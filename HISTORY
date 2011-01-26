@@ -1,0 +1,6 @@
+
+0.02    * Initial posting of package onto CRAN
+	* Fixes the aldmck() polarity issues from previous iteration
+	* Includes full vignette
+	* Future plans: more testing + Marisa & Keith replication
+
