@@ -27,14 +27,14 @@ summary.blackbox <- function(object, ...){
 	cat("\n\n")
 }
 
-blackbox <- function(data,missing,verbose=FALSE,dims=1,minscale){
+blackbox <- function(data,missing=NULL,verbose=FALSE,dims=1,minscale){
 
 
 	### Error check each argument ###
 	if(class(data) != "matrix") stop("Data is not a matrix, please convert it using as.matrix().")
 	if(typeof(data) != "double") stop("Data are not numeric values, please convert it using as.numeric() or mode().")
-	if(!(is.matrix(missing) | is.vector(missing))) stop("Argument 'missing' must be a vector or matrix.")
-	if(mode(missing) != "numeric") stop("Argument 'missing' must only contain numerics.")
+	if(!is.null(missing) & !(is.matrix(missing) | is.vector(missing))) stop("Argument 'missing' must be a vector or matrix.")
+	if(mode(missing) != "numeric" & !is.null(missing)) stop("Argument 'missing' must only contain integers.")
 	if(!is.logical(verbose)) stop("Argument 'verbose' must be set TRUE or FALSE.")
 	if(minscale<1) stop("Argument 'minscale' must be positive.")
 	if(dims<1) stop("Argument 'dims' must be positive.")
@@ -124,13 +124,13 @@ blackbox <- function(data,missing,verbose=FALSE,dims=1,minscale){
 
 }
 
-blackbox_transpose <- function(data,missing,verbose=FALSE,dims=1,minscale){
+blackbox_transpose <- function(data,missing=NULL,verbose=FALSE,dims=1,minscale){
 
 	### Error check each argument ###
 	if(class(data) != "matrix") stop("Data is not a matrix, please convert it using as.matrix().")
 	if(typeof(data) != "double") stop("Data are not numeric values, please convert it using as.numeric().")
-	if(!(is.matrix(missing) | is.vector(missing))) stop("Argument 'missing' must be a vector or matrix.")
-	if(mode(missing) != "numeric") stop("Argument 'missing' must only contain numeric values.")
+	if(!is.null(missing) & !(is.matrix(missing) | is.vector(missing))) stop("Argument 'missing' must be a vector or matrix.")
+	if(mode(missing) != "numeric" & !is.null(missing)) stop("Argument 'missing' must only contain integers.")
 	if(!is.logical(verbose)) stop("Argument 'verbose' must be set TRUE or FALSE.")
 	if(minscale<1) stop("Argument 'minscale' must be positive.")
 	if(dims<1) stop("Argument 'dims' must be positive.")
@@ -299,6 +299,12 @@ plot.AM <- function(x, xlim=c(-2,2), ...){
 
 	if(!class(x)=="aldmck") stop("Input is not of class 'aldmck'.")
 
+	if(sum(x$respondents[,"weight"]>0,na.rm=TRUE)==0){
+		plot(0,1,xlim=c(0,1),ylim=c(0,1),type="n",xaxt="n",yaxt="n",xlab="", ylab="",bty="n")
+		text(0.5,0.5,"No\nself\nplacement",cex=3)
+		return()
+	}
+
 	colchoice <- rep(palette(),3)
 	dens <- density(x$respondents[,"idealpt"],na.rm=TRUE)
 	ymax <- max(dens$y) - max(dens$y) %% 0.2 + 0.2
@@ -319,6 +325,12 @@ plot.AM <- function(x, xlim=c(-2,2), ...){
 plot.aldmck_positive <- function(x, xlim=c(-2,2), ...){
 
 	if(!class(x)=="aldmck") stop("Input is not of class 'aldmck'.")
+
+	if(sum(x$respondents[,"weight"]>0,na.rm=TRUE)==0){
+		plot(0,1,xlim=c(0,1),ylim=c(0,1),type="n",xaxt="n",yaxt="n",xlab="", ylab="",bty="n")
+		text(0.5,0.5,"No\nweights",cex=3)
+		return()
+	}
 
 	x$respondents <- x$respondents[x$respondents[,"weight"]>0,]
 
@@ -341,6 +353,13 @@ plot.aldmck_positive <- function(x, xlim=c(-2,2), ...){
 plot.aldmck_negative <- function(x, xlim=c(-2,2), ...){
 
 	if(!class(x)=="aldmck") stop("Input is not of class 'aldmck'.")
+
+	if(sum(x$respondents[,"weight"]<0,na.rm=TRUE)==0){
+		plot(0,1,xlim=c(0,1),ylim=c(0,1),type="n",xaxt="n",yaxt="n",xlab="", ylab="",bty="n")
+		text(0.5,0.5,"No\nnegative\nweights",cex=2.5)
+		return()
+	}
+
 	x$respondents <- x$respondents[x$respondents[,"weight"]<0,]
 	dens <- density(x$respondents[,"idealpt"],na.rm=TRUE)
 	ymax <- max(dens$y) - max(dens$y) %% 0.2 + 0.2
@@ -373,6 +392,12 @@ plot.cdf <- function(x, align=NULL, xlim=c(-2,2), ...){
 
 	if(!class(x)=="aldmck") stop("Input is not of class 'aldmck'.")
 
+	if(sum(x$respondents[,"weight"]>0,na.rm=TRUE)==0){
+		plot(0,1,xlim=c(0,1),ylim=c(0,1),type="n",xaxt="n",yaxt="n",xlab="", ylab="",bty="n")
+		text(0.5,0.5,"No\nself\nplacement",cex=3)
+		return()
+	}
+
 	colchoice <- rep(palette(),3)
 	cdf <- ecdf(x$respondents[,"idealpt"])
 	plot(cdf, lwd=2, xlim=xlim, lab=c(5,5,7), bty="n",
@@ -390,7 +415,7 @@ plot.cdf <- function(x, align=NULL, xlim=c(-2,2), ...){
 }
 
 
-aldmck <- function(data, respondent = 0, missing, polarity, verbose=FALSE) {
+aldmck <- function(data, respondent = 0, missing=NULL, polarity, verbose=FALSE) {
 
 	### Error check each argument ###
 	if(class(data) != "matrix") stop("Data is not a matrix, please convert it using as.matrix().")
@@ -405,8 +430,8 @@ aldmck <- function(data, respondent = 0, missing, polarity, verbose=FALSE) {
 	if(polarity > ncol(data))  stop("Polarity set to a column greater than number of columns in data.")
 	if(polarity < 0)  stop("Polarity cannot be negative.")
 
-	if(!(is.matrix(missing) | is.vector(missing))) stop("Argument 'missing' must be a vector or matrix.")
-	if(mode(missing) != "numeric") stop("Argument 'missing' must only contain integers.")
+	if(!is.null(missing) & !(is.matrix(missing) | is.vector(missing))) stop("Argument 'missing' must be a vector or matrix.")
+	if(mode(missing) != "numeric" & !is.null(missing)) stop("Argument 'missing' must only contain integers.")
 
 	if(!is.logical(verbose)) stop("Argument 'verbose' must be set TRUE or FALSE.")
 
@@ -427,11 +452,11 @@ aldmck <- function(data, respondent = 0, missing, polarity, verbose=FALSE) {
 	rawdata[is.na(rawdata)] <- missval
 
 	##Longer output
+	deleted <- sum(is.na(apply(data,1,sum)))
 	stimnames <- colnames(data)
 	if(is.null(stimnames)) stimnames <- paste("stim", 1:N, sep="")
 	if(verbose){
 
-	deleted <- sum(is.na(apply(data,1,sum)))
 	cat("\n\n\tBeginning Aldrich-McKelvey Scaling...")
 	if(respondent!=0) cat("\n\n\t\tColumn '",stimnames[respondent],"' is set as the self placement.", sep="")
 	if(respondent==0) cat("\n\n\t\tSelf-placements have not been provided by the user.")
@@ -487,9 +512,10 @@ aldmck <- function(data, respondent = 0, missing, polarity, verbose=FALSE) {
 	respondents <- cbind(respondents, selfplace, polinfo)
 
 
-	result <- list(stimuli = stimuli, respondents = respondents, eigenvalues = as.numeric(res$eigenvalues),
+	result <- list(stimuli = stimuli, respondents = as.data.frame(respondents),
+			eigenvalues = as.numeric(res$eigenvalues),
 			AMfit = as.numeric(res$fits[1]), R2 = as.numeric(res$fits[2]),
-			N = as.integer(res$fits[3]), N.neg = as.integer(res$fits[5]),
+			N = nrow(data)-deleted, N.neg = as.integer(res$fits[5]),
 			N.pos = as.integer(res$fits[4]))
 
 	class(result) <- c("aldmck")
@@ -508,9 +534,11 @@ summary.aldmck <- function(object, ...){
     cat("\n----------------------------------")
     cat("\n\nNumber of Stimuli:", length(x$stimuli))
     cat("\nNumber of Respondents Scaled:", x$N)
-    cat("\nNumber of Respondents (Positive Weights):", x$N.pos)
-    cat("\nNumber of Respondents (Negative Weights):", x$N.neg)
-    cat("\n\nR-Squared:", round(x$R2, digits=2))
+     if(sum(!is.na(x$respondents[,"selfplace"])) != 0){
+	cat("\nNumber of Respondents (Positive Weights):", x$N.pos)
+	cat("\nNumber of Respondents (Negative Weights):", x$N.neg)
+	cat("\n\nR-Squared:", round(x$R2, digits=2))
+     }
     cat("\nReduction of normalized variance of perceptions:", round(x$AMfit, digits=2), "\n\n")
 
 

@@ -14,7 +14,7 @@
 }
 
 \usage{
-  aldmck(data, respondent = 0, missing, polarity, verbose=FALSE)
+  aldmck(data, respondent = 0, missing=NULL, polarity, verbose=FALSE)
 }
 
 \arguments{
@@ -25,14 +25,17 @@
 	the respondent's self-placement on the scale. Setting respondent = 0 specifies
 	that the self-placement data is not available.  Self-placement data is not
 	required to estimate the locations of the stimuli, but is required if recovery
-	of the respondent ideal points is desired.}
+	of the respondent ideal points, or distortion parameters is desired. Note that
+	no distortion parameters are estimated in AM without self-placements because they
+	are not needed, see equation (24) in Aldrich and McKelvey (1977) for proof.}
   \item{missing}{ vector or matrix of numeric values, sets the missing values for the data.
 	Observations with missing data are discarded before analysis.  If input is a
 	vector, then the vector is assumed to contain the missing value codes for all
 	the data.  If the input is a matrix, it must be of dimension p x q, where p
 	is the maximum number of missing values and q is the number of columns in the
 	data.  Each column of the inputted matrix then specifies the missing data values
-	for the respective variables in data. }
+	for the respective variables in data. If null (default), no missing values are in the
+	data.}
   \item{polarity}{integer, specifies the column in the data matrix of the stimuli that is
 	to be set on the left side (generally this means a liberal) }
   \item{verbose}{ logical, indicates whether \code{aldmck} should print out detailed
@@ -72,10 +75,13 @@
   \item{AMfit}{ Ratio of overall variance to perceptions in scaled data divided by average
 	variance. This measure of fit, described by Aldrich and McKelvey, measures the
 	amount of reduction of the variance of the scaled over unscaled data.}
-  \item{R2}{ R-squared from regressing respondent self-reported position vs. scaled position. }
+  \item{R2}{ R-squared from regressing respondent self-reported position vs. scaled position. 
+	Only calculated if respondent self-placements are specified, will be NaN if not.}
   \item{N}{ Number of respondents used in the estimation (i.e. had no missing data)}
-  \item{N.neg}{ Number of cases with negative weights.}
-  \item{N.pos}{ Number of cases with positive weights.}
+  \item{N.neg}{ Number of cases with negative weights. Only calculated if respondent
+	self-placements are specified, will equal 0 if not.}
+  \item{N.pos}{ Number of cases with positive weights. Only calculated if respondent
+	self-placements are specified, will equal 0 if not.}
 
 }
 

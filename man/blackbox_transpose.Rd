@@ -12,7 +12,7 @@
 }
 
 \usage{
-  blackbox_transpose(data,missing,verbose=FALSE,dims=1,minscale)
+  blackbox_transpose(data,missing=NULL,verbose=FALSE,dims=1,minscale)
 }
 
 \arguments{
@@ -25,7 +25,8 @@
 	the data.  If the input is a matrix, it must be of dimension p x q, where p
 	is the maximum number of missing values and q is the number of columns in the
 	data.  Each column of the inputted matrix then specifies the missing data values
-	for the respective variables in data. }
+	for the respective variables in data.  If null (default), no missing values are in
+	the data.}
   \item{verbose}{ logical, indicates whether \code{aldmck} should print out detailed
 	output when scaling the data.}
   \item{dims}{integer, specifies the number of dimensions to be estimated. }

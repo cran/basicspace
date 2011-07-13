@@ -17,7 +17,8 @@ plot.aldmck(x, ...)
 
 \value{
     A plot of the probability distribution of the respondent ideal points, along with
-    the locations of the stimuli.
+    the locations of the stimuli. If no self-placements were specified during estimation,
+    no graphical plots will appear.
 }
 
 \author{ 

@@ -21,7 +21,8 @@ plot.cdf(x, align=NULL, xlim=c(-2,2), ...)
 
 \value{
     A plot of the empirical cumulative distribution of the respondent ideal points,
-    along with the locations of the stimuli.
+    along with the locations of the stimuli. If no self-placements were specified
+    during estimation, no graphical plots will appear.
 }
 
 \author{ 

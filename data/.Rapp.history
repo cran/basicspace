@@ -1,0 +1,100 @@
+load("/Users/poole/Desktop/basicspace/data/colombia.rda")
+ls()
+load("/Users/keithtpoole/Desktop/basicspace/data/colombia.rda")
+load("/Users/keithtpoole/Desktop/basicspace/data/colombia.rda")
+tmp <- colombia[,c(5:8,12:16)]#
+#
+#garzon as left#
+result <- aldmck(data=tmp, polarity=7, respondent=0, missing=c(99),verbose=TRUE)
+library(basicspace)
+tmp <- colombia[,c(5:8,12:16)]#
+#
+#garzon as left#
+result <- aldmck(data=tmp, polarity=7, respondent=0, missing=c(99),verbose=TRUE)
+plot(result)
+names(result)
+summary(result)
+tmp <- colombia[,c(5:8,12:17)]
+dim(tmp)
+result <- aldmck(data=tmp, polarity=7, respondent=10, missing=c(99),verbose=TRUE)#
+#
+summary(result)
+plot(result)
+plot.coord(result)
+plot.coords(result)
+library)help=aldmck
+library(help=aldmck)
+library(help=basicspace)
+plot.AM(result)
+plot.cdf(result)
+load("colombia.rda")#
+tmp <- colombia[,c(5:8,12:17)]#
+result <- aldmck(data=tmp, polarity=7, respondent=10, missing=c(99),verbose=TRUE)
+plot.aldmck_positive(result)
+names(result)
+result$respondents
+tmp <- colombia[,c(5:8,12:16)]#
+result <- aldmck(data=tmp, polarity=7, respondent=0, missing=c#(99),verbose=TRUE)
+tmp <- colombia[,c(5:8,12:16)]#
+result <- aldmck(data=tmp, polarity=7, respondent=0, missing=c(99),verbose=TRUE)
+plot.aldmck_positive(result)
+x <- result
+x$respondents <- x$respondents[x$respondents[,"weight"]>0,]
+x$respondents
+?par
+plot(0,1,xlim=c(0,1),ylim=c(0,1),type="n",xaxt="n",yaxt="n")
+plot(0,1,xlim=c(0,1),ylim=c(0,1),type="n",xaxt="n",yaxt="n",xlab="n", ylab="n",bty="n")
+plot(0,1,xlim=c(0,1),ylim=c(0,1),type="n",xaxt="n",yaxt="n",xlab="", ylab="",bty="n")
+plot(0,1,xlim=c(0,1),ylim=c(0,1),type="n",xaxt="n",yaxt="n",xlab="", ylab="",bty="n")#
+text(0.5,0.5,"No weights")
+?cex
+?text
+plot(0,1,xlim=c(0,1),ylim=c(0,1),type="n",xaxt="n",yaxt="n",xlab="", ylab="",bty="n")#
+text(0.5,0.5,"No weights",cex=3)
+x#respon
+x$respondents[,"weight"]>0
+sum(x$respondents[,"weight"]>0,na.rm=TRUE)
+		plot(0,1,xlim=c(0,1),ylim=c(0,1),type="n",xaxt="n",yaxt="n",xlab="", ylab="",bty="n")#
+		text(0.5,0.5,"No negative weights",cex=3)
+?as.data.frame
+is.empty
+is.empty()
+aldmck(data=tmp, polarity=7, respondent=10, missing=99,verbose=TRUE)
+aldmck(data=tmp, polarity=7, respondent=0, missing=99,verbose=TRUE)
+aldmck(data=tmp, polarity=7, respondent=0, missing=NA,verbose=TRUE)
+aldmck(data=tmp, polarity=7, respondent=0, missing=NULL,verbose=TRUE)
+mode(NA)
+is.null
+is.null(NULL)
+is.null(NA)
+!(is.matrix(NULL)
+)
+!(is.matrix(3))
+!(is.matrix(c(343,3)))
+missing=c(123)#
+if(!(is.matrix(missing) | is.vector(missing))) cat("Argument 'missing' must be a vector or matrix.")#
+if(mode(missing) != "numeric" & !is.null(missing)) cat("Argument 'missing' must only contain integers.")
+missing=c(123)#
+if(!(is.matrix(missing) | is.vector(missing))) cat("Argument 'missing' must be a vector or matrix.")#
+if(mode(missing) != "numeric" & !is.null(missing)) cat("Argument 'missing' must only contain integers.")
+missing=c(NULL)#
+if(!(is.matrix(missing) | is.vector(missing))) cat("Argument 'missing' must be a vector or matrix.")#
+if(mode(missing) != "numeric" & !is.null(missing)) cat("Argument 'missing' must only contain integers.")
+missing=c(NULL)#
+if(!is.null(missing)& !(is.matrix(missing) | is.vector(missing))) cat("Argument 'missing' must be a vector or matrix.")#
+if(mode(missing) != "numeric" & !is.null(missing)) cat("Argument 'missing' must only contain integers.")
+missing=c(NULL)#
+if(is.null(missing)& !(is.matrix(missing) | is.vector(missing))) cat("Argument 'missing' must be a vector or matrix.")#
+if(mode(missing) != "numeric" & !is.null(missing)) cat("Argument 'missing' must only contain integers.")
+tmp <- colombia[,c(5:8,12:16)]#
+result <- aldmck(data=tmp, polarity=7, respondent=0, missing=c(99),verbose=TRUE)
+summary(result)
+result$legislators
+result$legislator
+names(result)
+result$respondents
+colnames(result$respondents)
+is.na(result$respondents[,"selfplace"])
+sum(!is.na(result$respondents[,"selfplace"]))
+if(sum(!is.na(result$respondents[,"selfplace"])) != 0)
+summary(result)
