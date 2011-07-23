@@ -19,7 +19,9 @@ plot.aldmck_negative(x, xlim=c(-2,2), ...)
 
 \value{
     A plot of the probability distribution of the respondent ideal points, along with
-    the locations of the stimuli.
+    the locations of the stimuli. If no negative weights exist, either because respondent
+    self-placements are not specified, or because all weights are positive, a plot indicating
+    this in text is given.
 }
 
 \author{ 

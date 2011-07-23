@@ -21,10 +21,10 @@
 options(width=60)
 @
 
-This R (R Development Core Team, 2011) package contains software designed to recover latent dimensions (i.e. a basic space)
+This R (R Development Core Team, 2010) package contains software designed to recover a latent dimension (i.e. a basic space)
 from a numeric matrix of data. The initial development was conducted by Poole (1998), who wrote the Fortran
 executable that was previously used by social scientists to analyze survey data in publications such
-as Saiegh (2009) and Abrajano and Poole (2011).  The principal purpose of the package is to facilitate
+as Palfrey and Poole (1987) and Saiegh (2009).  The principal purpose of the package is to facilitate
 the analysis of self-placement and/or perceptual survey data by scaling stimuli into a common space. Stated
 differently, assume that various political actors (i.e. the stimuli) occupy positions on a continuous
 left-right political spectrum, and our objective is to recover estimates of those positions.  This package
@@ -50,8 +50,7 @@ liberal-conservative scale.
 The exposition of the model presented here closely follows Poole (1998). Consider a matrix of survey
 data $X_0$ with $n$ respondents and $m$ issue scales, with individuals on the rows and issues on the
 columns. Some cells of the matrix $X_0$ are missing, and we let $X$ denote the version of $X_0$ that
-has no missing data. In each cell $x_{ij}$, respondent $i$ (\textit{i=1, \ldots, n}) reports their position on
-issue scale $j$ (\textit{j=1, \ldots, m}), with some responses missing.\footnote{The `0' subscript
+has no missing data. In each cell $x_{ij}$, respondent $i$ (\textit{i=1, \ldots, n}) reports their position on issue scale $j$ (\textit{j=1, \ldots, m}), with some responses missing.\footnote{The `0' subscript
 indicates that some elements are missing from the matrix.} Now let $\Psi_{ik}$ be the $i$th
 individual's position on the $k$th basic dimension (\textit{k=1, \ldots, s}), $W$ be an $m$ by $s$
 matrix of weights that map individual positions from the basic space to the issue dimensions, $c$
@@ -67,31 +66,35 @@ Without loss of generality, we also assume that $E_0$ is drawn from a symmetric 
 mean 0 and that the centroid of the basic space coordinates is at the origin (i.e. $J_n'\Psi=0$).
 Substituting into the model equation, this implies that $J_n'[X-J_nc'] = 0_m'$, where $0_m$ is an $m$
 length vector of zeroes. Then in the situation where $X_0$ has no missing data, the parameters
-of interest can all be recovered using singular value decomposition. To see why this is true, set $c$ equal
-to the column means of $X$, or $c_j = \frac{\sum\limits_{i=1}^n x_{ij}}{n} = \bar{x}_j$.  Then the
-singular value decomposition of $X - J_nc'$ can be expressed as:
+of interest can all be recovered using singular value decomposition.  To see why this is true, recall
+that for an $n$ by $m$ matrix of real elements with $n \ge m$, there exists an $n$ by $m$ orthogonal
+matrix $U$, an $m$ by $m$ orthogonal matrix $V$, and an $m$ by $m$ matrix $\Lambda$ such that:
 
 \begin{equation}
-X - J_nc'\ =\ U \Lambda V'\ =\ \Psi W'
+X = U \Lambda V'
 \label{two}
 \end{equation}
 
-\noindent where $U$ is an $n$ by $m$ matrix, $\Lambda$ is an $m$ by $m$ diagonal matrix of singular
-values, and $V$ is an $m$ by $m$ orthogonal matrix such that $U'U=V'V=VV'=I_{m}$, where $I_{m}$
-is the $m$ by $m$ identity matrix. This implies that in the absence of missing data, one solution for
-$\Psi$ and $W$ is:
+\noindent where $\Lambda$ is a diagonal matrix of singular values.\footnote{A more general
+form of this equation can be written in which $\Lambda$ is instead an $n$ by $m$ matrix and $U$ is
+$n$ by $n$.} To solve [1], set $c$ equal to the column means of $X$, or $c_j = \frac{\sum\limits_{i=1}^n x_{ij}}{n} = \bar{x}_j$. Then using [2], the 
+singular value decomposition of $X - J_nc'$ can be expressed as:
+
+$$X - J_nc'\ =\ U \Lambda V'\ =\ \Psi W'$$
+
+This implies that in the absence of missing data, one solution for $\Psi$ and $W$ is:
 
 $$\Psi = U\Lambda^{0.5}$$
 
 $$W = V\Lambda^{0.5}$$
 
 \noindent with $\Lambda^{0.5}$ being a diagonal matrix where diagonal elements are
-the square roots of $\Lambda$. The solution shown in (\ref{two}) has rank $m$. If a lower rank solution
-is desired, $s<m$, then Eckart and Young (1936) have shown that the least squares approximation in $s$ dimensions
+the square roots of $\Lambda$. While other solutions to this problem exist, Eckart
+and Young (1936) have shown that the least squares approximation in $s$ dimensions
 of a matrix $A$ can be found by using only the first $s$ singular values of $A$ along the
 diagonal of $\Lambda$ and remultiplying $U \Lambda V'$.
 
-In the presence of missing data in matrix $X_0$, the use of singular value decomposition
+In the presence of missing data in data matrix $X_0$, the use of singular value decomposition
 to solve for $W$ and $\Psi$ is no longer possible, and we instead estimate $\hat{W}$ and
 $\hat{\Psi}$ using an alternating least squares (ALS) technique that is similar to the procedures
 used in Carroll and Chang (1970) and Takane, Young, and de Leeuw (1977). The objective
@@ -100,15 +103,13 @@ the columns have been adjusted for column means, or:
 
 $$\xi = \displaystyle\sum\limits_{i=1}^n \sum\limits_{j=1}^{m_i} \{[ \sum\limits_{k=1}^s \Psi_{ik}W_{jk}] + c_j -x_{ij} \}^2$$
 
-\noindent where $m_{i}$ is the number of entries in the $i$th row. In minimizing this objective function, two
-constraints from the earlier analysis in the absence of missing data are applied. First, we exploit the the fact
-that $\Psi$ and $W$ are orthogonal matrices, which implies that $\Psi'\Psi = W'W$.\footnote{More specifically,
-$\Psi'\Psi = \Lambda^{0.5}U'U\Lambda^{0.5} = \Lambda^{0.5}I_m\Lambda^{0.5} = W'W = \Lambda^{0.5}V'V\Lambda^{0.5} = \Lambda^{0.5}I_{m}\Lambda^{0.5} = \Lambda.$} Secondly,
-following our earlier restriction that $J_n'[X-J_nc'] = 0_m'$, $J_n'U = J_n'\Psi = 0_m'$ as well.
+In minimizing this objective function, two constraints from the earlier analysis with no missing
+data are applied. First, we exploit the the fact that $\Psi$ and $W$ are orthogonal matrices, which implies
+that $\Psi'\Psi = W'W$.\footnote{More specifically, $\Psi'\Psi = \Lambda^{0.5}U'U\Lambda^{0.5} = \Lambda^{0.5}I_m\Lambda^{0.5} = \Lambda = W'W.$} Secondly, following our earlier restriction that $J_n'[X-J_nc'] = 0_m'$, $J_n'U = J_n'\Psi = 0_m'$ as well.
 These restrictions produce the Lagrangian multiplier problem:
 
 
-$$\mu = \xi + 2\gamma'['\Psi'J_n] + tr[\Phi(\Psi'\Psi - W'W)]$$
+$$\mu = \xi = 2\gamma'['\Psi'J_n] + tr[\Phi(\Psi'\Psi - W'W)]$$
 
 \noindent where $\Phi$ is a symmetric $s$ by $s$ matrix of Lagrangian multipliers and $\gamma$ is an $s$ length
 vector of Lagrangian multipliers. Since all Lagrangian multipliers are zero,\footnote{See Appendix A in Poole (1998)
@@ -129,8 +130,7 @@ for a full proof that all Lagrangian multipliers are zero.} the partial derivati
 \label{five}
 \end{equation}
 
-\noindent where $n_{j}$ is the number of entries in the $j$th column. Let $W^*$ be an $m_i$ by $s$ matrix with
-appropriate rows corresponding to missing entries in $X_0$ removed, $x_{0i}$ be the
+Let $W^*$ be an $m_i$ by $s$ matrix with appropriate rows corresponding to missing entries in $X_0$ removed, $x_{0i}$ be the
 length $m_i$ row of $X_0$, and $c_0$ be the length $m_i$ vector of constants corresponding to the elements of $x_{0i}$. Then
 if $W^*$'$W^*$ exists, the $ith$ row of $\Psi$ can be estimated by setting (\ref{three}) to zero, collecting the $s$ partial derivatives
 of the $i$th row of $\Psi$ into a vector and solving for $\psi_j$ as:
@@ -151,7 +151,7 @@ Then if $\Psi_{j}^*$$'\Psi_j^*$ exists, $w_j$ and $c_j$ can be jointly estimated
 \end{equation}
 
 Equations (\ref{six}) and (\ref{seven}) represent the core set of equations that are used to solve for $\hat{W}$,
-$\hat{c}$, and $\hat{\Psi}$. Once a set of starting values have been generated, (\ref{six}) and (\ref{seven}) are
+$\hat{c}$, and $\hat{\Psi}$. Once a set of starting values has been generated, (\ref{six}) and (\ref{seven}) are
 iterated until convergence is complete. Generation of appropriate start values is conducted one dimension at a time,
 and a more detailed justification of the procedure can be found in Poole (1998). On the first dimension, start
 values are generated by using the following three equations:
@@ -177,46 +177,45 @@ and (\ref{nine}), starting values for $\psi$ are:
 \label{ten}
 \end{equation}
 
-If two or more dimensions are to be estimated, start values for other dimensions can be generated by replacing
-the data matrix $X_0$ with the matrix of residuals $E_{0k}$ in equations (\ref{nine}) and (\ref{ten}). However, no further estimation
-of start values for $\hat{c}$ is required. The matrix of residuals to be used for generating start values
-on dimension $k$ is:
+If more than one dimensions are to be estimated ($s > 1$), start values for other dimensions can be generated
+simply by replacing the data matrix $X_0$ with the matrix of residuals $E_{0s}$ in equations (\ref{nine}) and (\ref{ten}). However, no further estimation of start values for $\hat{c}$ is required. The matrix of residuals to be used for generating start values on dimension $s$ is:
 
-$$E_{0k} = X_0 - \displaystyle\sum\limits_{l=1}^{k} \hat{\Psi}_l\hat{w}_l\mathrm{'} - J_n\hat{c}'$$
+$$E_{0s} = X_0 - \displaystyle\sum\limits_{j=1}^{s} \hat{\Psi}_s\hat{w}_s\mathrm{'} - J_n\hat{c}'$$
 
 This residual matrix allows the generation of higher-dimension start values by iterating $\Gamma$ to
-maximize the positive elements in $E_{0k}$. Equations (\ref{six}) and (\ref{seven}) become, respectively:
+maximize the positive elements in $E_{0s}$. The starting values are now:
 
 %Equation 12 in paper
 \begin{equation}
-\hat{\psi}_{ik} = \frac{\displaystyle\sum\limits_{j=1}^{m_i} \hat{w}_{jk}e_{1(k-1)ij}}{\sum\limits_{j=1}^{m_j} \hat{w}_{jk}^2}
+\hat{\psi}_{is} = \frac{\displaystyle\sum\limits_{j=1}^{m_i} \hat{w}_{js}e_{1(s-1)ij}}{\sum\limits_{j=1}^{m_j} \hat{w}_{js}^2}
 \label{eleven}
 \end{equation}
 
+\noindent where the initial $\hat{w_{js}}$ values of +1s and -1s are used to obtain $\hat{\psi}_{is}$ starting values. The starting values of $\hat{w_{js}}$ are now:
+
 %Equation 11 in paper
 \begin{equation}
-\hat{w}_{jk} = \frac{\displaystyle\sum\limits_{i=1}^{n_j} \hat{\psi}_{ik}e_{(k-1)ij}}{\sum\limits_{i=1}^{n_j} \hat{\psi}_{ik}^2}
+\hat{w}_{js} = \frac{\displaystyle\sum\limits_{i=1}^{n_j} \hat{\psi}_{is}e_{(s-1)ij}}{\sum\limits_{i=1}^{n_j} \hat{\psi}_{is}^2}
 \label{twelve}
 \end{equation}
+
 
 Summarizing the preceding discussion in full, the basic space technique decomposes an $n$ by $m$ matrix $X_0$ with
 $n > m$ following equation (\ref{one}). In the absence of missing data, this decomposition can be solved using
 singular value decomposition as in equation (\ref{two}). The basic space technique can therefore be thought of as
 a generalization of singular value decomposition to matrices with missing data. Estimation of (\ref{one}) proceeds
 in three steps. In the first stage, starting values on the first dimension are generated for $\hat{c}_{j}$, $w_{j1}$,
-and $\hat{\psi}_{i1}$ by using equations (\ref{eight}) to (\ref{ten}) and then iterating 
-equations (\ref{six}) and (\ref{seven}) until convergence. In the second stage, if the
-number of dimensions to be estimated $k > 1$, higher dimensional starting values for $\hat{\psi}_{ik}$ and $\hat{w}_{ik}$
-are generated dimension by dimension using equations (\ref{nine}) and (\ref{ten}) and then iterating
-equations (\ref{eleven}) to (\ref{twelve}) until convergence. Finally, the starting values generated 
-in the preceding two stages are improved by iterating equations (\ref{six}) to (\ref{seven}) until convergence.
+and $\hat{\psi}_{i1}$ by iterating equations (\ref{eight})-(\ref{ten}) until convergence. In the second stage, if the
+number of dimensions to be estimated $s > 1$, higher dimensional starting values for $\hat{\psi}_{is}$ and $\hat{w}_{is}$
+are generated dimension by dimension using equations (\ref{eleven})-(\ref{twelve}). Finally, the starting values generated 
+in the preceding two stages are improved by iterating equations (\ref{six})-(\ref{seven}) until convergence.
 
 \section{Monte Carlo Test}
 
 In this section, we present the first of three motivating examples. We begin with a Monte Carlo example that
 tests the basic space technique against simulated data. Four key variables should be set in each simulation:
 the number of respondents $N$ (set here to $N=1000$), the number of issue scales (also referred to as stimuli,
-and set here to $M=20$), the number of explanatory dimensions (set here to $s=2$), the
+and set here to $M=20$), the number of explantory dimensions (set here to $s=2$), the
 fraction of observations that are missing (set here as 0.3), and the distribution of error terms (set here as
 random uniform draws from -0.5 to 0.5). These variables can be changed for other simulations, but the
 restriction that $N>M$ must be hold true. In cases where $M>N$ please refer to the third example that uses
@@ -286,14 +285,14 @@ names(result)
 @
 
 The output object contains multiple data frames summarizing the results of the estimation. The key data
-frames are \textbf{stimuli}, which contain estimates of $\hat{W}$ and $c$, as well as $\textbf{individuals}$,
+frames are \textbf{stimuli}, which contain estimates of $\hat{W}$ and $\hat{c}$, as well as $\textbf{individuals}$,
 which contain estimates of $\hat{\Psi}$.  The other quantities are fit statistics described in greater
 detail in the standard documentation for the function.
 
 With the estimates complete, we are now able to test the recovery of our parameters of interest. In general,
 scaling problems are not fully identified. Stated differently, given $X = \Psi W'$, $\Psi$ and $W'$ are not
 unique solutions because $X = \Psi K K^{-1} W'$ for any conformable and invertible matrix $K$, so $X$ can
-always be decomposed instead as $X = \Psi^* W^{*'})$ where $\Psi^* = \Psi K$ and $W^{*'} = K^{-1} W'$. 
+always be decomposed instead as $X = \Psi^* W^{*'}$ where $\Psi^* = \Psi K$ and $W^{*'} = K^{-1} W'$. 
 When evaluating parameter fit, we are therefore largely concerned with finding monotonic relationships between
 the true and estimated parameters of interest.  Figure \ref{fig:seven} compares the true vs. estimated values of
 $\Psi$ across two dimensions, and the results suggest a reasonable model fit.
@@ -316,10 +315,9 @@ xlab="True Psi, second dimension", ylab="Recovered Psi, second dimension")
 \label{fig:seven}
 \end{figure}
 
-
-Similarly, we can repeat the same procedure for $W$ which is shown in Figure \ref{fig:six}. In Figure
-\ref{fig:eight} we repeat this analysis for $c$, the vector of column means estimated with one dimension.  In
-both cases the estimates for $\hat{W}$ and $\hat{c}$ are a monotonic transformation of the
+Figure \ref{fig:six} shows the results for the same procedure applied to $W$. In Figure
+\ref{fig:eight} we repeat this analysis for $c$, which is a column mean that is only estimated in
+one dimension.  In both cases the estimates for $\hat{W}$ and $\hat{c}$ are a monotonic transformation of the
 true parameters as expected.\footnote{In other estimates, the relationship may only be affine because $X = \Psi W'$
 implies $X = -(\Psi) -(W')$ as well.}
 
@@ -358,9 +356,9 @@ xlab="True C", ylab="Recovered C")
 \label{fig:eight}
 \end{figure}
 
-Finally, we pool our estimates of $\hat{W}$, $\hat{\Psi}$, and $\hat{c}$ together to
+Finally, we pool our estimates of $\hat{W}$, $\hat{Psi}$, and $\hat{c}$ together to
 estimate the full matrix $\hat{X}$ following Equation ($\ref{one}$).  While social
-scientists are principally concerned with estimation of $\hat{W}$ and $\hat{\Psi}$,
+scientists are principally concerned with estimation of $\hat{W}$ and $\hat{Psi}$,
 others seeking to conduct singular value decomposition of matrices with missing
 data may find $\hat{X}$ to be of value. One obvious application of $\hat{X}$ is
 its potential use as an imputation tool for missing data.\footnote{The simulation
@@ -532,22 +530,82 @@ We can also produce summary reports of the stimuli as follows:
 summary(result)
 @
 
-The transposed basic space model is a generalization of the original model by Aldrich and McKelvey (1977)
-to matrices with missing values and estimates with more than one dimension. For historical purposes, we include
-the original Aldrich-McKelvey estimator with this package, and estimate the same model using it
-as shown below. While the \emph{aldmck()} function accepts nearly identical arguments to the
-\emph{blackbox\_transpose()}, one notable difference appears by default. In addition to ranking
-of stimuli, \emph{aldmck()} also accepts a column (specified by the argument \emph{respondent})
-in the data matrix that specifies the respondent's self placements on the issue scale.
-The reported respondent rating is then transformed into an ideology score by applying the respondent's
-personal stretch and bias parameters to that score.
+
+\section{Scaling Perceptual Data using Aldrich and McKelvey's Esimator}
+
+The transposed basic space model is a generalization of a model developed by Aldrich and McKelvey (1977). The transposed
+basic space model can be applied to matrices with missing values and can estimate more than one dimension. For historical purposes, we include
+the original Aldrich-McKelvey estimator with this package. In the basic model, the estimator assumes that:
+
+$$Y_{ij} = Z_j + \epsilon_{ij}$$
+
+\noindent where $Z_j$ is the true location of $j$ amd $\epsilon_{ij}$ is a random variable with mean 0, positive variance that is independent of $i$ and $j$ (homoskedastic), and zero covariance across the $i$'s and $j$'s. Aldrich and McKelvey then introduce two distortion parameters, $c_i$ and $w_i$, that transform the perceived candidate position into a reported candidate position $Z_{ij}$, according to:
+
+$$Z_{ij}= \frac{1}{w_i}(Y_{ij} - c_i)$$
+
+A least-squares minimization procedure is then used to obtain estimates of $\{Z_j\}_{j=1}^{J}$ and $\{w_i,c_i\}_{i=1}^{I}$.
+
+We begin by reestimating the earlier results using the 1980 Liberal-Conservative scales using the Aldrich-McKelvey estimator. While the \emph{aldmck()} function accepts nearly identical arguments the \emph{blackbox\_transpose()}, one notable difference appears by default.  \emph{aldmck()} also accepts a column in the data matrix, specified by the \emph{respondent} argument, that specifies the respondent's self placement on the issue scale. The reported respondent rating is then transformed into an ideology score by applying the respondent's personal stretch and bias parameters to that score. Note that the results largely correspond to those shown earlier with \emph{blackbox\_transpose()}.
 
 <<aldmck>>=
 data(LC1980)
 result <- aldmck(data=LC1980, polarity=2, respondent=1, missing=c(0,8,9),verbose=TRUE)
 summary(result)
+@
+
+
+
+\begin{figure}
+\begin{center}
+<<label=aldmck_plot,fig=TRUE,echo=TRUE,width=14,height=14>>=
+
 plot.aldmck(result)
 @
+\end{center}
+\caption{Aldrich-McKelvey plots.}
+\label{fig:aldmck_plot}
+\end{figure}
+
+
+
+Estimation of uncertainty for estimates using Aldrich-McKelvey can be obtained via the non-parametric bootstrap (Efron and Tibshirani 1994). To simulate 20 samples from the 1980 Liberal-Conservative scales, we do the following:
+
+<<aldmck_boot>>=
+Ntrials <- 20
+results <- vector("list", Ntrials)
+for(i in 1:Ntrials) results[[i]] <- aldmck(data=LC1980[sample(1:nrow(LC1980),nrow(LC1980),replace=TRUE),], polarity=2, respondent=1, missing=c(0,8,9),verbose=FALSE)
+@
+
+The Aldrich-McKelvey function is primarily intended for scaling perceptual data from surveys, though it can also be used to replicate previously published Monte Carlo results from Palfrey and Poole (1987). Palfrey and Poole find that the Aldrich-McKelvey algorithm is robust to the assumption of homoskedastic error, and test this by replacing the homoskedastic error term $\epsilon_{ij}$ with a respondent-specific $\epsilon_{i}$. In this example we replicate their result in a single trial, and show that the estimated rank ordering of the stimuli $\hat{Z_j}$ is identical to the true $Z_j$.
+
+<<aldmck_MC>>=
+Nstimuli <- 6
+Nresp <- 500
+
+Z_j <- rnorm(6)
+Z_j <- (Z_j - mean(Z_j))/sd(Z_j)
+
+respondent.sd <- runif(Nresp,min=0.3,max=0.9)
+error_heteroskedastic <- matrix(NA,Nresp,Nstimuli)
+for(i in 1:Nresp) error_heteroskedastic <- rnorm(Nstimuli,sd=respondent.sd)
+
+w_i <- runif(Nresp,min=0,max=1)
+c_i <- rnorm(Nresp)
+Y_ij <- rep(1,500) %o%  Z_j
+Y_ij <- Y_ij + error_heteroskedastic
+Z_ij <-  1/w_i %o% rep(1,Nstimuli) * (Y_ij - c_i %o% rep(1,Nstimuli))
+
+result <- aldmck(Z_ij,polarity=6,missing=c(999))
+
+rank(Z_j)
+rank(result$stimuli)
+@
+
+Although we only show one trial in this paper, the result shown here is robust to tests over multiple simulations.\footnote{Replication of the Monte Carlo test with separate groups of informed and uniformed individuals, from Palfrey and Poole (1987, pg. 515), can be conducted by simply changing the respondent's error deviations in the code above to have 250 respondents with $\sigma_i=0.3$ and 250 respondents with $\sigma_i=0.9$.}
+
+
+
+
 
 \section{Conclusion}
 
@@ -563,10 +621,6 @@ statistics environment, we hope to encourage a renewed interest in this importan
 \newpage
 \begin{thebibliography}{3}
 
-\bibitem{Abrajano} Abrajano, Marisa and Keith T. Poole (2011). ``A Method of Linking Surveys Using Affective
-Signatures with an Application to Racial/Ethnic Groups in the U.S. In \emph{Who Gets Represented}, edited
-by Peter Enns and Christopher Wlezien. New York: Russell Sage Foundation.
-
 \bibitem{aldmck} Aldrich, John H. and Richard D. McKelvey (1977). ``A Method of Scaling with Applications to the
 1968 and 1972 Presidential Elections.'' \emph{American Political Science Review} 71(1), 111-130.
 
@@ -574,7 +628,9 @@ by Peter Enns and Christopher Wlezien. New York: Russell Sage Foundation.
 Scaling Via an N-Way Generalization of ``Eckart-Young'' Decomposition.'' \emph{Psychometrika} 35:283-319.
 
 \bibitem{EckYoung} Eckart, Carl and Gale Young (1936). ``The Approximation of One Matrix By Another of Lower Rank.''
-\emph{Psychometrika} 1, 211-218.
+\emph{Psycometrika} 1, 211-218.
+
+\bibitem{EfronTibshirani} Efron, Bradley and Robert Tibshirani (1993). \emph{An Introduction to the Bootstrap.} New York: Chapman and Hall.
 
 \bibitem{HerronLewis} Herron, M. C. and J. B. Lewis (2007). ``Did Ralph Nader Spoil Al Gore's Presidential Bid?
 A Ballot-Level Study of Green and Reform Party Voters in the 2000 Presidential Election.''
