@@ -1,37 +1,17 @@
-\name{blackbox_transpose}
-\alias{blackbox_transpose}
-\title{ Blackbox transpose Scaling }
-\description{ 
-  \code{blackbox_transpose} is a function that takes a matrix of perceptual data, such as
-	liberal-conservative rankings of various stimuli, and recovers the true
-	location of those stimuli in a spatial model. It differs from procedures
-	such as \code{wnominate}, which instead use preference data to estimate
-	candidate and citizen positions. The procedure here generalizes the technique
-	developed by John Aldrich and Richard McKelvey in 1977, which is also included
-	in this package as the \code{aldmck} function.
+\name{LC1980_bbt}
+\alias{LC1980_bbt}
+
+\title{
+  Blackbox Transpose Estimate, 1980 Liberal-Conservative Scales.
+}
+
+\description{
+  Blackbox-Transpose estimats from Liberal-Conservative 7-point scales from the 1980
+  National Election Study. Estimates in 3 dimensions.
 }
 
 \usage{
-  blackbox_transpose(data,missing=NULL,verbose=FALSE,dims=1,minscale)
-}
-
-\arguments{
-  \item{data}{ matrix of numeric values, containing the perceptual data.  Respondents should
-	be organized on rows, and stimuli on columns. It is helpful, though
-	not necessary, to include row names and column names. }
-  \item{missing}{ vector or matrix of numeric values, sets the missing values for the data.
-	Observations with missing data are discarded before analysis.  If input is a
-	vector, then the vector is assumed to contain the missing value codes for all
-	the data.  If the input is a matrix, it must be of dimension p x q, where p
-	is the maximum number of missing values and q is the number of columns in the
-	data.  Each column of the inputted matrix then specifies the missing data values
-	for the respective variables in data.  If null (default), no missing values are in
-	the data.}
-  \item{verbose}{ logical, indicates whether \code{aldmck} should print out detailed
-	output when scaling the data.}
-  \item{dims}{integer, specifies the number of dimensions to be estimated. }
-  \item{minscale}{ integer, specifies the minimum number of responses a respondent needs
-	needs to provide to be used in the scaling.} 
+data(LC1980_bbt)
 }
 
 \value{
@@ -81,28 +61,27 @@
   \item{dims}{ Number of dimensions estimated.}
 }
 
+\source{
+
+  American national Election Study. \url{http://www.electionstudies.org/}
+
+  Also availble from Keith Poole. \url{ http://voteview.edu/aldmck.htm }
+}
 
 \author{ 
 Keith Poole \email{ktpoole@uga.edu}
 
-Howard Rosenthal \email{rosentha@princeton.edu}
+Howard Rosenthal \email{lo@uni-mannheim.de}
 
 Jeffrey Lewis \email{jblewis@ucla.edu}
 
-James Lo \email{lo@uni-mannheim.de}
+James Lo \email{jameslo@ucla.edu}
 
 Royce Carroll \email{rcarroll@rice.edu}
 }
 
-\references{
-
-Keith T. Poole (1998) ``Recovering a Basic Space From a Set of Issue Scales.'' American
-Journal of Political Science. 42(3), 954-993.
-
-}
-
 \seealso{
-  '\link{plotcdf.blackbt}', '\link{LC1980}', '\link{plot.blackbt}', '\link{summary.blackbt}', '\link{LC1980_bbt}'.
+  '\link{plotcdf.blackbt}', '\link{LC1980}', '\link{plot.blackbt}', '\link{summary.blackbt}', '\link{blackbox_transpose}'.
 }
 
 \examples{
@@ -119,4 +98,5 @@ par(ask=TRUE)
 plotcdf.blackbt(LC1980_bbt)
 summary(LC1980_bbt)
 }
-\keyword{ multivariate }
+
+\keyword{datasets}

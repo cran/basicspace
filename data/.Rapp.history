@@ -1,100 +1,853 @@
-load("/Users/poole/Desktop/basicspace/data/colombia.rda")
-ls()
-load("/Users/keithtpoole/Desktop/basicspace/data/colombia.rda")
-load("/Users/keithtpoole/Desktop/basicspace/data/colombia.rda")
-tmp <- colombia[,c(5:8,12:16)]#
+names(sweden)
+dim(sweden)
+gentable <- "CREATE TABLE search(#
+AnonID integer,#
+Query varchar(1025),#
+QueryTime timestamp, #
+ItemRank integer,#
+ClickURL text#
+);"#
+sqlQuery(chan, gentable)
+?odbcConnect
+chan <- odbcConnect("testsource")
+library(RODBC)#
+odbcDataSources()#
 #
-#garzon as left#
-result <- aldmck(data=tmp, polarity=7, respondent=0, missing=c(99),verbose=TRUE)
-library(basicspace)
-tmp <- colombia[,c(5:8,12:16)]#
+chan <- odbcConnect("testsource")
+warnings()
+chan <- odbcConnect("testsource", uid="postgres", pwd="super")
+warnings()
+library(RODBC)#
+odbcDataSources()#
 #
-#garzon as left#
-result <- aldmck(data=tmp, polarity=7, respondent=0, missing=c(99),verbose=TRUE)
-plot(result)
-names(result)
-summary(result)
-tmp <- colombia[,c(5:8,12:17)]
-dim(tmp)
-result <- aldmck(data=tmp, polarity=7, respondent=10, missing=c(99),verbose=TRUE)#
+chan <- odbcConnect("testsource", uid="postgres", pwd="super")#
+#
+#
+channel <- odbcConnect("test", uid="ripley", pwd="secret")
+library(RODBC)#
+odbcDataSources()#
+#
+chan <- odbcConnect("testsource", uid="postgres", pwd="super")
+chan <- odbcConnect("pg", uid="postgres", pwd="super")
+chan <- odbcConnect("psdf", uid="postgres", pwd="super")
+?odbcConnect
+chan <- odbcConnect("pg", uid="postgres", pwd="super", case="postgresql")
+vignette("wnominate")
+library(RODBC)
+?sqlFetch
+?sqlQuery
+## Simulate fake data as always#
+N <- 10000	#Represents number of genes in potassium ion channel GO cat#
+gene.name <- paste("gene",1:N,sep="")#
+gene.size <- sample(1:100,N,replace=TRUE)#
+pvals <- vector("list",N)	#Each element of this list has all the pvals in a vector for that particular gene#
+for(i in 1:N) pvals[[i]] <- runif(gene.size[i], min=0.001, max=0.05)	#All genes simulated to have pvals between 0.05 to 0.001#
+#
+# Calculate the skew value for each gene's pvals#
+# Note this requires the 'psych' library: type install.packages("psych") if you don't already have it#
+library(psych)#
+skew <- numeric(N)#
+for(i in 1:N) skew[i] <- skew(pvals[[i]])#
+skew <- abs(skew)	# For reasons explained in graphic version 1#
+#
+point.estimate <- by(skew, gene.size, mean, na.rm=TRUE)	#renaming these to match the earlier code#
+plot(1:max(gene.size),1:max(gene.size), type="n", xlim=c(1,100),bty="n", ylim=c(0,0.4),ylab="Absolute value of skew",xlab="Gene Size")#
+for(i in 2:length(point.estimate))segments(i, 0, i, point.estimate[i], lty=1, lwd=1.2)
+#### Graphic version 3 --- Essentiall a flipped version of graphic 1 ####
+### An option if you have lots of pval ranges, but also have to visually show the spread#
+#
+## Simulate fake data as always#
+N <- 10000	#Represents number of genes in potassium ion channel GO cat#
+gene.name <- paste("gene",1:N,sep="")#
+gene.size <- sample(1:100,N,replace=TRUE)#
+pvals <- vector("list",N)	#Each element of this list has all the pvals in a vector for that particular gene#
+for(i in 1:N) pvals[[i]] <- runif(gene.size[i], min=0.001, max=0.05)	#All genes simulated to have pvals between 0.05 to 0.001#
+#
+# Calculate the skew value for each gene's pvals#
+# Note this requires the 'psych' library: type install.packages("psych") if you don't already have it#
+library(psych)#
+skew <- numeric(N)#
+for(i in 1:N) skew[i] <- skew(pvals[[i]])#
+skew <- abs(skew)	# For reasons explained in graphic version 1#
+#
+point.estimate <- by(skew, gene.size, mean, na.rm=TRUE)	#renaming these to match the earlier code#
+std.error <- by(skew, gene.size, sd, na.rm=TRUE)#
+#
+plot(1:max(gene.size),1:max(gene.size), type="n", xlim=c(0,max(gene.size)),bty="n", ylim=c(-0.5,1),ylab="Absolute value of skew",xlab="Gene Size")#
+for(i in 2:max(gene.size))   segments(i, point.estimate[i]+ 1.96*std.error[i], i, point.estimate[i] - 1.96*std.error[i], col="grey")#
+points(1:max(gene.size), point.estimate, pch=20)	# Add point estimates#
+size.names <- paste("Size=",2:max(gene.size),sep="")
+### Example 1: A 'standard' point estimate with confidence interval plot#
+### This probably isn't what you want to use to show what you would like, but it's a starting point#
+#
+## Generate some data#
+N <- 10#
+point.estimate <- rnorm(N,sd=0.6)#
+std.error <- runif(N, 0,0.2)#
+gene.name <- paste("gene",1:N,sep="")#
+#
+# Create a blank canvas that is appropriately sized#
+plot(point.estimate,1:N, type="n", xlim=c(-1,1),yaxt="n",bty="n", ylim=c(1,N),xlab="Estimand of Interest",ylab="")#
+# Add the confidence intervals. 1.96 is used because t=1.96 is a 95% confidence interval#
+for(i in 1:N)   segments(point.estimate[i]+ 1.96*std.error[i], i, point.estimate[i] - 1.96*std.error[i], i, col="grey")#
+points(point.estimate,1:N, pch=20)	# Add point estimates#
+mtext(gene.name, side=2, at=1:N,las=1,adj=1.3,cex=0.7)	#add labels#
+segments(-1.5,seq(1.5,15.5),1,lty=3,col="lightgrey")		# add separating lines
+library(sem)
+install.packages("sem")
+library(sem)
+library(help=sem)
+?tsls
+data(Kmenta)#
+summary(tsls(Q ~ P + D, ~ D + F + A, data=Kmenta))
+summary(tsls(Q ~ P + D + A, ~ D + F, data=Kmenta))
+colnames(Kmenta)
+dim(Kmenta)
+lm(P ~ D + F,data=Kmenta)
+lm(P ~ D + F,data=Kmenta)-
+model <- lm(P ~ D + F,data=Kmenta)
+model
+names(model)
+predict(model)
+P.hat <- predict(lm(P ~ D + F,data=Kmenta))
+plot(P.hat, Kmenta$P)
+Kmenta$P.hat <- predict(lm(P ~ D + F,data=Kmenta))
+summary(tsls(Q ~ P + D, ~ D + F, data=Kmenta))#
+Kmenta$P.hat <- predict(lm(P ~ D + F,data=Kmenta))#
+summary(lm(Q ~ P.hat + D, data=Kmenta))
+summary(lm(Q ~ P + D, data=Kmenta))
+summary(tsls(Q ~ P + D + A, ~ D + F, data=Kmenta))
+summary(tsls(Q ~ P + D + A, ~ D + F, data=Kmenta))#
+Kmenta$P.hat <- predict(lm(P ~ D + F,data=Kmenta))#
+Kmenta$A.hat <- predict(lm(A ~ D + F,data=Kmenta))#
+summary(lm(Q ~ P.hat + D + A.hat, data=Kmenta))
+summary(lm(Q ~ P.hat + D + A, data=Kmenta))
+summary(tsls(Q ~ P + D + A, ~ D + F, data=Kmenta))#
+Kmenta$P.hat <- predict(lm(P ~ D + F,data=Kmenta))#
+Kmenta$A.hat <- predict(lm(A ~ D + F,data=Kmenta))#
+summary(lm(Q ~ P.hat + D + A, data=Kmenta))
+summary(lm(Q ~ P + D + A.hat, data=Kmenta))
+summary(tsls(Q ~ P + D + A, ~ D + F, data=Kmenta))#
+Kmenta$P.hat <- predict(lm(P ~ D + F,data=Kmenta))#
+Kmenta$A.hat <- predict(lm(A ~ D + F,data=Kmenta))#
+#summary(lm(Q ~ P.hat + D + A, data=Kmenta))#
+summary(lm(Q ~ P + D + A.hat, data=Kmenta))
+?tsls
+install.packages("aer")
+install.packages("AER")
+library(AER)
+library(help=AER)
+?ivreg
+data("CigarettesSW")#
+CigarettesSW$rprice <- with(CigarettesSW, price/cpi)#
+CigarettesSW$rincome <- with(CigarettesSW, income/population/cpi)#
+CigarettesSW$tdiff <- with(CigarettesSW, (taxs - tax)/cpi)#
+#
+## high-level interface#
+fm <- ivreg(log(packs) ~ log(rprice) + log(rincome) | log(rincome) + tdiff + I(tax/cpi),#
+  data = CigarettesSW, subset = year == "1995")#
+#
+## low-level interface#
+y <- fm$y#
+x <- model.matrix(fm)#
+z <- model.matrix(fm, component = "instruments")
+y
+x
+z
+summary(tsls(Q ~ P + D + A, ~ D + F, data=Kmenta))#
+Kmenta$P.hat <- predict(lm(P ~ D + F,data=Kmenta))#
+Kmenta$A.hat <- predict(lm(A ~ D + F,data=Kmenta))#
+#summary(lm(Q ~ P.hat + D + A, data=Kmenta))#
+summary(lm(Q ~ P + D + A.hat, data=Kmenta))
+summary(tsls(Q ~ P + D + A, ~ D + F, data=Kmenta))#
+Kmenta$P.hat <- predict(lm(P ~ D + F,data=Kmenta))#
+Kmenta$A.hat <- predict(lm(A ~ D + F,data=Kmenta))#
+#summary(lm(Q ~ P.hat + D + A, data=Kmenta))#
+#summary(lm(Q ~ P + D + A.hat, data=Kmenta))#
+summary(lm(Q ~ P + D + A, data=Kmenta))
+summary(tsls(Q ~ P + D + A, ~ D + F, data=Kmenta))#
+Kmenta$P.hat <- predict(lm(P ~ D + F,data=Kmenta))#
+Kmenta$A.hat <- predict(lm(A ~ D + F,data=Kmenta))#
+#summary(lm(Q ~ P.hat + D + A, data=Kmenta))#
+summary(lm(Q ~ P.hat + D + A.hat, data=Kmenta))
+summary(lm(Q ~ P.hat + D + A, data=Kmenta))
+summary(tsls(Q ~ P + D + A, ~ D + F, data=Kmenta))#
+Kmenta$P.hat <- predict(lm(P ~ D,data=Kmenta))#
+Kmenta$A.hat <- predict(lm(A ~ D,data=Kmenta))#
+summary(lm(Q ~ P.hat + D + A.hat, data=Kmenta))
+summary(tsls(Q ~ P + D + A, ~ D + F, data=Kmenta))#
+Kmenta$P.hat <- predict(lm(P ~ ,data=Kmenta))#
+Kmenta$A.hat <- predict(lm(A ~ ,data=Kmenta))#
+summary(lm(Q ~ P.hat + D + A.hat, data=Kmenta))
+Kmenta$D
+summary(tsls(Q ~ P + D + A, ~ D + F, data=Kmenta))#
+Kmenta$P.hat <- predict(lm(P ~ A + D + F,data=Kmenta))#
+Kmenta$A.hat <- predict(lm(A ~ P + D + F,data=Kmenta))#
+summary(lm(Q ~ P.hat + D + A.hat, data=Kmenta))
+summary(tsls(Q ~ P + D + A, ~ D + F, data=Kmenta))#
+Kmenta$P.hat <- predict(lm(P ~ D + F,data=Kmenta))#
+Kmenta$A.hat <- predict(lm(A ~ D + F,data=Kmenta))#
+summary(lm(Q ~ P.hat + D + A.hat, data=Kmenta))
+summary(tsls(Q ~ P + D + A, ~ D + F, data=Kmenta))#
+Kmenta$P.hat <- predict(lm(P ~ A + F,data=Kmenta))#
+Kmenta$A.hat <- predict(lm(A ~ P + F,data=Kmenta))#
+summary(lm(Q ~ P.hat + D + A.hat, data=Kmenta))
+summary(tsls(Q ~ P + D + A, ~ D + F, data=Kmenta))#
+Kmenta$P.hat <- predict(lm(P ~ A + D,data=Kmenta))#
+Kmenta$A.hat <- predict(lm(A ~ P + D,data=Kmenta))#
+summary(lm(Q ~ P.hat + D + A.hat, data=Kmenta))
+W <- cbind(1,Kmenta$D, Kmenta$F)#
+X1 <- W %*% solve(t(W) %*% W)
+X1
+Q
+W
+X1 <- W %*% solve(t(W) %*% W) %*% t(W)
+dim(X1)
+summary(tsls(Q ~ P + D + A, ~ D + F, data=Kmenta))
+W <- cbind(1,Kmenta$D, Kmenta$F)#
+X <- cbind(1, Kmenta$P, Kmenta$D, Kmenta$A)#
+X1 <- W %*% solve(t(W) %*% W) %*% t(W) %*% X
+dim(X1)
+dim(X)
+W <- cbind(1,Kmenta$D, Kmenta$F)#
+X <- cbind(1, Kmenta$P, Kmenta$D, Kmenta$A)#
+X1 <- W %*% solve(t(W) %*% W) %*% t(W) %*% X#
+solve(t(X1) %*% X1) %*% t(X1) %*% Kmenta$Q
+solve(t(X1) %*% X1) %*% t(X1)
+t(X1)
+(t(X1) %*% X1)
+solve(t(X1) %*% X1)
+330*27
+choose(4,2)
+choose(3,2)
+23.50*0.25
+rm(list=ls(all=TRUE))#
+setwd("/Users/jalo/Dropbox/forum/data")#
+library(basicspace)#
+library(foreign)#
+library(car)#
 #
+### Read and format general files#
+eesdat <- read.spss("ees2009_AR_20100416.sav",to.data.frame=T,use.value.labels=TRUE)#
+countrylist <- sort(unique(as.character(eesdat$t102)))#
+parties <- read.csv("EES_2009_VOTER_STUDY-party_codes_variables_UPDATE30-6-2010.csv",as.is=TRUE,na.strings="")#
+unique(as.character(parties[,1]))#
+results <- vector("list", length(countrylist))#
+names(results) <- countrylist#
+#
+parties <- cbind(country=recode(as.character(parties[,1]), "#
+	'AT'='Austria';#
+	'BE'='Belgium';#
+	'BG'='Bulgaria';#
+	'CY'='Cyprus';#
+	'CZ'='Czech Republic';#
+	'DE'='Germany';#
+	'DK'='Denmark';#
+	'EE'='Estonia';		#aka. Estland#
+	'GR'='Greece';#
+	'ES'='Spain';#
+	'FI'='Finland';#
+	'FR'='France';#
+	'HU'='Hungary';#
+	'IE'='Ireland';#
+	'IT'='Italy';#
+	'LT'='Lithuania';#
+	'LU'='Luxembourg';#
+	'LV'='Latvia';#
+	'MT'='Malta';#
+	'NL'='The Netherlands';#
+	'PL'='Poland';#
+	'PT'='Portugal';#
+	'RO'='Romania';#
+	'SE'='Sweden';#
+	'SI'='Slovenia';#
+	'SK'='Slovakia';#
+	'UK'='United Kingdom'; else=NA"), parties, idealpt.unscaled=as.numeric(rep(0,nrow(parties))) )#
+#
+#
+parties <- na.omit(parties)#
+parties$country <- as.character(parties$country)#
+parties$Party.name.in.English<- as.character(parties$Party.name.in.English)#
+#
+for(i in 1:length(countrylist)){#
+	dat <- eesdat[as.character(eesdat$t102)==countrylist[i],c("q46",paste("q47_p", 1:15, sep=""))]#
+	dat <- as.matrix(dat[,apply(dat,2,mean)!=99])	#unused columns#
+	results[[i]] <- aldmck(data=dat, polarity=2, respondent=1, missing=c(77,88,89),verbose=TRUE)#
+	## Until PIREDEU sorts out the q47 issue below, discard all#
+	if(!(countrylist[i] %in% c("Belgium","Denmark","Sweden","Spain","Malta"))) parties$idealpt.unscaled[which(parties$country==countrylist[i])] <- results[[i]]$stimuli#
+}#
+#
+### Get rid of the unscaled countries#
+temp <- parties[parties$idealpt.unscaled !=0,]	#Eliminate the countries that were unscaled because of data quality issues#
+#
+## Notice that unlike other estimates, we don't discard parties with no party group#
+## Hence this is commented out#
+#new <- temp[apply(temp[,c("EPP","ALDE","SD.PES","Greens.EFA","ECR","EUL.NGL","EFD")],1,sum)==1,]#
+#
+#
+##Record mean placement of parties by voters with no scaling#
+meanplace <- rep(NA,nrow(temp))#
+eesdat <- read.spss("ees2009_AR_20100416.sav",to.data.frame=T)	#raw data file from PIREDEU#
+for(i in 1:nrow(temp)){#
+	placement <- eesdat[as.character(eesdat$t102)==temp$country[i],sub("Q","q",as.character(temp$Left.Right.placement[i]))]#
+	meanplace[i] <- mean(placement[placement %in% 0:10])	#dump missing data codes#
+}#
+temp$LR.mean <- meanplace#
+#
+#
+##Record mean placement of parties by voters with no scaling#
+meanplace <- rep(NA,nrow(temp))#
+eesdat <- read.spss("ees2009_AR_20100416.sav",to.data.frame=T)	#raw data file from PIREDEU#
+for(i in 1:nrow(temp)){#
+	placement <- eesdat[as.character(eesdat$t102)==temp$country[i],sub("Q","q",as.character(temp$EU.integration.stance[i]))]#
+	meanplace[i] <- mean(placement[placement %in% 0:10])	#dump missing data codes#
+}#
+temp$EU.mean <- meanplace#
+#
+## Uhm, this doesn't look like what Hooghe and Marks' U curve says#
+scatter.smooth(temp$LR.mean, temp$EU.mean)#
+#
+new <- temp[,c("country","Party.name.in.English","LR.mean","EU.mean")]#
+#
+#
+#
+### Conduct the merge#
+#hooghe <- read.dta("summaries_hooghe.dta",convert.factors=FALSE)#
+hooghe <- read.dta("summaries_hooghe.dta")#
+#
+## Merge in names#
+partynames <- read.csv("summaries_partycode.csv",as.is=TRUE)#
+partynames <- partynames[,c("countryID_hd","partyID_hd","country","party")]#
+colnames(partynames) <- c("countryID_hd","partyID_hd","country_name","party_name")#
+hooghe <- merge(hooghe,partynames,by=c("countryID_hd","partyID_hd"))#
+#
+## Merge in voter means#
+hooghe <- merge(hooghe,new, by.x=c("country_name","party_name"),by.y=c("country","Party.name.in.English"),all.x=TRUE)#
+#
+#Confirmation of successful merge#
+#plot(hooghe$raw_unscaled,hooghe$LR.mean)#
+#
+plot(hooghe$Chapel_Hill_LeftRight, hooghe$LR.mean)#
+plot(hooghe$Chapel_Hill_Integration, hooghe$EU.mean)#
+#
+### EU Integration, Full Range#
+cor(hooghe$Chapel_Hill_LeftRight, hooghe$LR.mean,use="pairwise.complete.obs")#
+cor(hooghe$Chapel_Hill_Integration, hooghe$EU.mean, use="pairwise.complete.obs")#
+length(na.omit(hooghe$Chapel_Hill_LeftRight))
+150*30
+1.06^14
+1.09^14
+1.12^14
+1.12^13
+1.09^13
+4000*1.06^14
+4000*1.09^14
+1:3/1:3
+1:3/c(2,3,4)
+c("23",231")
+c("23","231")
+c("23","231")->a
+paste(a)
+paste(a,"r")
+#
+### Power model examining rapidity of decay in 2006 Sub-National Elections#
+### Ads units in data are in GRP/100 in data#
+### Produce Table 4 Result#
+#
+library(foreign)#
+library(car)#
+library(MASS)#
+setwd("/Users/jalo/Dropbox/HLVZ")#
+rm(list=ls(all=TRUE))#
+#
+#Impact 1 assumed 0 as baseline#
+standard.llik <- function(par, Y, X, ads){#
+#
+    #first ncol(X) variables are controls#
+    ##ncol(X) +1, and ncol(X) +2 are tau cutlines#
+    ##ncol(X) +3 is delta#
+    ##ncol(X) + 4 is impact#
+#
+    nvar <- ncol(X)#
+    nobs <- nrow(X)#
+#
+    beta2 <- par[1:nvar]#
+    beta3 <- par[(nvar+1):(2*nvar)]#
+    delta2 <-par[2*nvar+1]#
+    impact2 <- par[2*nvar+2]#
+    delta3 <-par[2*nvar+3]#
+    impact3 <- par[2*nvar+4]#
+#
+    dvec2 <- (1:ncol(ads))^(delta2*-1)#
+    dstuff2 <- ads %*% dvec2 #
+    dvec3 <- (1:ncol(ads))^(delta3*-1)#
+    dstuff2 <- ads %*% dvec3 #
+#
+    #Bounding catch#
+    if(delta2>=1) return(-8000)#
+    if(delta3>=1) return(-8000)#
+#
+#
+    Prob1 <- rep(1,nobs)#
+    Prob2 <- exp(X %*% beta2 + dvec2)#
+    Prob3 <- exp(X %*% beta3 + dvec3)#
+    denom <- Prob1 + Prob2 + Prob3#
+    Prob1 <- Prob1/denom#
+    Prob2 <- Prob2/denom#
+    Prob3 <- Prob3/denom#
+#
+    return(sum(log(Prob1[which(Y==1)])) + sum(log(Prob2[which(Y==2)])) + sum(log(Prob3[which(Y==3)])))#
+}#
+#
+standard <- function(Y, X, ads, starts){#
+#
+    #will definitely require starts#
+    result <- optim(par=starts, standard.llik, Y=Y, X=X, ads=ads, method="BFGS", control=list(fnscale = -1),hessian=TRUE)#
+    result$namelist <- c(paste(colnames(X),".2",sep=""), paste(colnames(X),".3",sep=""), "delta2","impact2","delta3","impact3")#
+    result$N <- nrow(X)#
+    if(result$convergence == 0) cat("\n\n\tEstimator successfully converged...\n\n")#
+    return(result)#
+#
+}#
+#
+#
+#
+su.standard <- function(result){#
+#
+    error <- sqrt(diag(solve(-result$hessian)))#
+    output <- cbind(coef=round(result$par,6),SE=round(error,6), t=round(result$par/error,3))#
+    rownames(output) <- result$namelist#
+#
+    cat("\nPrinting Standard Estimator Results...\n\n")#
+    print(output)#
+#
+    cat("\nLoglike =",  result$value)#
+    cat("\nN = ", result$N, "\n\n")#
+#
+}#
+#
+#
+## Read data#
+fulldata <-read.dta("recoded2006.dta",convert.factors=FALSE)#
+#
+## Filters#
+fulldata <- fulldata[fulldata$tv==1,]   #John's tv filter#
+fulldata <- fulldata[!is.na(fulldata$vote_pre),]	#dump weird cases with no recorded vote, can't use anyway#
+fulldata <- fulldata[!is.na(fulldata$dma),]	#dump weird cases with unknown DMA, can't use anyway#
+dma.lag=14	#Activates Ground campaign effects 10 days before election.#
+#
+## Some variable recoding#
+fulldata$pid7 <- recode(fulldata$pid7, "1=1;2=2;3=3;4=4;5=5;6=6;7=7;else=4")#
+fulldata$income[is.na(fulldata$income)] <- 15	#15 is nonresponse according to codebook#
+fulldata$income.dkna <- 1*(fulldata$income==15)#
+fulldata$pinter <- fulldata$pid7*fulldata$info_alpha#
+fulldata$ovote <- fulldata$vote_pre + 2#
+#
+## Generating district proportional Republican (from 2004 presidential election)#
+## Source: http://www.cookpolitical.com/sites/default/files/pvistate.pdf#
+districts <- c("IL1", "IL2", "IL3", "IL4", "IL5", "IL6", "IL7", "IL8", "IL9", "IL10", "IL11", "IL12",#
+"IL13", "IL14", "IL15", "IL16", "IL17", "IL18", "IL19", "IN1", "IN2", "IN3", "IN4",#
+"IN5", "IN6", "IN7", "IN8", "IN9", "MI1", "MI2", "MI3", "MI4", "MI5", "MI6", "MI7",#
+"MI8", "MI9", "MI10", "MI11", "MI12", "MI13", "MI14", "MI15", "MN1", "MN2", "MN3", "MN4",#
+"MN5", "MN6", "MN7", "MN8", "OH1", "OH2", "OH3", "OH4", "OH5", "OH6", "OH7", "OH8", "OH9",#
+"OH10", "OH11", "OH12", "OH13", "OH14", "OH15", "OH16", "OH17", "OH18", "WI1", "WI2",#
+"WI3", "WI4", "WI5", "WI6", "WI7", "WI8")#
+bushvote <- c(83,84,59,79,67,47,83,44,68,53,46,52,45,44,41,44,51,42,39,55,43,32,30,28,35,58,#
+38,40,46,39,40,44,59,46,45,45,49,43,47,61,81,83,62,47,45,48,62,71,42,43,53,50,36,46,34,39,49,#
+43,35,58,58,81,49,56,47,50,46,63,43,46,62,51,70,36,43,50,44)#
+fulldata$prep.2004 <- bushvote[match(fulldata$cd,districts)]#
+fulldata$prep.2004[fulldata$type%in% c("sen","gov") & fulldata$state=="IL"] <- 44.48#
+fulldata$prep.2004[fulldata$type%in% c("sen","gov") & fulldata$state=="OH"] <- 50.81#
+fulldata$prep.2004[fulldata$type%in% c("sen","gov") & fulldata$state=="MI"] <- 47.81#
+fulldata$prep.2004[fulldata$type%in% c("sen","gov") & fulldata$state=="WI"] <- 49.32#
+fulldata$prep.2004[fulldata$type%in% c("sen","gov") & fulldata$state=="MN"] <- 47.61#
+fulldata$prep.2004[fulldata$type%in% c("sen","gov") & fulldata$state=="IN"] <- 59.94#
+#
+## Geting timing variables#
+fulldata$month <- substr(fulldata$starttim,5,7)#
+fulldata$day <- as.numeric(substr(fulldata$starttim,9,10))#
+fulldata$hour <- as.numeric(substr(fulldata$starttim,12,13))#
+fulldata$intweek0 <- 1*(fulldata$month=="Nov")#
+fulldata$intweek1 <- 1*(fulldata$month=="Oct" & fulldata$day %in% 25:31) #
+fulldata$intweek2 <- 1*(fulldata$month=="Oct" & fulldata$day %in% 18:24) #
+fulldata$intweek3 <- 1*(fulldata$month=="Oct" & fulldata$day %in% 11:17) #
+not.lastten <- 1*(fulldata$month=="Oct" & fulldata$day < 25)#
+not.lastfourteen <- 1*(fulldata$month=="Oct" & fulldata$day < 29)#
+#
+#
+## Partial Media market effects ###
+## Note: Minneaplolis DMA is exactly collinear with all Minnesota respondents ###
+if(dma.lag==10) dump.dma <- not.lastten#
+if(dma.lag==14) dump.dma <- not.lastfourteen#
+dmalist.sen <- unique(fulldata$dma[fulldata$type=="sen"])#
+dma.sen <- matrix(0,nrow=nrow(fulldata),ncol=length(dmalist.sen))#
+colnames(dma.sen) <- paste("dma.sen", 1:length(dmalist.sen), sep="")#
+for(i in 1:length(dmalist.sen)) dma.sen[,i] <- 1*(fulldata$dma==dmalist.sen[i] & fulldata$type=="sen")#
+dma.sen[dump.dma==1,] <- 0#
+dmalist.gov <- unique(fulldata$dma[fulldata$type=="gov"])#
+dma.gov <- matrix(0,nrow=nrow(fulldata),ncol=length(dmalist.gov))#
+colnames(dma.gov) <- paste("dma.gov", 1:length(dmalist.gov), sep="")#
+for(i in 1:length(dmalist.gov)) dma.gov[,i] <- 1*(fulldata$dma==dmalist.gov[i] & fulldata$type=="gov")#
+dma.gov[dump.dma==1,] <- 0#
+dmalist.rep <- unique(fulldata$dma[fulldata$type=="rep"])#
+dma.rep <- matrix(0,nrow=nrow(fulldata),ncol=length(dmalist.rep))#
+colnames(dma.rep) <- paste("dma.rep", 1:length(dmalist.rep), sep="")#
+for(i in 1:length(dmalist.rep)) dma.rep[,i] <- 1*(fulldata$dma==dmalist.rep[i] & fulldata$type=="rep")#
+dma.rep[dump.dma==1,] <- 0#
+#
+## Getting rid of lopsided races from ground campaign effects#
+## Counted as non-BG if final result victory margin > 30%#
+#nonBG <- c("IL1","IL16","IL18","IL2","IL3","IL4","IL5", #
+#	"IL7","IL9","IN1","MI10","MI12","MI13","MI14","MI5",  #
+#	"MN3","MN4","MN5","MN7","MN8","MI15","OH10","OH11","OH17", #
+#	"OH9","WI3","WI4")#
+#dma.sen[(fulldata$type=="sen" & fulldata$state=="WI"),] <- 0	#the only non-BG state level race#
+#dma.rep[(fulldata$type=="rep" & (fulldata$state %in% nonBG)),] <- 0	#the only non-BG state level race#
+#
+#fulldata <- cbind(fulldata,dma.sen,dma.gov,dma.rep)#
+#
+#DMA#
+fulldata$dma1 <- 1*(fulldata$dma=="champaign-springfield-decatur, il")#
+fulldata$dma2 <- 1*(fulldata$dma== "chicago, il" )#
+fulldata$dma3 <- 1*(fulldata$dma=="cleveland, oh")#
+fulldata$dma4 <- 1*(fulldata$dma=="columbus, oh")#
+fulldata$dma5 <- 1*(fulldata$dma=="detroit, mi")#
+fulldata$dma6 <- 1*(fulldata$dma=="lansing, mi")#
+fulldata$dma7 <- 1*(fulldata$dma=="madison, wi")#
+fulldata$dma8 <- 1*(fulldata$dma=="milwaukee, wi" )#
+fulldata$dma9 <- 1*(fulldata$dma=="minneapolis, mn")#
+#
+## Fixed effects by type of race ###
+sen.state <- c("MI","MN","OH","WI")#
+for(i in 1:length(sen.state)) fulldata[,paste("sen.",sen.state[i],sep="")] <- 1*(fulldata$state==sen.state[i] & fulldata$type=="sen")#
+gov.state <- c("IL","OH","MI","WI","MN")#
+for(i in 1:length(gov.state)) fulldata[,paste("gov.",gov.state[i],sep="")] <- 1*(fulldata$state==gov.state[i] & fulldata$type=="gov")#
+CDvec <- names(table(fulldata$cd))[table(fulldata$cd)>10]#
+for(i in 1:length(CDvec)) fulldata[,CDvec[i]] <- 1*(fulldata$cd==CDvec[i] & fulldata$type=="rep")#
+#
+### Ads calculation and shifting to account for same day ads#
+cand2 <- fulldata[,paste("lag",0:43,"cand2_grp",sep="")]#
+cand1 <- fulldata[,paste("lag",0:43,"cand1_grp",sep="")]#
+cand2[is.na(cand2)] <- 0#
+cand1[is.na(cand1)] <- 0#
+ads.all <- as.matrix(log(cand2+1) - log(cand1+1))#
+ads <- matrix(0,nrow=nrow(ads.all),ncol=43)#
+for(i in 1:nrow(ads)){#
+  if(fulldata$hour[i]>=17) ads[i,] <- ads.all[i,1:43]#
+  if(fulldata$hour[i] %in% 0:2) ads[i,] <- ads.all[i,2:44]#
+  if(fulldata$hour[i] %in% 3:16) ads[i,] <- c(0,ads.all[i,2:43])#
+#  if(fulldata$hour[i]>=17) ads[i,] <- ads.all[i,1:43]#
+#  if(fulldata$hour[i]<17) ads[i,] <- ads.all[i,2:44]#
+}#
+colnames(ads) <- paste("grplag",0:42)#
+#
+## Generate additional advertising variables ###
+fulldata$lag0 <- ads[,1]#
+fulldata$lag1_42 <- apply(ads[,2:43],1,sum)#
+fulldata$lag1 <- ads[,2]#
+fulldata$lag2_42 <- apply(ads[,3:43],1,sum)#
+fulldata$lag1_2 <- apply(ads[,2:3],1,sum)#
+fulldata$lag3_42 <- apply(ads[,4:43],1,sum)#
+fulldata$lag1_3 <- apply(ads[,2:4],1,sum)#
+fulldata$lag4_42 <- apply(ads[,5:43],1,sum)#
+fulldata$lag1_5 <- apply(ads[,2:6],1,sum)#
+fulldata$lag6_42 <- apply(ads[,7:43],1,sum)#
+fulldata$lag2_5 <- apply(ads[,3:6],1,sum)#
+fulldata$daytime <- 1*(fulldata$hour<17)#
+fulldata$lagxdaytime <- fulldata$daytime*fulldata$lag0#
+#
+## RUN MODEL ###
+## Generate additional advertising variables, take out observations with NAs ###
+#
+fulldata$lag0_42 <- apply(ads[,1:43],1,sum)#
+tempdat <- na.omit(cbind(fulldata[,c("ovote","pid7","pinter","info_alpha","male","white","educ","income","income.dkna","age","prep.2004",#
+	paste("dma", 1:9, sep=""),#
+	"sen.MI","sen.MN","sen.OH","sen.WI","gov.IL","gov.OH","gov.MI","gov.WI","gov.MN",#
+	CDvec, "lag0_42","lag0")], ads))#
+tempY <- tempdat[,"ovote"]#
+tempX <- as.matrix(tempdat[,c("pid7","pinter","info_alpha","male","white","educ","income","income.dkna","age","prep.2004",#
+	paste("dma", 1:9, sep=""),#
+	"sen.MI","sen.MN","sen.OH","sen.WI","gov.IL","gov.OH","gov.MI","gov.WI","gov.MN",#
+	CDvec)])#
+tempads <- as.matrix(tempdat[,colnames(ads)])#
+baseline <- suppressWarnings(multinom(as.factor(tempY) ~ cbind(tempX,apply(tempads,1,sum)), method=c("probit"),Hess=T))#
+baseline$deviance/-2#
+summary(baseline)
+big_blackbox_transpose <- function (data, missing, verbose = FALSE, dims = 1, minscale) {#
+    if (class(data) != "matrix") #
+        stop("Data is not a matrix, please convert it using as.matrix().")#
+    if (typeof(data) != "double") #
+        stop("Data are not numeric values, please convert it using as.numeric().")#
+    if (!(is.matrix(missing) | is.vector(missing))) #
+        stop("Argument 'missing' must be a vector or matrix.")#
+    if (mode(missing) != "numeric") #
+        stop("Argument 'missing' must only contain numeric values.")#
+    if (!is.logical(verbose)) #
+        stop("Argument 'verbose' must be set TRUE or FALSE.")#
+    if (minscale < 1) #
+        stop("Argument 'minscale' must be positive.")#
+    if (dims < 1) #
+        stop("Argument 'dims' must be positive.")#
+    # if (nrow(data) > 1500)         stop("There are more than N = 1500 respondents in the data.")#
+    N <- nrow(data)#
+    NQ <- ncol(data)#
+    if (is.vector(missing)) #
+        data[data %in% missing] <- NA#
+    if (is.matrix(missing)) #
+        for (i in 1:ncol(data)) data[data[, i] %in% missing[, #
+            i], i] <- NA#
+    missval <- max(data, na.rm = TRUE) + 1#
+    rawdata <- as.numeric(t(data))#
+    rawdata[is.na(rawdata)] <- missval#
+    stimnames <- colnames(data)#
+    if (is.null(stimnames)) #
+        stimnames <- paste("stim", 1:N, sep = "")#
+    if (verbose) {#
+        deleted <- sum(is.na(apply(data, 1, sum)))#
+        cat("\n\n\tBeginning Blackbox Transpose Scaling...")#
+        cat(NQ, "stimuli have been provided.")#
+    }#
+    res <- .Fortran("blackboxt", as.integer(N), as.integer(NQ), #
+        as.integer(dims), as.integer(1), as.double(rep(missval, #
+            NQ)), as.integer(minscale), as.integer(rep(1, N)), #
+        as.double(rawdata), as.character("a"), fits = double(7 * #
+            dims), psimatrix = double(N * ((dims * (dims + 1))/2) + #
+            2 * N * dims), wmatrix = double((NQ) * ((dims * (dims + #
+            1))/2) + 2 * (NQ) * dims), lresp = integer(N + NQ), #
+        lmark = integer(N), fits2 = double(6), exitstatus = integer(1))#
+    if (res$exitstatus != 1) #
+        stop("\n\n\t====== Blackbox-Transpose did not execute properly ======\n\n")#
+    stimuli <- vector("list", dims)#
+    start <- 1#
+    end <- 2 * NQ#
+    for (i in 1:dims) {#
+        stimuli[[i]] <- as.data.frame(matrix(round(res$wmatrix[start:end], #
+            digits = 3), nrow = NQ, ncol = i + 1, byrow = T))#
+        colnames(stimuli[[i]]) <- c(paste("coord", 1:i, "D", #
+            sep = ""), "R2")#
+        rownames(stimuli[[i]]) <- stimnames#
+        stimuli[[i]] <- cbind(N = res$lresp[(length(res$lresp) - #
+            NQ + 1):length(res$lresp)], stimuli[[i]])#
+        start <- end + 1#
+        end <- start + (i + 2) * NQ - 1#
+    }#
+    individuals <- vector("list", dims)#
+    start <- 1#
+    end <- 3 * N#
+    for (i in 1:dims) {#
+        individuals[[i]] <- as.data.frame(matrix(round(res$psimatrix[start:end], #
+            digits = 3), nrow = N, ncol = i + 2, byrow = T))#
+        colnames(individuals[[i]]) <- c("c", paste("w", 1:i, #
+            sep = ""), "R2")#
+        if (!is.null(rownames(data))) #
+            rownames(individuals[[i]]) <- rownames(data)#
+        start <- end + 1#
+        end <- start + (i + 3) * N - 1#
+        individuals[[i]][!res$lmark, ] <- NA#
+    }#
+    fits <- matrix(res$fits, nrow = dims, ncol = 7, byrow = T)#
+    fits <- as.data.frame(fits[, c(1:3, 6:7), drop = FALSE])#
+    colnames(fits) <- c("SSE", "SSE.explained", "percent", "SE", #
+        "singular")#
+    rownames(fits) <- paste("Dimension", 1:dims)#
+    result <- list(stimuli = stimuli, individuals = individuals, #
+        fits = fits, Nrow = res$fits2[1], Ncol = res$fits2[2], #
+        Ndata = res$fits2[3], Nmiss = res$fits2[4], SS_mean = res$fits2[6], #
+        dims = dims)#
+    class(result) <- c("blackbt")#
+    if (verbose) #
+        cat("\n\n\tBlackbox-Transpose estimation completed successfully.\n\n")#
+    result#
+}
+big_blackbox_transpose
+?blackbox_transpose
+library(basicspace)
+?blackbox_transpse
+?blackbox_transpose
+data(LC1980)#
+LCdat=LC1980[,-1]	#Dump the column of self-placements#
+result <- blackbox_transpose(LCdat,missing=c(0,8,9),dims=3,minscale=5,verbose=TRUE)#
+plot(result)#
+par(ask=TRUE)#
+plotcdf.blackbt(result)#
+summary(result)
+result <- big_blackbox_transpose(LCdat,missing=c(0,8,9),dims=3,minscale=5,verbose=TRUE)
+plot(result)#
+par(ask=TRUE)#
+plotcdf.blackbt(result)#
+summary(result)
+source("/Users/jalo/Desktop/big_blackbox_transpose.R")#
+data(LC1980)
+library(basicspace)#
+source("/Users/jalo/Desktop/big_blackbox_transpose.R")#
+data(LC1980)#
+#
+#
+LCdat=LC1980[,-1]	#Dump the column of self-placements#
+result <- big_blackbox_transpose(LCdat,missing=c(0,8,9),dims=3,minscale=5,verbose=TRUE)#
+plot(result)#
+par(ask=TRUE)#
+plotcdf.blackbt(result)#
+summary(result)
+library(help=basicspace)
+550*2.5
+1450
+440
+20*7
+580
+8.5^2+11^2
+sqrt(8.5^2+11^2)
+600*12
+600*12/59000
+?packageStartupMessage
+testit <- function() {#
+  message("testing package startup messages")#
+  packageStartupMessage("initializing ...", appendLF = FALSE)#
+  Sys.sleep(1)#
+  packageStartupMessage(" done")#
+}#
+#
+testit()#
+suppressPackageStartupMessages(testit())
+?.onAttach
+packageStartupMessage
+packageStartupMessage("\n## Optimal Classification Ideal Point Package \n")
+_gfortran_stop_string
+install.packages("wnominate")
+?require
+?Suggests
+?Depends
+?.onAttach
+library(oc)
+?plot.OCangles
+vignette("oc")
+library(oc)
+example(oc)
+?compactPDF
+?PDF
+?pdf
+compactPDF
+library(tools)
+compactPDF
+compactPDF("/Users/jalo/Desktop/basicspace/inst/doc")
+Sys.getenv("_R_BUILD_COMPACT_VIGNETTES_")
+Sys.getenv("_R_BUILD_COMPACT_VIGNETTES_","no")
+Sys.getenv("_R_BUILD_COMPACT_VIGNETTES_","no")->tmp
+tmp
+?Sys.getenv
+Sys.getenv(c("R_HOME", "R_PAPERSIZE", "R_PRINTCMD", "HOST"))
+Sys.getenv(c("R_BUILD_COMPACT_VIGNETTES"))
+Sys.getenv(c("R_BUILD_COMPACT_VIGNETTES_"))
+Sys.getenv(c("_R_BUILD_COMPACT_VIGNETTES_"))
+names(s <- Sys.getenv()) # all settings (the values could be very long)
+Sys.getenv("R_TEST")
+print(Sys.setenv(R_TEST="testit", "A+C"=123))
+Sys.getenv("R_TEST")
+Sys.unsetenv("R_TEST")
+Sys.getenv("R_TEST", unset=NA)
+Sys.getenv("A+C")
+Sys.setenv
+?Sys.setenv
+Sys.setenv("R_TEST"="")
+setenv
+library(tools)
+setenv
+Sys.setenv
+Sys.getenv
+Sys.getenv(""PKG_LIBS")
+Sys.getenv("PKG_LIBS")
+library(oc)
+Sys.getenv("PKG_LIBS")
+  compact_vignettes <- Sys.getenv("_R_BUILD_COMPACT_VIGNETTES_", "no")
+compact_vignettes
+  compact_vignettes <- Sys.setenv("_R_BUILD_COMPACT_VIGNETTES_", "qpdf")
+ Sys.setenv("_R_BUILD_COMPACT_VIGNETTES_", "qpdf")
+?Sys.setenv
+ Sys.setenv("tmp", "qpdf")
+ Sys.setenv(tmp, "qpdf")
+?Sys.setenv
+ Sys.setenv(_R_BUILD_COMPACT_VIGNETTES_="qpdf")
+ Sys.setenv("_R_BUILD_COMPACT_VIGNETTES_"="qpdf")
+ Sys.getenv("_R_BUILD_COMPACT_VIGNETTES_")
+Sys.getenv("_R_BUILD_COMPACT_VIGNETTES_", "no")
+compact_vignettes <- Sys.getenv("_R_BUILD_COMPACT_VIGNETTES_", "no")
+compact_vignettes
+library(basicspace)
+library(tools)
+Sys.getenv("_R_BUILD_COMPACT_VIGNETTES_")
+library(help=tools)
+help(wnominate)
+library(wnominate)
+help(wnominate)
+vignette("basicspace")
+vignette("oc")
+library(oc)
+?plot.OCangles
+plot.OCangles
+example(oc)
+library(wnominate)
+vignette("wnominate")
+library(wnominate)
+example(wnominate)
+library(basicspace)
+example(aldmck)
+?blackbt
+?blackbox
+data(Issues1980)#
+Issues1980[Issues1980[,"abortion1"]==7,"abortion1"] <- 8	#missing recode#
+Issues1980[Issues1980[,"abortion2"]==7,"abortion2"] <- 8	#missing recode#
+result <- blackbox(Issues1980,missing=c(0,8,9),verbose=FALSE,dims=3,minscale=8)#
+summary(result)
+plot.blackbt
+?plot.blackbt
+data(LC1980)#
+LCdat=LC1980[,-1]	#Dump the column of self-placements#
+result <- blackbox_transpose(LCdat,missing=c(0,8,9),dims=3,minscale=5,verbose=TRUE)
+result <- blackbox_transpose(LCdat,missing=c(0,8,9),dims=2,minscale=5,verbose=TRUE)
+result <- blackbox_transpose(LCdat,missing=c(0,8,9),dims=1,minscale=5,verbose=TRUE)
+summary(result)
+plotcdf.blackbt(result)
+example(plot.aldmck_positive)
+example( summary.blackbox)
+library(help=basicspace)
+library(basicspace)
+library(help=basicspace)
+example(blackbox_transpose)
+library(basicspace)
+library(help=basicspace)
+?plotcdf.blackbt
+data(LC1980)#
+LCdat=LC1980[,-1]	#Dump the column of self-placements#
+result <- blackbox_transpose(LCdat,missing=c(0,8,9),dims=1,minscale=5,verbose=TRUE)#
+plot(result)#
+par(ask=TRUE)#
+plotcdf.blackbt(result)#
+summary(result)
 summary(result)
 plot(result)
-plot.coord(result)
-plot.coords(result)
-library)help=aldmck
-library(help=aldmck)
-library(help=basicspace)
-plot.AM(result)
-plot.cdf(result)
-load("colombia.rda")#
-tmp <- colombia[,c(5:8,12:17)]#
-result <- aldmck(data=tmp, polarity=7, respondent=10, missing=c(99),verbose=TRUE)
-plot.aldmck_positive(result)
-names(result)
-result$respondents
-tmp <- colombia[,c(5:8,12:16)]#
-result <- aldmck(data=tmp, polarity=7, respondent=0, missing=c#(99),verbose=TRUE)
-tmp <- colombia[,c(5:8,12:16)]#
-result <- aldmck(data=tmp, polarity=7, respondent=0, missing=c(99),verbose=TRUE)
-plot.aldmck_positive(result)
-x <- result
-x$respondents <- x$respondents[x$respondents[,"weight"]>0,]
-x$respondents
-?par
-plot(0,1,xlim=c(0,1),ylim=c(0,1),type="n",xaxt="n",yaxt="n")
-plot(0,1,xlim=c(0,1),ylim=c(0,1),type="n",xaxt="n",yaxt="n",xlab="n", ylab="n",bty="n")
-plot(0,1,xlim=c(0,1),ylim=c(0,1),type="n",xaxt="n",yaxt="n",xlab="", ylab="",bty="n")
-plot(0,1,xlim=c(0,1),ylim=c(0,1),type="n",xaxt="n",yaxt="n",xlab="", ylab="",bty="n")#
-text(0.5,0.5,"No weights")
-?cex
-?text
-plot(0,1,xlim=c(0,1),ylim=c(0,1),type="n",xaxt="n",yaxt="n",xlab="", ylab="",bty="n")#
-text(0.5,0.5,"No weights",cex=3)
-x#respon
-x$respondents[,"weight"]>0
-sum(x$respondents[,"weight"]>0,na.rm=TRUE)
-		plot(0,1,xlim=c(0,1),ylim=c(0,1),type="n",xaxt="n",yaxt="n",xlab="", ylab="",bty="n")#
-		text(0.5,0.5,"No negative weights",cex=3)
-?as.data.frame
-is.empty
-is.empty()
-aldmck(data=tmp, polarity=7, respondent=10, missing=99,verbose=TRUE)
-aldmck(data=tmp, polarity=7, respondent=0, missing=99,verbose=TRUE)
-aldmck(data=tmp, polarity=7, respondent=0, missing=NA,verbose=TRUE)
-aldmck(data=tmp, polarity=7, respondent=0, missing=NULL,verbose=TRUE)
-mode(NA)
-is.null
-is.null(NULL)
-is.null(NA)
-!(is.matrix(NULL)
-)
-!(is.matrix(3))
-!(is.matrix(c(343,3)))
-missing=c(123)#
-if(!(is.matrix(missing) | is.vector(missing))) cat("Argument 'missing' must be a vector or matrix.")#
-if(mode(missing) != "numeric" & !is.null(missing)) cat("Argument 'missing' must only contain integers.")
-missing=c(123)#
-if(!(is.matrix(missing) | is.vector(missing))) cat("Argument 'missing' must be a vector or matrix.")#
-if(mode(missing) != "numeric" & !is.null(missing)) cat("Argument 'missing' must only contain integers.")
-missing=c(NULL)#
-if(!(is.matrix(missing) | is.vector(missing))) cat("Argument 'missing' must be a vector or matrix.")#
-if(mode(missing) != "numeric" & !is.null(missing)) cat("Argument 'missing' must only contain integers.")
-missing=c(NULL)#
-if(!is.null(missing)& !(is.matrix(missing) | is.vector(missing))) cat("Argument 'missing' must be a vector or matrix.")#
-if(mode(missing) != "numeric" & !is.null(missing)) cat("Argument 'missing' must only contain integers.")
-missing=c(NULL)#
-if(is.null(missing)& !(is.matrix(missing) | is.vector(missing))) cat("Argument 'missing' must be a vector or matrix.")#
-if(mode(missing) != "numeric" & !is.null(missing)) cat("Argument 'missing' must only contain integers.")
-tmp <- colombia[,c(5:8,12:16)]#
-result <- aldmck(data=tmp, polarity=7, respondent=0, missing=c(99),verbose=TRUE)
+par(ask=TRUE)#
+plot(result)#
+plotcdf.blackbt(result)
+data(LC1980)#
+LCdat=LC1980[,-1]	#Dump the column of self-placements#
+result <- blackbox_transpose(LCdat,missing=c(0,8,9),dims=1,minscale=5,verbose=TRUE)#
+par(ask=TRUE)#
+plot(result)#
+plotcdf.blackbt(result)#
 summary(result)
-result$legislators
-result$legislator
-names(result)
-result$respondents
-colnames(result$respondents)
-is.na(result$respondents[,"selfplace"])
-sum(!is.na(result$respondents[,"selfplace"]))
-if(sum(!is.na(result$respondents[,"selfplace"])) != 0)
-summary(result)
+vignette("basicspace")
+load("/Users/jalo/Desktop/basicspace/data/LC1980_bbt.rda")
+load("/Users/jalo/Desktop/basicspace/data/LC1980.rda")
+ls()
+setwd("/Users/jalo/Desktop/basicspace/data")
+save(LC1980,result,file="LC1980.rda")
+load("/Users/jalo/Desktop/basicspace/data/LC1980_bbt.rda")
+setwd("/Users/jalo/Desktop/basicspace/data")
+ls()
+LC1980_bbt <- results
+LC1980_bbt <- result
+ls()
+save(LC1980_bbt,file="LC1980_bbt.rda")
+load("/Users/jalo/Desktop/basicspace/data/LC1980_bbt.rda")
+ls()
+LC1980_bbt

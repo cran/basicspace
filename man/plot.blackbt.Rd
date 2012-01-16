@@ -7,7 +7,7 @@
 }
 
 \usage{
-plot.blackbt(x, xlim=c(-1,1), ...)
+\method{plot}{blackbt}(x, xlim=c(-1,1), \ldots)
 }
 
 \arguments{
@@ -36,17 +36,21 @@ Royce Carroll \email{rcarroll@rice.edu}
 }
 
 \seealso{
-  '\link{blackbox_transpose}', '\link{LC1980}', '\link{plotcdf.blackbt}', '\link{summary.blackbt}'.
+  '\link{blackbox_transpose}', '\link{LC1980}', '\link{plotcdf.blackbt}', '\link{summary.blackbt}', '\link{LC1980_bbt}'.
 }
 
 \examples{
 ### Loads and scales the Liberal-Conservative scales from the 1980 NES.
 data(LC1980)
 LCdat=LC1980[,-1]	#Dump the column of self-placements
-result <- blackbox_transpose(LCdat,missing=c(0,8,9),dims=3,minscale=5,verbose=TRUE)
-plot(result)
+
+### This command conducts estimates, which we instead load using data()
+#LC1980_bbt <- blackbox_transpose(LCdat,missing=c(0,8,9),dims=3,minscale=5,verbose=TRUE)
+data(LC1980_bbt)
+
+plot(LC1980_bbt)
 par(ask=TRUE)
-plotcdf.blackbt(result)
-summary(result)
+plotcdf.blackbt(LC1980_bbt)
+summary(LC1980_bbt)
 }
 \keyword{ multivariate }

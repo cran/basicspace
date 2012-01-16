@@ -7,7 +7,7 @@
 }
 
 \usage{
-plot.aldmck_negative(x, xlim=c(-2,2), ...)
+\method{plot}{aldmck_negative}(x, xlim=c(-2,2), \ldots)
 }
 
 \arguments{

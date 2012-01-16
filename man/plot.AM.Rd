@@ -7,7 +7,7 @@
 }
 
 \usage{
-plot.AM(x, xlim=c(-2,2), ...)
+\method{plot}{AM}(x, xlim=c(-2,2), \ldots)
 }
 
 \arguments{

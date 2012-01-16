@@ -6,7 +6,7 @@
 }
 
 \usage{
-  summary.blackbox(object, ...)             
+  \method{summary}{blackbox}(object, \ldots)             
 }
 
 \arguments{
