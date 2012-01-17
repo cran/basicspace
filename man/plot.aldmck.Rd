@@ -7,7 +7,7 @@
 }
 
 \usage{
-plot.aldmck(x, ...)
+\method{plot}{aldmck}(x, \ldots)
 }
 
 \arguments{

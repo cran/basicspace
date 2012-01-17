@@ -11,5 +11,12 @@
 	* summary.aldmck(), and the two weight plotting functions no longer assume self-placements
 	* Allows no missing values for all functions
 
+0.05	* Changed to comply with new Command Check. 2.14.1
+	* .onLoad() changed to conform using packageStartupMessage()
+	* _R_BUILD_COMPACT_VIGNETTES_ environment set to compress using QPDF
+	* WRITE statements in code all taken out to remove warnings
+	* plot/summary function documentation coded using \method markup
+	* Some are not true S3 methods, but coded that way to allow for backwards compatibility
+	* Added LC1980_bbt to speed up command checks
 
 

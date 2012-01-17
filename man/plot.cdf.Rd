@@ -7,7 +7,7 @@
 }
 
 \usage{
-plot.cdf(x, align=NULL, xlim=c(-2,2), ...)
+\method{plot}{cdf}(x, align=NULL, xlim=c(-2,2), \ldots)
 }
 
 \arguments{

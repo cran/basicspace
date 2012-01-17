@@ -954,8 +954,8 @@
   343 CONTINUE
   32  R(J,JJ)=R(JJ,J)
       IF(IPRNT.EQ.1)GO TO 62
-      DO 34 J=1,NY
-  34  WRITE(23,200)(R(J,JJ),JJ=1,NY)
+!      DO 34 J=1,NY
+!  34  WRITE(23,200)(R(J,JJ),JJ=1,NY)
   62  BB=-99.0
 !
 !  FIND ROW WITH LARGEST TOTAL SUM OF ABSOLUTE VALUED CORRELATIONS
@@ -995,8 +995,8 @@
       IF(KK.GT.NYD2)LL(J)=LL(J)*(-1)
       IF(JK.EQ.NY)MPOS(J)=KSUM
   60  IF(KK.GT.NYD2)KS=999
-      IF(IPRNT.EQ.0)WRITE(23,1009)NY,NYD2,KPOS,KSUM,KS,KSOLD,        &
-                                         (LL(JCJ),JCJ=1,NY)
+!      IF(IPRNT.EQ.0)WRITE(23,1009)NY,NYD2,KPOS,KSUM,KS,KSOLD,        &
+!                                         (LL(JCJ),JCJ=1,NY)
  1009 FORMAT(' SIGN VECTOR',40I4)
 !
       DEALLOCATE(SA)
@@ -1280,7 +1280,7 @@
       PXB=PXB/XNS
       PXS=PXS-XNS*PXB*PXB
 !      SQU(KKK)=ESUM
-      IF(IPRNT.EQ.0)WRITE(23,350)KKK,ESUM
+!      IF(IPRNT.EQ.0)WRITE(23,350)KKK,ESUM
 !      IF(IPRNT.EQ.0)WRITE(*,350)KKK,ESUM
   350 FORMAT(' DIMENSION=',I3,1X,'TOTAL SSE REG2=',F15.4)
       BREG=ESUM
@@ -1421,10 +1421,10 @@
       SUM=SUM+PSI(I,J)*PSI(I,K)
   2   CONTINUE
   1   R(J,K)=SUM
-      IF(IPRNT.EQ.0)THEN
-         DO 3 I=1,NF
-  3      WRITE(23,200)(R(I,J),J=1,NF)
-      ENDIF
+!      IF(IPRNT.EQ.0)THEN
+!         DO 3 I=1,NF
+!  3      WRITE(23,200)(R(I,J),J=1,NF)
+!      ENDIF
       RETURN
       END
 

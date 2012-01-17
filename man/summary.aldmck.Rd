@@ -6,7 +6,7 @@
 }
 
 \usage{
-summary.aldmck(object, ...)              
+\method{summary}{aldmck}(object, \ldots)              
 }
 
 \arguments{

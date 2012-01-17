@@ -1,19 +1,111 @@
+
 %\VignetteIndexEntry{Recovering a Basic Space in R}
 %\VignetteKeywords{multivariate}
 %\VignettePackage{basicspace}
 
-\documentclass[12pt]{article}
-\usepackage{fullpage}
+%\documentclass[nojss]{jss}
+\documentclass[nojss]{jss}
+%\documentclass[article]{jss}
+\graphicspath{{Figures/}}
 
-\usepackage{Sweave}
-\usepackage{amsmath}
-\usepackage{amscd}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% declarations for jss.cls %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% almost as usual
+\author{Keith Poole \\ University of \\ Georgia
+  \And
+  Jeffrey Lewis \\ University of \\ California, Los Angeles
+  \And
+  Howard Rosenthal \\ New York\\University
+  \And
+  James Lo \\ University of \\ Mannheim
+  \And
+  Royce Carroll \\ Rice University
+}
+\Plainauthor{Keith Poole, Jeffrey Lewis, Howard Rosenthal, James Lo, Royce Carroll}
+
+\title{Recovering a Basic Space in \proglang{R}}
+
+%% for pretty printing and a nice hypersummary also set:
+\Plaintitle{Recovering a Basic Space in R} %% without formatting
+%\Shorttitle{A Capitalized Title} %% a short title (if necessary)
+
+%% an abstract and keywords
+\Abstract{
+\noindent \pkg{basicspace} is a publicly available \proglang{R} package that estimates latent dimensions underlying a set of observable variables, as described in \citet{poole1998recovering}. The scaling procedure effectively performs a singular value decomposition of a rectangular matrix of real elements with missing entries. Monte Carlo tests show that the procedure reliably estimates the latent dimensions and reproduces the missing elements of a matrix even at high levels of error and missing data. In addition, we illustrate applications of the estimator to survey data that is commonly used in the social sciences.
+}
+
+\Keywords{multivariate, \proglang{R}, scaling}
+\Plainkeywords{multivariate, R, scaling}
+
+%% at least one keyword must be supplied
+%% publication information
+%% NOTE: Typically, this can be left commented and will be filled out by the technical editor
+%% \Volume{13}
+%% \Issue{9}
+%% \Month{September}
+%% \Year{2004}
+%% \Submitdate{2004-09-29}
+%% \Acceptdate{2004-09-29}
+
+%% The address of (at least) one author should be given
+%% in the following format:
+\Address{
+
+  Keith T. Poole\\
+  Department of Political Science\\
+  Baldwin Hall\\
+  University of Georgia\\
+  Athens, GA 30602\\
+  E-mail: \email{kpoole@uga.edu}\\
+  URL: \url{http://www.voteview.com/}\\\\
+
+  Jeffrey B. Lewis\\
+  University of California - Los Angeles\\
+  Political Science Department, Bunche Hall\\
+  Los Angeles, CA 90095\\
+  E-mail: \email{jblewis@ucla.edu}\\
+  URL: \url{http://www.polisci.ucla.edu/faculty/lewis/}\\\\
+
+  Howard Rosenthal\\
+  NYU Department of Politics\\
+  19 W. 4th Street, New York,  10012\\
+  E-mail: \email{howardrosenthal@nyu.edu}\\
+  URL: \url{http://politics.as.nyu.edu/object/HowardRosenthal}\\\\
+
+  James Lo\\
+  University of Mannheim, SFB 884\\
+  L13, 15-17\\
+  Mannheim, Germany 68131\\
+  E-mail: \email{lo@uni-mannheim.de}\\\\
+
+  Royce Carroll\\
+  Department of Political Science, MS 24\\
+  Rice University\\
+  PO Box 1892\\
+  Houston, Texas 77251-1892\\
+  E-mail: \email{rcarroll@rice.edu}\\
+  URL: \url{http://rcarroll.web.rice.edu/}\\\\
+
+}
+
+%% It is also possible to add a telephone and fax number
+%% before the e-mail in the following format:
+%% Telephone: +43/1/31336-5053
+%% Fax: +43/1/31336-734
+
+%% for those who use Sweave please include the following line (with % symbols):
+%% need no \usepackage{Sweave.sty}
+
+%% end of declarations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 \begin{document}
 
-\title{Recovering a Basic Space in R}
-%\author{James Lo}
-\maketitle
+%% include your article here, just as usual
+%% Note that you should use the \pkg{}, \proglang{} and \code{} commands.
+
 
 \section{Introduction}
 
@@ -21,41 +113,17 @@
 options(width=60)
 @
 
-This R (R Development Core Team, 2010) package contains software designed to recover a latent dimension (i.e. a basic space)
-from a numeric matrix of data. The initial development was conducted by Poole (1998), who wrote the Fortran
-executable that was previously used by social scientists to analyze survey data in publications such
-as Palfrey and Poole (1987) and Saiegh (2009).  The principal purpose of the package is to facilitate
-the analysis of self-placement and/or perceptual survey data by scaling stimuli into a common space. Stated
-differently, assume that various political actors (i.e. the stimuli) occupy positions on a continuous
-left-right political spectrum, and our objective is to recover estimates of those positions.  This package
-facilitates the estimation of these positions under the assumption that survey respondents report their
-personal estimates of these positions with different levels of bias and scale attenuation. While intended
-for use with survey data, this procedure has potentially broader applications outside of social science
-because mathematically it can be thought of as a special case of singular value decomposition on a numeric
-matrix with missing data.\footnote{When used to analyze survey data, this property implies that
-survey scales can be treated as a continuous rather than ordinal variable. Researchers who believe that
-their scales are ordinal should therefore not be using the model presented here.}
+This \proglang{R} \citep{R} package contains software designed to recover a latent dimension (i.e. a basic space)
+from a numeric matrix of data. The initial development was conducted by \citet{poole1998recovering}, who wrote the Fortran executable that was previously used by social scientists to analyze survey data in publications such as \citet{palfrey1987relationship} and \citet{saiegh2009recovering}.  The principal purpose of the package is to facilitate the analysis of self-placement and/or perceptual survey data by scaling stimuli into a common space.
 
-This vignette proceeds in four steps. First, we begin with a description of the math that underlies the
-basic space estimator. We then provide three examples. First, we show a Monte Carlo analysis that suggests
-our estimator produces an accurate decomposition of our simulated data matrix even with 30 per cent of the
-data missing. Secondly, we show how the procedure can be applied to self-placement survey data from the 
-1980 National Election Survey. We conclude with an application of the model to perceptual data from
-the 1980 National Election Study, where various political candidates are ranked along a 7 point
-liberal-conservative scale.
+Stated differently, assume that various political actors (i.e. the stimuli) occupy positions on a continuous left-right political spectrum, and our objective is to recover estimates of those positions.  This package facilitates the estimation of these positions under the assumption that survey respondents report their personal estimates of these positions with different levels of bias and scale attenuation. While intended for use with survey data, this procedure has potentially broader applications outside of social science because mathematically it is a special case of singular value decomposition on a numeric matrix with missing data.\footnote{When used to analyze survey data, this property implies that survey scales can be treated as a continuous rather than ordinal variable. Researchers who believe that their scales are ordinal should therefore not be using the model presented here.}
+
+This paper proceeds in four steps. First, we begin with a description of the mathematics that underlie the basic space estimator. We then provide three examples. First, we show a Monte Carlo analysis that suggests our estimator produces an accurate decomposition of our simulated data matrices even with 30 per cent of the data missing. Stated differently, we are able to estimate an Eckart-Young lower-rank approximation matrix of a matrix with missing entries.   Secondly, we show how the procedure can be applied to self-placement survey data from the  1980 National Election Survey. Next, we proceed with an application of the model to perceptual data from the 1980 National Election Study, where various political candidates are ranked along a 7 point liberal-conservative scale. We conclude with a look at a related estimator developed by \citet{aldrich1977method} that is also included in this package for historical purposes.
 
 
 \section{Model}
 
-The exposition of the model presented here closely follows Poole (1998). Consider a matrix of survey
-data $X_0$ with $n$ respondents and $m$ issue scales, with individuals on the rows and issues on the
-columns. Some cells of the matrix $X_0$ are missing, and we let $X$ denote the version of $X_0$ that
-has no missing data. In each cell $x_{ij}$, respondent $i$ (\textit{i=1, \ldots, n}) reports their position on issue scale $j$ (\textit{j=1, \ldots, m}), with some responses missing.\footnote{The `0' subscript
-indicates that some elements are missing from the matrix.} Now let $\Psi_{ik}$ be the $i$th
-individual's position on the $k$th basic dimension (\textit{k=1, \ldots, s}), $W$ be an $m$ by $s$
-matrix of weights that map individual positions from the basic space to the issue dimensions, $c$
-be a vector of issue dimension intercept terms of length $m$, $J_n$ by an $n$ length vector of ones,
-and $E_0$ be error terms in the data matrix. The model that we seek to estimate is:
+The exposition of the model presented here closely follows \citet{poole1998recovering}. Consider a matrix of survey data $X_0$ with $n$ respondents and $m$ issue scales, with individuals on the rows and issues on the columns. Some cells of the matrix $X_0$ are missing, and we let $X$ denote the version of $X_0$ that has no missing data. In each cell $x_{ij}$, respondent $i$ (\textit{i=1, \ldots, n}) reports their position on issue scale $j$ (\textit{j=1, \ldots, m}), with some responses missing.\footnote{The `0' subscript indicates that some elements are missing from the matrix.} Now let $\Psi_{ik}$ be the $i$th individual's position on the $k$th basic dimension (\textit{k=1, \ldots, s}), $W$ be an $m$ by $s$ matrix of weights that map individual positions from the basic space to the issue dimensions, $c$ be a vector of issue dimension intercept terms of length $m$, $J_n$ by an $n$ length vector of ones, and $E_0$ be error terms in the data matrix. The model that we seek to estimate is:
 
 \begin{equation}
 X_0 = [\Psi W' + J_nc']_0 + E_0
@@ -63,7 +131,7 @@ X_0 = [\Psi W' + J_nc']_0 + E_0
 \end{equation}
 
 Without loss of generality, we also assume that $E_0$ is drawn from a symmetric distribution with
-mean 0 and that the centroid of the basic space coordinates is at the origin (i.e. $J_n'\Psi=0$).
+mean 0 and the centroid of the basic space coordinates is at the origin (i.e. $J_n'\Psi=0$).
 Substituting into the model equation, this implies that $J_n'[X-J_nc'] = 0_m'$, where $0_m$ is an $m$
 length vector of zeroes. Then in the situation where $X_0$ has no missing data, the parameters
 of interest can all be recovered using singular value decomposition.  To see why this is true, recall
@@ -77,8 +145,7 @@ X = U \Lambda V'
 
 \noindent where $\Lambda$ is a diagonal matrix of singular values.\footnote{A more general
 form of this equation can be written in which $\Lambda$ is instead an $n$ by $m$ matrix and $U$ is
-$n$ by $n$.} To solve [1], set $c$ equal to the column means of $X$, or $c_j = \frac{\sum\limits_{i=1}^n x_{ij}}{n} = \bar{x}_j$. Then using [2], the 
-singular value decomposition of $X - J_nc'$ can be expressed as:
+$n$ by $n$.} To solve (\ref{one}), set $c$ equal to the column means of $X$, or $c_j = \frac{\sum\limits_{i=1}^n x_{ij}}{n} = \bar{x}_j$. Then using (\ref{two}), the singular value decomposition of $X - J_nc'$ can be expressed as:
 
 $$X - J_nc'\ =\ U \Lambda V'\ =\ \Psi W'$$
 
@@ -88,45 +155,40 @@ $$\Psi = U\Lambda^{0.5}$$
 
 $$W = V\Lambda^{0.5}$$
 
-\noindent with $\Lambda^{0.5}$ being a diagonal matrix where diagonal elements are
-the square roots of $\Lambda$. While other solutions to this problem exist, Eckart
-and Young (1936) have shown that the least squares approximation in $s$ dimensions
-of a matrix $A$ can be found by using only the first $s$ singular values of $A$ along the
-diagonal of $\Lambda$ and remultiplying $U \Lambda V'$.
+\noindent with $\Lambda^{0.5}$ being a diagonal matrix where diagonal elements are the square roots of $\Lambda$. While other solutions to this problem exist, \citet{eckart1936approximation} have shown that the least squares approximation in $s$ dimensions of a matrix $A$ can be found by using only the first $s$ singular values of $A$ along the diagonal of $\Lambda$ and re-multiplying $U \Lambda V'$.
 
 In the presence of missing data in data matrix $X_0$, the use of singular value decomposition
 to solve for $W$ and $\Psi$ is no longer possible, and we instead estimate $\hat{W}$ and
 $\hat{\Psi}$ using an alternating least squares (ALS) technique that is similar to the procedures
-used in Carroll and Chang (1970) and Takane, Young, and de Leeuw (1977). The objective
+used in \citet{carroll1970analysis} and \citet{takane1977nonmetric}. The objective
 function to be minimized is the sum of the squared deviations across all cells in $A$ after
 the columns have been adjusted for column means, or:
 
 $$\xi = \displaystyle\sum\limits_{i=1}^n \sum\limits_{j=1}^{m_i} \{[ \sum\limits_{k=1}^s \Psi_{ik}W_{jk}] + c_j -x_{ij} \}^2$$
 
-In minimizing this objective function, two constraints from the earlier analysis with no missing
-data are applied. First, we exploit the the fact that $\Psi$ and $W$ are orthogonal matrices, which implies
+\noindent where $m_i$ is the number of non-missing entries on row $i$.  In minimizing this objective function, two constraints from the earlier analysis with no missing data are applied. First, we exploit the the fact that $\Psi$ and $W$ are orthogonal matrices, which implies
 that $\Psi'\Psi = W'W$.\footnote{More specifically, $\Psi'\Psi = \Lambda^{0.5}U'U\Lambda^{0.5} = \Lambda^{0.5}I_m\Lambda^{0.5} = \Lambda = W'W.$} Secondly, following our earlier restriction that $J_n'[X-J_nc'] = 0_m'$, $J_n'U = J_n'\Psi = 0_m'$ as well.
 These restrictions produce the Lagrangian multiplier problem:
 
 
-$$\mu = \xi = 2\gamma'['\Psi'J_n] + tr[\Phi(\Psi'\Psi - W'W)]$$
+$$\mu = \xi + 2\gamma'['\Psi'J_n] + tr[\Phi(\Psi'\Psi - W'W)]$$
 
 \noindent where $\Phi$ is a symmetric $s$ by $s$ matrix of Lagrangian multipliers and $\gamma$ is an $s$ length
-vector of Lagrangian multipliers. Since all Lagrangian multipliers are zero,\footnote{See Appendix A in Poole (1998)
+vector of Lagrangian multipliers. Since all Lagrangian multipliers are zero,\footnote{See Appendix A in \citet{poole1998recovering}
 for a full proof that all Lagrangian multipliers are zero.} the partial derivatives of $\xi$ are:
 
 \begin{equation}
-\frac{\partial \mu}{\partial \Psi_{ik}} = 2\displaystyle\sum\limits_{j=1}^{m_i} [(\sum\limits_{l=1}^s w_{jl}\psi_{jl})+ c_j - x_{ij}]w_{jk}
+\frac{\partial \mu}{\partial \Psi_{ik}} = 2\displaystyle\sum\limits_{j=1}^{m_i} [(\sum\limits_{l=1}^s w_{jl}\psi_{il})+ c_j - x_{ij}]w_{jk}
 \label{three}
 \end{equation}
 
 \begin{equation}
-\frac{\partial \mu}{\partial w_{jk}} = 2\displaystyle\sum\limits_{i=1}^{n_j} [(\sum\limits_{l=1}^s w_{jl}\psi_{jl})+ c_j - x_{ij}]\psi_{jk}
+\frac{\partial \mu}{\partial w_{jk}} = 2\displaystyle\sum\limits_{i=1}^{n_j} [(\sum\limits_{l=1}^s w_{jl}\psi_{il})+ c_j - x_{ij}]\psi_{jl}
 \label{four}
 \end{equation}
 
 \begin{equation}
-\frac{\partial \mu}{\partial c_j} = 2\displaystyle\sum\limits_{i=1}^{n_j} [(\sum\limits_{l=1}^s w_{jl}\psi_{jl})+ c_j - x_{ij}]
+\frac{\partial \mu}{\partial c_j} = 2\displaystyle\sum\limits_{i=1}^{n_j} [(\sum\limits_{l=1}^s w_{jl}\psi_{il})+ c_j - x_{ij}]
 \label{five}
 \end{equation}
 
@@ -143,7 +205,7 @@ of the $i$th row of $\Psi$ into a vector and solving for $\psi_j$ as:
 \noindent which can of course by estimated using ordinary least squares. Similarly, let $\Psi_j^* = [\Psi_0|J_0]$ be an
 $n_j$ by $s+1$ matrix with the appropriate rows corresponding to missing data removed and bordered by ones, $w_j$ be
 the $s$ length vector of row $j$ in $W$, $c_j$ be the $j$th element of $c$, and $x_{0j}$ be the $j$th column of $X_0$.
-Then if $\Psi_{j}^*$$'\Psi_j^*$ exists, $w_j$ and $c_j$ can be jointly estimated by combining (4) and (5) as:
+Then if $\Psi_{j}^*$$'\Psi_j^*$ exists, $w_j$ and $c_j$ can be jointly estimated by combining (\ref{four}) and (\ref{five}) as:
 
 \begin{equation}
 \frac{\hat{w}_j}{\hat{c}_j} = (\Psi_j^*\mathrm{'}\Psi_j^*)^{-1} \Psi_j^*\mathrm{'}x_{0j}
@@ -153,7 +215,7 @@ Then if $\Psi_{j}^*$$'\Psi_j^*$ exists, $w_j$ and $c_j$ can be jointly estimated
 Equations (\ref{six}) and (\ref{seven}) represent the core set of equations that are used to solve for $\hat{W}$,
 $\hat{c}$, and $\hat{\Psi}$. Once a set of starting values has been generated, (\ref{six}) and (\ref{seven}) are
 iterated until convergence is complete. Generation of appropriate start values is conducted one dimension at a time,
-and a more detailed justification of the procedure can be found in Poole (1998). On the first dimension, start
+and a more detailed justification of the procedure can be found in \citet{poole1998recovering}. On the first dimension, start
 values are generated by using the following three equations:
 
 \begin{equation}
@@ -169,7 +231,7 @@ w_{j1} = diag(\Gamma)
 \noindent where $\Gamma$ is an $m$ by $m$ diagonal matrix with diagonal elements either set to 1 or -1
 that maximizes the number of positive elements in the $m$ by $m$ covariance matrix
 $\Gamma[X_0 - J_nc']\mathrm{'}[X_0 - J_nc']\Gamma$. $\Gamma$ is found by a simple iterative process
-similar to that used to speed eigenvector/eigenvalue decomposition (Poole, 1998). Given equations (\ref{eight})
+similar to that used to speed eigenvector/eigenvalue decomposition \citep{poole1998recovering}. Given equations (\ref{eight})
 and (\ref{nine}), starting values for $\psi$ are:
 
 \begin{equation}
@@ -177,7 +239,7 @@ and (\ref{nine}), starting values for $\psi$ are:
 \label{ten}
 \end{equation}
 
-If more than one dimensions are to be estimated ($s > 1$), start values for other dimensions can be generated
+If more than one dimension is to be estimated ($s > 1$), start values for other dimensions can be generated
 simply by replacing the data matrix $X_0$ with the matrix of residuals $E_{0s}$ in equations (\ref{nine}) and (\ref{ten}). However, no further estimation of start values for $\hat{c}$ is required. The matrix of residuals to be used for generating start values on dimension $s$ is:
 
 $$E_{0s} = X_0 - \displaystyle\sum\limits_{j=1}^{s} \hat{\Psi}_s\hat{w}_s\mathrm{'} - J_n\hat{c}'$$
@@ -187,7 +249,7 @@ maximize the positive elements in $E_{0s}$. The starting values are now:
 
 %Equation 12 in paper
 \begin{equation}
-\hat{\psi}_{is} = \frac{\displaystyle\sum\limits_{j=1}^{m_i} \hat{w}_{js}e_{1(s-1)ij}}{\sum\limits_{j=1}^{m_j} \hat{w}_{js}^2}
+\hat{\psi}_{is} = \frac{\displaystyle\sum\limits_{j=1}^{m_i} \hat{w}_{js}e_{(s-1)ij}}{\sum\limits_{j=1}^{m_j} \hat{w}_{js}^2}
 \label{eleven}
 \end{equation}
 
@@ -204,7 +266,7 @@ Summarizing the preceding discussion in full, the basic space technique decompos
 $n > m$ following equation (\ref{one}). In the absence of missing data, this decomposition can be solved using
 singular value decomposition as in equation (\ref{two}). The basic space technique can therefore be thought of as
 a generalization of singular value decomposition to matrices with missing data. Estimation of (\ref{one}) proceeds
-in three steps. In the first stage, starting values on the first dimension are generated for $\hat{c}_{j}$, $w_{j1}$,
+in three steps. In the first stage, starting values on the first dimension are generated for $\hat{c}_{j}$, $\hat{w}_{j1}$,
 and $\hat{\psi}_{i1}$ by iterating equations (\ref{eight})-(\ref{ten}) until convergence. In the second stage, if the
 number of dimensions to be estimated $s > 1$, higher dimensional starting values for $\hat{\psi}_{is}$ and $\hat{w}_{is}$
 are generated dimension by dimension using equations (\ref{eleven})-(\ref{twelve}). Finally, the starting values generated 
@@ -212,14 +274,14 @@ in the preceding two stages are improved by iterating equations (\ref{six})-(\re
 
 \section{Monte Carlo Test}
 
-In this section, we present the first of three motivating examples. We begin with a Monte Carlo example that
+In this section, we present the first of four motivating examples. We begin with a Monte Carlo example that
 tests the basic space technique against simulated data. Four key variables should be set in each simulation:
 the number of respondents $N$ (set here to $N=1000$), the number of issue scales (also referred to as stimuli,
-and set here to $M=20$), the number of explantory dimensions (set here to $s=2$), the
+and set here to $M=20$), the number of explanatory dimensions (set here to $s=2$), the
 fraction of observations that are missing (set here as 0.3), and the distribution of error terms (set here as
 random uniform draws from -0.5 to 0.5). These variables can be changed for other simulations, but the
 restriction that $N>M$ must be hold true. In cases where $M>N$ please refer to the third example that uses
-\emph{blackbox\_transpose()} and \emph{aldmck()}.
+\code{blackbox\_transpose} and \code{aldmck}.
 
 <<one>>=
 set.seed(1231)
@@ -274,7 +336,7 @@ colnames(X.0) <- paste("V", 1:M, sep="")
 @
 
 Estimation of the Monte Carlo data after formatting is trivial. The function that applies the basic space
-decomposition described in this paper is \emph{blackbox()}.  It takes four arguments: the matrix to
+decomposition described in this paper is \code{blackbox}.  It takes four arguments: the matrix to
 be decomposed, a vector of missing data values, a boolean flag indicating whether verbose output is
 desired, the number of dimensions to estimate, and the minimum number of issue scales that an individual
 needs to provide responses to if they are to be included in the estimation.
@@ -285,7 +347,7 @@ names(result)
 @
 
 The output object contains multiple data frames summarizing the results of the estimation. The key data
-frames are \textbf{stimuli}, which contain estimates of $\hat{W}$ and $\hat{c}$, as well as $\textbf{individuals}$,
+frames are \code{stimuli}, which contain estimates of $\hat{W}$ and $\hat{c}$, as well as \code{individuals},
 which contain estimates of $\hat{\Psi}$.  The other quantities are fit statistics described in greater
 detail in the standard documentation for the function.
 
@@ -356,9 +418,9 @@ xlab="True C", ylab="Recovered C")
 \label{fig:eight}
 \end{figure}
 
-Finally, we pool our estimates of $\hat{W}$, $\hat{Psi}$, and $\hat{c}$ together to
+Finally, we pool our estimates of $\hat{W}$, $\hat{\Psi}$, and $\hat{c}$ together to
 estimate the full matrix $\hat{X}$ following Equation ($\ref{one}$).  While social
-scientists are principally concerned with estimation of $\hat{W}$ and $\hat{Psi}$,
+scientists are principally concerned with estimation of $\hat{W}$ and $\hat{\Psi}$,
 others seeking to conduct singular value decomposition of matrices with missing
 data may find $\hat{X}$ to be of value. One obvious application of $\hat{X}$ is
 its potential use as an imputation tool for missing data.\footnote{The simulation
@@ -376,7 +438,7 @@ significantly higher mean squared error than the values that were retained (i.e.
 along the $45^{\circ}$ line is similar in both plots). While further tests are necessary,
 these results suggest that the use of the techniques demonstrated here may have greater
 applicability beyond survey research.  Further discussion of imputation can be found in the
-unpublished appendix to Poole (1998).
+unpublished appendix to \citet{poole1998recovering}.
 
 
 \begin{figure}
@@ -403,26 +465,26 @@ xlab="True X, nonmissing values", ylab="Recovered X, nonmissing values")
 \end{figure}
 
 
-\section{Recovering a Basic Space with the 1980 National Election Study Issue Scales}
+\section{Example 1: 1980 NES Issue Scales}
 
 In this section we present an application of the basic space model to a common problem in social science.
 One issue of interest to political scientists in particular are empirical models of voting (also
 known as ideal point models), that allow legislator locations in an abstract policy or ideological space
 to be inferred from their roll call votes. The recovered scores have wide applicability to the study
-of Congress (Poole and Rosenthal 1997; McCarty et al. 2006), elections (Herron and Lewis 2007),
-courts (Martin and Quinn, 2002), and in non-legislative voting bodies such as the United
-Nations (Voeten 2000).\footnote{For a more extensive review of applications of spatial modelling
-in the social sciences, see Poole (2005).}  The most prominent ideal point model in the political
-science literature is NOMINATE (Poole and Rosenthal 1997), a model that estimates the policy
+of Congress \citep{Congress, app1}, elections \citep{herronlewis},
+courts \citep{martin2002dynamic}, and in non-legislative voting bodies such as the United
+Nations \citep{Voeten}.\footnote{For a more extensive review of applications of spatial modeling
+in the social sciences, see \citet{poole2005spatial}.}  The most prominent ideal point model in the political
+science literature is NOMINATE \citep{Congress}, a model that estimates the policy
 preferences of legislators using observed roll call votes as the primary source of data.\footnote{The
-package \emph{wnominate} on CRAN contains software used to estimate NOMINATE scores.}  However, the
+\pkg{wnominate} package on CRAN contains software used to estimate NOMINATE scores.}  However, the
 use of models such as NOMINATE may not always be possible because roll call data is often not
 available or recorded.  In such instances, the basic space model shown here presents an attractive
 alternative estimator.\footnote{For a more comprehensive review of the advantages and disadvantages
-of different data sources for spatial models, see Saiegh (2009).}
+of different data sources for spatial models, see \citet{saiegh2009recovering}.}
 
 We present a simple example that applies the basic space model to a set of issue scales from the
-1980 National Election Study. This survey contains N=1614 respondents who were asked to place themselves
+1980 National Election Study. This survey contains N=1,614 respondents who were asked to place themselves
 on scales about desired levels of defense spending, inflation, tax cuts, abortion, liberal-conservative
 scales, the role of women, the role of government in providing jobs, busing, and other similar issues.
 We assume that each respondent has a location in a common ideological space and attempt to recover
@@ -438,7 +500,7 @@ Issues1980[1:10,1:4]
 @
 
 Virtually all surveys contain missing data, and for the two survey questions about abortion, `7' is
-used as a missing data code. However, many of the other scales in this data set us 7 point scales, so
+used as a missing data code. However, many of the other scales in this data set use 7 point scales, so
 we need to recode the missing data for those questions.
 
 <<eleven>>=
@@ -446,14 +508,14 @@ Issues1980[Issues1980[,"abortion1"]==7,"abortion1"] <- 8
 Issues1980[Issues1980[,"abortion2"]==7,"abortion2"] <- 8
 @
 
-Estimation of the scores is now trivial using the \emph{blackbox()} function, which takes the same
+Estimation of the scores is now trivial using the \code{blackbox} function, which takes the same
 arguments already described in the Monte Carlo example:
 
 <<twelve>>=
 result <- blackbox(Issues1980,missing=c(0,8,9),verbose=FALSE,dims=3,minscale=8)
 @
 
-Objects of class \emph{blackbox()} can also be summarized using the \emph{summary()} function, although
+Objects of class \code{blackbox} can also be summarized using the \code{summary} function, although
 the summaries largely provide only summaries of the stimuli. For each dimension estimated, the summary
 provides the intercept ($c$) and stretch ($w_1 \ldots w_3$) parameters for each question, as well
 as the number of respondents and various fit statistics.
@@ -462,8 +524,8 @@ as the number of respondents and various fit statistics.
 summary(result)
 @
 
-When using \emph{blackbox()} for applied research, the researcher's principal goal is the recovery of
-the individual parameters stored as the \emph{individuals} data frame. These typically represent our
+When using \code{blackbox} for applied research, the researcher's principal goal is the recovery of
+the individual parameters stored as the \code{individuals} data frame. These typically represent our
 estimate of the individual's ideological measure in the basic space. Due to the issues with model identification
 discussed earlier, these measures are measured only up to an affine transformation of the true space.
 In particular, the rotation of the estimate is not specified, so if the ideological measure is to be
@@ -479,10 +541,10 @@ using them for auxiliary analyses.
 cor(result$individuals[[1]]$c1, Issues1980[,"libcon1"])
 @
 
-\section{Recovering a Basic Space with the 1980 National Election Study Liberal-Conservative Scales}
+\section{Example 2: 1980 NES Liberal-Conservative Scales}
 
 In our previous example applying the basic space model to analyze respondent self-placement
-on issues scales, we considered an example where the bias and stretch parameters $c$ and $w$ were
+on issue scales, we considered an example where the bias and stretch parameters $c$ and $w$ were
 estimated for the column parameters.  However, we may instead wish to estimate a version of the model
 where $c$ and $w$ are estimated for the row parameters (i.e. the survey respondents) instead.  This is
 simply a transposed version of the basic space model, where $m > n$ instead of $n > m$.  A transposed
@@ -492,11 +554,11 @@ of N=888 respondents were asked to place six stimuli (Carter, Reagan, Kennedy, A
 and the Democrats) on a 7 point liberal-conservative scale. Our objective is to estimate the locations
 of the six stimuli in the basic space, which each respondent perceives with some bias and stretch parameter.
 The data is input in a manner identical to before, with survey respondents on the rows and stimuli on
-the columns. One very important difference between \emph{blackbox()} and \emph{blackbox\_transpose()} is that
+the columns. One very important difference between \code{blackbox} and \code{blackbox\_transpose} is that
 in most survey data sets, the number of respondents is very large relative to the number of stimuli.
-This typically means that \emph{blackbox\_transpose()} takes much longer to estimate because each respondent
+This typically means that \code{blackbox\_transpose} takes much longer to estimate because each respondent
 estimates both a bias $c$ and stretch $W$ parameter. To estimate the 1980 liberal-conservative placements
-using \emph{blackbox\_transpose()}, we simply load the data and call the estimator as follows:
+using \code{blackbox\_transpose}, we simply load the data and call the estimator as follows:
 
 <<blackbt>>=
 data(LC1980)
@@ -505,10 +567,9 @@ LCdat[1:10,]
 result <- blackbox_transpose(LCdat,missing=c(0,8,9),dims=3,minscale=5,verbose=TRUE)
 @
 
-In an effort to simplify interpretation of results from \emph{blackbox\_tranpose()}, we include two plot functions.
+In an effort to simplify interpretation of results from \code{blackbox\_tranpose}, we include two plot functions.
 These functions plot the location of the stimuli against a probability and cumulative distribution plot of
-locations of the population weights. These weights represent reasonable estimates of the two-dimensional
-ideal points, as shown in Abrajano and Poole (2010).
+locations of the population weights (see Figure 5).
 
 \begin{figure}
 \begin{center}
@@ -531,21 +592,19 @@ summary(result)
 @
 
 
-\section{Scaling Perceptual Data using Aldrich and McKelvey's Esimator}
+\section{Example 3: Aldrich and McKelvey's Estimator}
 
-The transposed basic space model is a generalization of a model developed by Aldrich and McKelvey (1977). The transposed
-basic space model can be applied to matrices with missing values and can estimate more than one dimension. For historical purposes, we include
-the original Aldrich-McKelvey estimator with this package. In the basic model, the estimator assumes that:
+The transposed basic space model is a generalization of a model developed by \citet{aldrich1977method}, which was restricted to analyzing matrices with no missing values in only one dimension.  For historical purposes, we include the original Aldrich-McKelvey estimator with this package. In the basic Aldrich-McKelvey model, the estimator assumes that:
 
 $$Y_{ij} = Z_j + \epsilon_{ij}$$
 
-\noindent where $Z_j$ is the true location of $j$ amd $\epsilon_{ij}$ is a random variable with mean 0, positive variance that is independent of $i$ and $j$ (homoskedastic), and zero covariance across the $i$'s and $j$'s. Aldrich and McKelvey then introduce two distortion parameters, $c_i$ and $w_i$, that transform the perceived candidate position into a reported candidate position $Z_{ij}$, according to:
+\noindent where $Z_j$ is the true location of $j$ and $\epsilon_{ij}$ is a random variable with mean 0, positive variance that is independent of $i$ and $j$ (homoskedastic), and zero covariance across the $i$'s and $j$'s. Aldrich and McKelvey then introduce two distortion parameters, $c_i$ and $w_i$, that transform the perceived candidate position into a reported candidate position $Z_{ij}$, according to:
 
 $$Z_{ij}= \frac{1}{w_i}(Y_{ij} - c_i)$$
 
 A least-squares minimization procedure is then used to obtain estimates of $\{Z_j\}_{j=1}^{J}$ and $\{w_i,c_i\}_{i=1}^{I}$.
 
-We begin by reestimating the earlier results using the 1980 Liberal-Conservative scales using the Aldrich-McKelvey estimator. While the \emph{aldmck()} function accepts nearly identical arguments the \emph{blackbox\_transpose()}, one notable difference appears by default.  \emph{aldmck()} also accepts a column in the data matrix, specified by the \emph{respondent} argument, that specifies the respondent's self placement on the issue scale. The reported respondent rating is then transformed into an ideology score by applying the respondent's personal stretch and bias parameters to that score. Note that the results largely correspond to those shown earlier with \emph{blackbox\_transpose()}.
+We begin by reestimating the earlier results using the 1980 Liberal-Conservative scale with the Aldrich-McKelvey estimator. While the \code{aldmck} function accepts nearly identical arguments the \code{blackbox\_transpose}, one notable difference appears by default.  \code{aldmck} also accepts a column in the data matrix, specified by the \code{respondent} argument, that specifies the respondent's self placement on the issue scale. The reported respondent rating is then transformed into an ideology score by applying the respondent's personal stretch and bias parameters to that score, with the results shown in Figure 6. Note that the results largely correspond to those shown earlier with \code{blackbox\_transpose}.
 
 <<aldmck>>=
 data(LC1980)
@@ -568,15 +627,15 @@ plot.aldmck(result)
 
 
 
-Estimation of uncertainty for estimates using Aldrich-McKelvey can be obtained via the non-parametric bootstrap (Efron and Tibshirani 1994). To simulate 20 samples from the 1980 Liberal-Conservative scales, we do the following:
+Estimation of uncertainty for estimates using Aldrich-McKelvey can be obtained via the non-parametric bootstrap \citep{efron1993introduction}. To simulate 20 samples from the 1980 Liberal-Conservative scales, we do the following:
 
 <<aldmck_boot>>=
 Ntrials <- 20
 results <- vector("list", Ntrials)
-for(i in 1:Ntrials) results[[i]] <- aldmck(data=LC1980[sample(1:nrow(LC1980),nrow(LC1980),replace=TRUE),], polarity=2, respondent=1, missing=c(0,8,9),verbose=FALSE)
+for(i in 1:Ntrials) results[[i]] <- aldmck(data=LC1980[sample(nrow(LC1980),nrow(LC1980),replace=TRUE),], polarity=2, respondent=1, missing=c(0,8,9),verbose=FALSE)
 @
 
-The Aldrich-McKelvey function is primarily intended for scaling perceptual data from surveys, though it can also be used to replicate previously published Monte Carlo results from Palfrey and Poole (1987). Palfrey and Poole find that the Aldrich-McKelvey algorithm is robust to the assumption of homoskedastic error, and test this by replacing the homoskedastic error term $\epsilon_{ij}$ with a respondent-specific $\epsilon_{i}$. In this example we replicate their result in a single trial, and show that the estimated rank ordering of the stimuli $\hat{Z_j}$ is identical to the true $Z_j$.
+The Aldrich-McKelvey function is primarily intended for scaling perceptual data from surveys, though it can also be used to replicate previously published Monte Carlo results from \citet{palfrey1987relationship}. Palfrey and Poole find that the Aldrich-McKelvey algorithm is robust to the assumption of homoskedastic error, and test this by replacing the homoskedastic error term $\epsilon_{ij}$ with a respondent-specific $\epsilon_{i}$. In this example we replicate their result in a single trial, and show that the estimated rank ordering of the stimuli $\hat{Z_j}$ is identical to the true $Z_j$.
 
 <<aldmck_MC>>=
 Nstimuli <- 6
@@ -601,74 +660,19 @@ rank(Z_j)
 rank(result$stimuli)
 @
 
-Although we only show one trial in this paper, the result shown here is robust to tests over multiple simulations.\footnote{Replication of the Monte Carlo test with separate groups of informed and uniformed individuals, from Palfrey and Poole (1987, pg. 515), can be conducted by simply changing the respondent's error deviations in the code above to have 250 respondents with $\sigma_i=0.3$ and 250 respondents with $\sigma_i=0.9$.}
-
-
-
-
+Although we only show one trial in this paper, the result shown here is robust to tests over multiple simulations.\footnote{Replication of the Monte Carlo test with separate groups of informed and uniformed individuals, from \citet[pg. 515]{palfrey1987relationship}, can be conducted by simply changing the respondent's error deviations in the code above to have 250 respondents with $\sigma_i=0.3$ and 250 respondents with $\sigma_i=0.9$.}
 
 \section{Conclusion}
 
-Social scientists often wish to infer the locations of voters and legislators in an abstract policy
-or ideological space.  In situations where this cannot be accomplished with a preference data-oriented
-estimator such as NOMINATE (Poole and Rosenthal, 1997), the use of perceptual data-oriented
-estimators such as the basic space technique described here are a useful alternative. In fact, it is
-somewhat surprising that given the abundance of perceptual data questions found in most political science
-surveys, articles that use perceptual data are still uncommon in the social science literature. By providing an
-R (R Development Core Team, 2010) package that facilitates the analysis of perceptual data in a popular
-statistics environment, we hope to encourage a renewed interest in this important literature.
+Social scientists often wish to infer the locations of voters and legislators in an abstract policy or ideological space.  In situations where this cannot be accomplished with a preference data-oriented estimator such as NOMINATE \citep{Congress}, the use of perceptual data-oriented estimators such as the basic space technique described here are a useful alternative. Given the abundance of perceptual data questions found in most social science surveys, we believe there are many possible applications of this estimator. By providing an R \citep{R} package that facilitates the analysis of perceptual data in a popular statistics environment, we hope to encourage a renewed interest in this important literature.
+
+\section{Acknowledgments}
+
+This research was supported by a grant from the National Science Foundation (NSF-SBS-0611974). James Lo also acknowledges support from SFB 884, ``Political Economy of Reforms''.
 
 \newpage
-\begin{thebibliography}{3}
 
-\bibitem{aldmck} Aldrich, John H. and Richard D. McKelvey (1977). ``A Method of Scaling with Applications to the
-1968 and 1972 Presidential Elections.'' \emph{American Political Science Review} 71(1), 111-130.
-
-\bibitem{Carroll} Carroll, Douglas and Jih-Jie Chang (1970). ``Analysis of Individual Differences in Multidimensional
-Scaling Via an N-Way Generalization of ``Eckart-Young'' Decomposition.'' \emph{Psychometrika} 35:283-319.
-
-\bibitem{EckYoung} Eckart, Carl and Gale Young (1936). ``The Approximation of One Matrix By Another of Lower Rank.''
-\emph{Psycometrika} 1, 211-218.
-
-\bibitem{EfronTibshirani} Efron, Bradley and Robert Tibshirani (1993). \emph{An Introduction to the Bootstrap.} New York: Chapman and Hall.
-
-\bibitem{HerronLewis} Herron, M. C. and J. B. Lewis (2007). ``Did Ralph Nader Spoil Al Gore's Presidential Bid?
-A Ballot-Level Study of Green and Reform Party Voters in the 2000 Presidential Election.''
-\emph{Quarterly Journal of Political Science} 2, 205-226.
-
-\bibitem{MartinQuinn} Martin, A. D. and K. Quinn (2002). ``Dynamic Ideal Point Estimation via Markov Chain Monte
-Carlo for the U.S. Supreme Court, 1953-1999.'' \emph{Political Analysis} 10, 134-153.
-
-\bibitem{MPR} McCarty, Nolan., Keith T. Poole, and Howard Rosenthal (2006). \emph{Polarized America: The Dance of
-Ideology and Unequal Riches}. Cambridge: MIT Press.
-
-\bibitem{PalfreyPoole} Palfrey, Thomas R. and Keith T. Poole (1987). ``The Relationship between Information,
-Ideology, and Voting Behavior.'' \emph{American Journal of Political Science} 31(3), 511-530. 
-
-\bibitem{Poole98} Poole, Keith T. (1998). ``Recovering a Basic Space From a Set of Issue Scales.''
-\emph{American Journal of Political Science} 42(3), 954-993. 
-
-\bibitem{Poole05} Poole, Keith T. (2005). \emph{Spatial Models of Parliamentary Voting.}
-Cambridge: Cambridge University Press.
-
-\bibitem{PR1997} Poole, Keith T. and Howard Rosenthal (1997).
-\emph{Congress: A Political-Economic History of Roll Call Voting.}
-New York: Oxford University Press.
-
-\bibitem{R} R Development Core Team (2010). \emph{R: A Language and Environment for Statistical Computing.}
-Vienna: R Foundation for Statistical Computing \emph{http://www.R-project.org}.
-
-\bibitem{Saiegh} Saiegh, Sebastian (2009). ``Recovering a Basic Space from Elite Surveys: Evidence from Latin
-America.'' \emph{Legislative Studies Quarterly}  34 (1), 117-145.
-
-\bibitem{Takane} Takane, Yoshio, Forrest Young, and Jan de Leeuw (1977). ``Nonmetric Individual Differences
-Multidimensional Scaling: An Alternative Least Squares Method with Optimal Scaling Features.'' \emph{Psychometrika}
-42, 7-67.
-
-\bibitem{Voeten} Voeten, Erik (2000). ``Clashes in the assembly.'' \emph{International Organization} 54 (2), 185-215.
-
-
-\end{thebibliography}
+\bibliography{basicspace}
 
 \end{document}
 
