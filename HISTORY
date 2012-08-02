@@ -19,4 +19,17 @@
 	* Some are not true S3 methods, but coded that way to allow for backwards compatibility
 	* Added LC1980_bbt to speed up command checks
 
-
+0.06	* In the index, the description: "Conducts Aldrich-McKelvey and Blackbox Scaling (SVD generalization with missing values)" has been changed to "Conducts Aldrich-McKelvey and Blackbox Scaling to Recover Latent Dimensions of Judgment" to avoid prior confusion.
+	* Added lines in blackbox(): 	dumpthese <- (rowSums(individuals[[i]]==0)==i)
+					individuals[[i]][dumpthese,] <- NA
+	* Changed:    result <- list(stimuli = stimuli, respondents = as.data.frame(respondents),
+              eigenvalues = as.numeric(res$eigenvalues),
+              AMfit = as.numeric(res$fits[1]), R2 = as.numeric(res$fits[2]),
+              N = nrow(data)-deleted, N.neg = as.integer(res$fits[5]),
+              N.pos = as.integer(res$fits[4]))
+	to: result <- list(stimuli = stimuli, respondents = as.data.frame(respondents),
+              eigenvalues = as.numeric(res$eigenvalues),
+              AMfit = as.numeric(res$fits[1]), R2 = as.numeric(res$fits[2]),
+              N =as.integer(res$fits[4])+as.integer(res$fits[5]), N.neg = as.integer(res$fits[5]),
+              N.pos = as.integer(res$fits[4]))
+	* Vignetted updated to drop all references to missing values

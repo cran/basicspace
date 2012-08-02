@@ -99,6 +99,8 @@ blackbox <- function(data,missing=NULL,verbose=FALSE,dims=1,minscale){
 	end <- N
 	for(i in 1:dims){
 		individuals[[i]] <- as.data.frame(matrix(round(res$psimatrix[start:end],digits=3),nrow=N,ncol=i,byrow=T))
+		dumpthese <- (rowSums(individuals[[i]]==0)==i)
+		individuals[[i]][dumpthese,] <- NA
 		colnames(individuals[[i]]) <- c(paste("c",1:i,sep=""))
 		rownames(individuals[[i]]) <- rownames(data)
 		start <- end + 1
@@ -515,7 +517,8 @@ aldmck <- function(data, respondent = 0, missing=NULL, polarity, verbose=FALSE) 
 	result <- list(stimuli = stimuli, respondents = as.data.frame(respondents),
 			eigenvalues = as.numeric(res$eigenvalues),
 			AMfit = as.numeric(res$fits[1]), R2 = as.numeric(res$fits[2]),
-			N = nrow(data)-deleted, N.neg = as.integer(res$fits[5]),
+#			N = nrow(data)-deleted, N.neg = as.integer(res$fits[5]),
+			N = as.integer(res$fits[4])+as.integer(res$fits[5]), N.neg = as.integer(res$fits[5]),
 			N.pos = as.integer(res$fits[4]))
 
 	class(result) <- c("aldmck")
