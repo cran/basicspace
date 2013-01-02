@@ -9,5 +9,3 @@ S3method(summary,aldmck)
 S3method(plot,blackbt)
 S3method(summary,blackbt)
 S3method(summary,blackbox)
-
-

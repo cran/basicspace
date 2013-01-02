@@ -1,10 +1,10 @@
-.First.lib <- function(lib,pkg) {
-   library.dynam("basicspace",pkg,lib)
-}
+#.First.lib <- function(lib,pkg) {
+#   library.dynam("basicspace",pkg,lib)
+#}
 
-.Last.lib <- function(lib,pkg) {
-   library.dynam.unload("basicspace",pkg,lib)
-}
+#.Last.lib <- function(lib,pkg) {
+#   library.dynam.unload("basicspace",pkg,lib)
+#}
 
 summary.blackbox <- function(object, ...){
 

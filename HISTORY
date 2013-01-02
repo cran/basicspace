@@ -33,3 +33,6 @@
               N =as.integer(res$fits[4])+as.integer(res$fits[5]), N.neg = as.integer(res$fits[5]),
               N.pos = as.integer(res$fits[4]))
 	* Vignetted updated to drop all references to missing values
+
+0.07	* Commented out the use of .First.lib and .Last.lib to conform to R 3.0.0 per Brian Ripley's suggestion
+	* Header.R renamed as zzz.R following CRAN standard
