@@ -1,10 +1,159 @@
-#.First.lib <- function(lib,pkg) {
-#   library.dynam("basicspace",pkg,lib)
-#}
 
-#.Last.lib <- function(lib,pkg) {
-#   library.dynam.unload("basicspace",pkg,lib)
-#}
+boot_aldmck <- function(data, respondent=0, missing=NULL, polarity, iter=100){
+
+	original <- aldmck(data=data, respondent=respondent, polarity=polarity,
+		missing=missing,verbose=FALSE)
+	samples <- matrix(NA, nrow=iter, ncol=length(original$stimuli))
+	samples[1,] <- original$stimuli
+	colnames(samples) <- names(original$stimuli)
+	rownames(samples) <- 1:iter
+
+	for(i in 2:iter){
+        	tmpdat <- data[sample(1:nrow(data),nrow(data), replace=TRUE),]
+		samples[i,] <- aldmck(data=tmpdat, respondent=respondent,
+		polarity=polarity, missing=missing,verbose=FALSE)$stimuli
+	}
+
+	class(samples) <- "boot_aldmck"
+	samples <- sign(samples[,1])*samples*-1	# For polarity consistency
+	return(samples)
+}
+
+plot.boot_aldmck <- function(x, ...){
+
+	if (class(x) != "boot_aldmck") stop("Data is not of class boot_aldmck.")
+
+	x <- x[,order(colMeans(x))]
+	positions <- colMeans(x)
+	xrange <- ceiling(max(abs(positions))*10)/10
+	plot(positions, 1:ncol(x), type="n", xlim=c(-xrange, xrange), yaxt="n",bty="n",
+		ylim=c(0.8,ncol(x)),xlab="AM position score",ylab="",cex.lab=1.2, ...)
+	bars <- apply(x,2,quantile,c(0.025,0.975))
+	for(i in 1:ncol(bars)) segments(bars[1,i], i, bars[2,i],col="grey",lwd=2)
+	points(positions, 1:ncol(bars), pch=20, cex=0.6)
+	mtext(colnames(x), side=2, at=1:ncol(x),las=1,adj=1,cex=0.8, font=3)
+
+}
+
+plot.blackbox <- function(x, ...){
+
+	if (class(x) != "blackbox") stop("Data is not of class blackbox.")
+
+	hist(x$individuals[[x$dims]]$c1, breaks = seq(-1, 1, 0.1),
+		main="Distribution of Blackbox Intercepts",
+		xlab="Blackbox Intercept", ...)
+
+}
+
+plot.boot_blackbt <- function(x, ...){
+
+	if (class(x) != "boot_blackbt") stop("Data is not of class boot_blackbt.")
+
+	x <- x[,order(colMeans(x))]
+	positions <- colMeans(x)
+	xrange <- ceiling(max(abs(positions))*10)/10
+	plot(positions, 1:ncol(x), type="n", xlim=c(-xrange, xrange), yaxt="n",bty="n",
+		ylim=c(0.8,ncol(x)),xlab="Blackbox Transpose Score",ylab="",cex.lab=1.2, ...)
+	bars <- apply(x,2,quantile,c(0.025,0.975))
+	for(i in 1:ncol(bars)) segments(bars[1,i], i, bars[2,i],col="grey",lwd=2)
+	points(positions, 1:ncol(bars), pch=20, cex=0.6)
+	mtext(colnames(x), side=2, at=1:ncol(x),las=1,adj=1,cex=0.8, font=3)
+
+}
+
+boot_blackbt <- function(data, missing=NULL, dims=1, dim.extract=dims, minscale, iter=100){
+
+	if(dim.extract > dims) stop("dim.extract must be less than dims")
+
+	original <- blackbox_transpose(data=data, missing=missing, dims=dims, minscale=minscale, verbose=FALSE)
+	samples <- matrix(NA, nrow=iter, ncol=nrow(original$stimuli[[dims]]))
+	getdim <- paste("coord", dim.extract, "D",sep="")
+	samples[1,] <- unlist(original$stimuli[[dims]][getdim])
+	colnames(samples) <- rownames(original$stimuli[[dims]])
+	rownames(samples) <- 1:iter
+
+	for(i in 2:iter){
+        	tmpdat <- data[sample(1:nrow(data),nrow(data), replace=TRUE),]
+		rownames(tmpdat) <- NULL
+		tmpres <- blackbox_transpose(tmpdat, missing=missing, dims=dims,
+			minscale=minscale, verbose=FALSE)
+		samples[i,] <- unlist(tmpres$stimuli[[dims]][getdim])
+
+	        if(i %% 10 ==0){
+			cat("\n\t\tIteration", i, "complete...")
+			flush.console()
+		}
+	}
+
+	class(samples) <- "boot_blackbt"
+	samples <- sign(samples[,1])*samples*-1	# For polarity consistency
+	return(samples)
+}
+
+predict.blackbox <- function(object, dims=1, ...){
+
+	## Error catch for dims
+    	if(!class(object)=="blackbox") stop("Input is not of class 'blackbox'.")
+        if(dims < 1)  stop("dims must be great than 1")
+	if(dims > object$dims)  stop(paste("dims must be equal or less than the number of estimate dimensions, which is", object$dims))
+
+	## Extract object output
+	W.hat<- as.matrix(object$stimuli[[dims]][,paste("w", 1:dims, sep="")])
+	Psi.hat <- as.matrix(object$individuals[[dims]][,paste("c", 1:dims, sep="")])
+	Jn <- rep(1, nrow(Psi.hat))
+	c <- object$stimuli[[dims]][,"c"]
+
+	## In blackbox, Keith already postmultiplied by sqrt(singular), so no need to do it here
+	## This is NOT the case in blackbox_transpose, which needs to be multiplied by sqrt(singular)
+	X.hat <- Psi.hat %*% t(W.hat) + Jn %o% c
+
+	colnames(X.hat) <- rownames(object$stimuli[[dims]])
+	rownames(X.hat) <- rownames(object$individuals[[dims]])
+	return(X.hat)
+}
+
+predict.aldmck <- function(object, caliper=0.2, ...){
+
+      	if(!class(object)=="aldmck") stop("Input is not of class 'aldmck'.")
+      	if(caliper < 0) stop("Caliper must be positive.")
+	N <-nrow(object$respondents)	#number of respondents
+	j <- length(object$stimuli)	#number of stimuli
+	Y <- matrix(rep(object$stimuli,N), nrow=N, ncol=j, byrow=TRUE)
+	c <- matrix(object$respondent[,"intercept"],ncol=1) %*% matrix(rep(1,j),nrow=1)
+	w <- matrix(object$respondent[,"weight"],ncol=1) %*% matrix(rep(1,j),nrow=1)
+	X.hat <- (Y - c)/w
+	dumpthese <- which(abs(object$respondent[,"weight"]) < caliper)
+        X.hat[dumpthese,] <- NA
+
+	colnames(X.hat) <- names(object$stimuli)
+	rownames(X.hat) <- rownames(object$respondents)
+
+	return(X.hat)
+}
+
+predict.blackbt <- function(object, dims=1, ...){
+
+	## Error catch for dims
+    	if(!class(object)=="blackbt") stop("Input is not of class 'blackbt'.")
+	if(dims < 1)  stop("dims must be great than 1")
+	if(dims > object$dims)  stop(paste("dims must be equal or less than the number of estimate dimensions, which is", object$dims))
+
+	W.hat<- as.matrix(object$individuals[[dims]][,paste("w", 1:dims, sep="")])
+	Psi.hat <- as.matrix(object$stimuli[[dims]][,paste("coord", 1:dims, "D", sep="")])
+	Jn <- matrix(rep(1, nrow(Psi.hat)),ncol=1)
+	c <- matrix(object$individuals[[dims]][,"c"],nrow=1)
+
+	## In blackbox, Keith already postmultiplied by sqrt(singular), so no need to do it here
+	## This is not the case in blackbox_transpose, which needs to be multiplied by sqrt(singular)
+	singular <- sqrt(diag(object$fits$singular[1:dims]))
+	X.hat <-  Psi.hat %*% singular %*% t(W.hat) + Jn %*% c
+	X.hat <- t(X.hat)
+
+	colnames(X.hat) <- rownames(object$stimuli[[dims]])
+	rownames(X.hat) <- rownames(object$individuals[[dims]])
+
+	return(X.hat)
+}
 
 summary.blackbox <- function(object, ...){
 
@@ -29,9 +178,10 @@ summary.blackbox <- function(object, ...){
 
 blackbox <- function(data,missing=NULL,verbose=FALSE,dims=1,minscale){
 
-
 	### Error check each argument ###
-	if(class(data) != "matrix") stop("Data is not a matrix, please convert it using as.matrix().")
+	if(class(data) == "data.frame") data <- as.matrix(data)
+	if(class(data) != "matrix") stop("Data is not a matrix, or data frame.")
+
 	if(typeof(data) != "double") stop("Data are not numeric values, please convert it using as.numeric() or mode().")
 	if(!is.null(missing) & !(is.matrix(missing) | is.vector(missing))) stop("Argument 'missing' must be a vector or matrix.")
 	if(mode(missing) != "numeric" & !is.null(missing)) stop("Argument 'missing' must only contain integers.")
@@ -129,7 +279,9 @@ blackbox <- function(data,missing=NULL,verbose=FALSE,dims=1,minscale){
 blackbox_transpose <- function(data,missing=NULL,verbose=FALSE,dims=1,minscale){
 
 	### Error check each argument ###
-	if(class(data) != "matrix") stop("Data is not a matrix, please convert it using as.matrix().")
+	if(class(data) == "data.frame") data <- as.matrix(data)
+	if(class(data) != "matrix") stop("Data is not a matrix, or data frame.")
+
 	if(typeof(data) != "double") stop("Data are not numeric values, please convert it using as.numeric().")
 	if(!is.null(missing) & !(is.matrix(missing) | is.vector(missing))) stop("Argument 'missing' must be a vector or matrix.")
 	if(mode(missing) != "numeric" & !is.null(missing)) stop("Argument 'missing' must only contain integers.")
@@ -289,11 +441,13 @@ plot.aldmck <- function(x, ...){
 
 	if(!class(x)=="aldmck") stop("Input is not of class 'aldmck'.")
 
+        op <- par(no.readonly=TRUE)     
 	par(mfrow=c(2,2))
 	plot.AM(x,...)
 	plot.cdf(x,...)
 	plot.aldmck_positive(x,...)
 	plot.aldmck_negative(x,...)
+        suppressWarnings(par(op))
 
 }
 
@@ -420,7 +574,8 @@ plot.cdf <- function(x, align=NULL, xlim=c(-2,2), ...){
 aldmck <- function(data, respondent = 0, missing=NULL, polarity, verbose=FALSE) {
 
 	### Error check each argument ###
-	if(class(data) != "matrix") stop("Data is not a matrix, please convert it using as.matrix().")
+	if(class(data) == "data.frame") data <- as.matrix(data)
+	if(class(data) != "matrix") stop("Data is not a matrix or data frame.")
 	if(typeof(data) != "double") stop("Data are not numeric values, please convert it using as.numeric() or mode().")
 
 	if(mode(respondent) != "numeric")  stop("Respondent is not specified as an integer.")
@@ -501,6 +656,9 @@ aldmck <- function(data, respondent = 0, missing=NULL, polarity, verbose=FALSE) 
 	rownames(respondents) <- midnames
 	colnames(respondents) <- c("intercept", "weight", "idealpt", "R2")
 
+	## For JSS edit, R2 removed
+	respondents <- respondents[,1:3]
+
     if (respondent == 0) {
         selfplace <- rep(NA, N)
 	data <- data[,-ncol(data)]
@@ -516,7 +674,8 @@ aldmck <- function(data, respondent = 0, missing=NULL, polarity, verbose=FALSE) 
 
 	result <- list(stimuli = stimuli, respondents = as.data.frame(respondents),
 			eigenvalues = as.numeric(res$eigenvalues),
-			AMfit = as.numeric(res$fits[1]), R2 = as.numeric(res$fits[2]),
+			AMfit = as.numeric(res$fits[1]), 
+#			R2 = as.numeric(res$fits[2]),
 #			N = nrow(data)-deleted, N.neg = as.integer(res$fits[5]),
 			N = as.integer(res$fits[4])+as.integer(res$fits[5]), N.neg = as.integer(res$fits[5]),
 			N.pos = as.integer(res$fits[4]))
@@ -540,7 +699,7 @@ summary.aldmck <- function(object, ...){
      if(sum(!is.na(x$respondents[,"selfplace"])) != 0){
 	cat("\nNumber of Respondents (Positive Weights):", x$N.pos)
 	cat("\nNumber of Respondents (Negative Weights):", x$N.neg)
-	cat("\n\nR-Squared:", round(x$R2, digits=2))
+#	cat("\n\nR-Squared:", round(x$R2, digits=2)
      }
     cat("\nReduction of normalized variance of perceptions:", round(x$AMfit, digits=2), "\n\n")
 
@@ -551,3 +710,61 @@ summary.aldmck <- function(object, ...){
     print(final,...)
     cat("\n\n")
 }
+
+stimuli <- function(object){
+        if(class(object)=="blackbox" | class(object)=="blackbt") return(object$stimuli)
+        if(class(object)=="aldmck") return(object$stimuli)
+        stop("Input is not of class 'blackbox' or 'blackbt' or 'aldmck'.")
+}
+
+individuals <- function(object){
+        if(class(object)=="blackbox" | class(object)=="blackbt") return(object$individuals)
+        if(class(object)=="aldmck") return(object$respondents)
+        stop("Input is not of class 'blackbox' or 'blackbt' or 'aldmck'.")
+}
+
+fit <- function(object){
+        if(class(object)=="blackbox" | class(object)=="blackbt") return(object$fits)
+        if(class(object)=="aldmck") return(object$AMfit)
+        stop("Input is not of class 'blackbox' or 'blackbt' or 'aldmck'.")
+}
+
+dim.blackbox <- function(x){
+	return(c(x$Nrow, x$Ncol))
+}
+
+dim.blackbt <- function(x){
+	return(c(x$Nrow, x$Ncol))
+}
+
+dim.aldmck <- function(x){
+	return(c(x$N, length(x$stimuli)))
+}
+
+ncol.blackbox <- function(x){
+	return(x$Ncol)
+}
+
+nrow.blackbox <- function(x){
+	return(x$Nrow)
+}
+
+ncol.blackbt <- function(x){
+	return(x$Ncol)
+}
+
+nrow.blackbt <- function(x){
+	return(x$Nrow)
+}
+
+nrow.aldmck <- function(x){
+	return(x$N)
+}
+
+ncol.aldmck <- function(x){
+	return(length(x$stimuli))
+}
+
+
+
+

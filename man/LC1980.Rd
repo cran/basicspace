@@ -44,11 +44,11 @@ data(LC1980)
 \author{ 
 Keith Poole \email{ktpoole@uga.edu}
 
-Howard Rosenthal \email{lo@uni-mannheim.de}
+Howard Rosenthal \email{hr31@nyu.edu}
 
 Jeffrey Lewis \email{jblewis@ucla.edu}
 
-James Lo \email{jameslo@ucla.edu}
+James Lo \email{jameslo@princeton.edu}
 
 Royce Carroll \email{rcarroll@rice.edu}
 }

@@ -20,13 +20,14 @@
 	be organized on rows, and stimuli on columns. It is helpful, though
 	not necessary, to include row names and column names. }
   \item{missing}{ vector or matrix of numeric values, sets the missing values for the data.
+        NA values are always treated as missing regardless of what is set here.
 	Observations with missing data are discarded before analysis.  If input is a
 	vector, then the vector is assumed to contain the missing value codes for all
 	the data.  If the input is a matrix, it must be of dimension p x q, where p
 	is the maximum number of missing values and q is the number of columns in the
 	data.  Each column of the inputted matrix then specifies the missing data values
 	for the respective variables in data.  If null (default), no missing values are in
-	the data.}
+	the data other than the standard NA value.}
   \item{verbose}{ logical, indicates whether \code{aldmck} should print out detailed
 	output when scaling the data.}
   \item{dims}{integer, specifies the number of dimensions to be estimated. }
@@ -82,11 +83,11 @@
 \author{ 
 Keith Poole \email{ktpoole@uga.edu}
 
-Howard Rosenthal \email{rosentha@princeton.edu}
+Howard Rosenthal \email{hr31@nyu.edu}
 
 Jeffrey Lewis \email{jblewis@ucla.edu}
 
-James Lo \email{lo@uni-mannheim.de}
+James Lo \email{jameslo@princeton.edu}
 
 Royce Carroll \email{rcarroll@rice.edu}
 }
@@ -99,7 +100,7 @@ Journal of Political Science. 42(3), 954-993.
 }
 
 \seealso{
-  '\link{Issues1980}', '\link{summary.blackbox}'.
+  '\link{Issues1980}', '\link{summary.blackbox}', '\link{plot.blackbox}'.
 }
 
 \examples{
@@ -110,5 +111,6 @@ Issues1980[Issues1980[,"abortion1"]==7,"abortion1"] <- 8	#missing recode
 Issues1980[Issues1980[,"abortion2"]==7,"abortion2"] <- 8	#missing recode
 result <- blackbox(Issues1980,missing=c(0,8,9),verbose=FALSE,dims=3,minscale=8)
 summary(result)
+
 }
 \keyword{ multivariate }

@@ -53,11 +53,11 @@ data(colombia)
 \author{ 
 Keith Poole \email{ktpoole@uga.edu}
 
-Howard Rosenthal \email{rosentha@princeton.edu}
+Howard Rosenthal \email{hr31@nyu.edu}
 
 Jeffrey Lewis \email{jblewis@ucla.edu}
 
-James Lo \email{jlo@uni-mannheim.de}
+James Lo \email{jameslo@princeton.edu}
 
 Royce Carroll \email{rcarroll@rice.edu}
 }

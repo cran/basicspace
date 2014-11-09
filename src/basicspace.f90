@@ -438,7 +438,7 @@
       DO 349 J=1,NY
       DC(J)=0.0
       CC(J)=0.0
-  349 LL(J)=0.0
+  349 LL(J)=0
       KTOT=0
       SVSUM=0.0
       SWSUM=0.0
@@ -919,7 +919,7 @@
       ALLOCATE(SC(NISSUES,NISSUES))
       ALLOCATE(SD(NISSUES,NISSUES))
 
-  200 FORMAT(1X,50F7.3)
+!  200 FORMAT(1X,50F7.3)
       DO 1 J=1,NY
       DO 1 JJ=1,NY
       SA(J,JJ)=0.0
@@ -929,8 +929,6 @@
       DO 40 I=1,NP
       DO 31 J=1,NY
       DO 31 JJ=1,J
-!      IF(X(I,J).EQ.-999.0)GO TO 31
-!      IF(X(I,JJ).EQ.-999.0)GO TO 31
       IF(ABS(X(I,J)+999.0).LE..001)GO TO 31
       IF(ABS(X(I,JJ)+999.0).LE..001)GO TO 31
       SA(J,JJ)=SA(J,JJ)+X(I,J)
@@ -953,10 +951,11 @@
       R(JJ,J)=AA/SQRT(BB*CC)
   343 CONTINUE
   32  R(J,JJ)=R(JJ,J)
-      IF(IPRNT.EQ.1)GO TO 62
+!      IF(IPRNT.EQ.1)GO TO 62
 !      DO 34 J=1,NY
 !  34  WRITE(23,200)(R(J,JJ),JJ=1,NY)
-  62  BB=-99.0
+!  62  BB=-99.0
+      BB=-99.0
 !
 !  FIND ROW WITH LARGEST TOTAL SUM OF ABSOLUTE VALUED CORRELATIONS
 !
@@ -1146,7 +1145,8 @@
   8   CONTINUE
       W(K,NF11)=ESUM
       TSUM(KK)=TSUM(KK)+ESUM
-      call CORR2(NRESPONDENTS,NISSUES,NP,2,XT,R,LL,MPOS,KS,KPOS,1)
+      NYY=2
+      call CORR22(NRESPONDENTS,NISSUES,NP,NYY,XT,R,LL,MPOS,KS,KPOS,1)
       RSUM(K)=R(1,2)*R(1,2)
   7   CONTINUE
 !
@@ -1456,7 +1456,7 @@
 ! SELECT A CENTRAL ELEMENT OF THE  
 ! ARRAY AND SAVE IT IN LOCATION T  
 !
-      IJ = I+(J-I)*R 
+      IJ = I+(J-I)*INT(R) 
       T = A(IJ)   
       IT = IR(IJ) 
 !
@@ -2367,7 +2367,7 @@
       DO 349 J=1,NY
       DC(J)=0.0
       CC(J)=0.0
-  349 LL(J)=0.0
+  349 LL(J)=0
       KTOT=0
       SVSUM=0.0
       SWSUM=0.0
@@ -3863,5 +3863,73 @@
         DEALLOCATE(XV)
         DEALLOCATE(YV)
         DEALLOCATE(ZV)
+      RETURN
+      END
+!
+!  **********************************************************************
+!    SUBROUTINE CORR2---CALLED BY BLACKB.  COMPUTES CORRELATION MATRIX
+!     FOR INPUT MATRIX X AND COMPUTES THE VECTOR OF COLUMN SIGN CHANGES
+!     WHICH IS STORED IN VECTOR LL.
+!  **********************************************************************
+!
+      SUBROUTINE CORR22(NRESPONDENTS,NISSUES,NP,NY,X,R,LL,MPOS,KS, &
+                                                        KPOS,IPRNT)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+      DIMENSION X(NRESPONDENTS,NISSUES),R(NISSUES,NISSUES),       &
+                LL(NISSUES),MPOS(NISSUES)
+!
+      DOUBLE PRECISION, ALLOCATABLE :: SA(:,:)
+      DOUBLE PRECISION, ALLOCATABLE :: SB(:,:)
+      DOUBLE PRECISION, ALLOCATABLE :: SC(:,:)
+      DOUBLE PRECISION, ALLOCATABLE :: SD(:,:)
+!
+      ALLOCATE(SA(NISSUES,NISSUES))
+      ALLOCATE(SB(NISSUES,NISSUES))
+      ALLOCATE(SC(NISSUES,NISSUES))
+      ALLOCATE(SD(NISSUES,NISSUES))
+
+!  200 FORMAT(1X,50F7.3)
+      DO 1 J=1,NY
+      DO 1 JJ=1,NY
+      R(J,JJ)=0.0
+      SA(J,JJ)=0.0
+      SB(J,JJ)=0.0
+      SC(J,JJ)=0.0
+  1   SD(J,JJ)=0.0
+      DO 40 I=1,NP
+      DO 31 J=1,NY
+      DO 31 JJ=1,J
+!      IF(ABS(X(I,J)+999.0).LE..001)GO TO 31
+!      IF(ABS(X(I,JJ)+999.0).LE..001)GO TO 31
+      SA(J,JJ)=SA(J,JJ)+X(I,J)
+      IF(J.NE.JJ)SA(JJ,J)=SA(JJ,J)+X(I,JJ)
+      SB(J,JJ)=SB(J,JJ)+X(I,J)*X(I,J)
+      IF(J.NE.JJ)SB(JJ,J)=SB(JJ,J)+X(I,JJ)*X(I,JJ)
+      SC(J,JJ)=SC(J,JJ)+X(I,J)*X(I,JJ)
+      SC(JJ,J)=SC(J,JJ)
+      SD(J,JJ)=SD(J,JJ)+1.0
+  31  CONTINUE
+  40  CONTINUE
+      DO 32 J=1,NY
+      DO 32 JJ=1,J
+      AA=0.0
+      BB=0.0
+      CC=0.0
+      BBCC=0.0
+      AA=SD(J,JJ)*SC(J,JJ)-SA(J,JJ)*SA(JJ,J)
+      BB=SD(J,JJ)*SB(J,JJ)-SA(J,JJ)*SA(J,JJ)
+      CC=SD(J,JJ)*SB(JJ,J)-SA(JJ,J)*SA(JJ,J)
+!      BBCC=BB*CC
+!      IF(BBCC.LE..0)R(JJ,J)=0.0
+!      IF(BBCC.LE..0)GO TO 343
+      R(JJ,J)=AA/DSQRT(DABS(BB*CC))
+!  343 CONTINUE
+  32  R(J,JJ)=R(JJ,J)
+!
+      DEALLOCATE(SA)
+      DEALLOCATE(SB)
+      DEALLOCATE(SC)
+      DEALLOCATE(SD)
+!
       RETURN
       END

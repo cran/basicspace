@@ -29,13 +29,14 @@
 	no distortion parameters are estimated in AM without self-placements because they
 	are not needed, see equation (24) in Aldrich and McKelvey (1977) for proof.}
   \item{missing}{ vector or matrix of numeric values, sets the missing values for the data.
+        NA values are always treated as missing regardless of what is set here.
 	Observations with missing data are discarded before analysis.  If input is a
 	vector, then the vector is assumed to contain the missing value codes for all
 	the data.  If the input is a matrix, it must be of dimension p x q, where p
 	is the maximum number of missing values and q is the number of columns in the
 	data.  Each column of the inputted matrix then specifies the missing data values
-	for the respective variables in data. If null (default), no missing values are in the
-	data.}
+	for the respective variables in data. If null (default), no missing values are in
+	the data other than the standard NA value.}
   \item{polarity}{integer, specifies the column in the data matrix of the stimuli that is
 	to be set on the left side (generally this means a liberal) }
   \item{verbose}{ logical, indicates whether \code{aldmck} should print out detailed
@@ -59,8 +60,6 @@
 	are still calculated for individuals with negative weights, so these may need
 	to be discarded. Note that this will not be calculated if self-placements are
 	not provided in the data.}
-    \item{\code{R2}}{R-squared of the bivariate regression between true and reported
-	stimulus locations.}
     \item{\code{selfplace}}{The self-reported location of the individual, copied from the
 	\code{data} argument if \code{respondent} is not set to 0. }
     \item{\code{polinfo}}{Estimated political information of respondent, calculated as
@@ -75,8 +74,6 @@
   \item{AMfit}{ Ratio of overall variance to perceptions in scaled data divided by average
 	variance. This measure of fit, described by Aldrich and McKelvey, measures the
 	amount of reduction of the variance of the scaled over unscaled data.}
-  \item{R2}{ R-squared from regressing respondent self-reported position vs. scaled position. 
-	Only calculated if respondent self-placements are specified, will be NaN if not.}
   \item{N}{ Number of respondents used in the estimation (i.e. had no missing data)}
   \item{N.neg}{ Number of cases with negative weights. Only calculated if respondent
 	self-placements are specified, will equal 0 if not.}
@@ -89,11 +86,11 @@
 \author{ 
 Keith Poole \email{ktpoole@uga.edu}
 
-Howard Rosenthal \email{rosentha@princeton.edu}
+Howard Rosenthal \email{hr31@nyu.edu}
 
 Jeffrey Lewis \email{jblewis@ucla.edu}
 
-James Lo \email{lo@uni-mannheim.de}
+James Lo \email{jameslo@princeton.edu}
 
 Royce Carroll \email{rcarroll@rice.edu}
 }

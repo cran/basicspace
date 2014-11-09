@@ -1,0 +1,78 @@
+
+0.02    * Initial posting of package onto CRAN
+	* Fixes the aldmck() polarity issues from previous iteration
+	* Includes full vignette
+
+0.03	* Includes updated vignette with AM Monte Carlo, many fixes, in preparation for JSS submission
+
+	* Now notes that aldmck() in one dimension yields no weights, R^2
+
+	* Includes Sebastian Saiegh's PELA 2004 data
+
+	* Some extra error messages now in place
+
+	* aldmck() output cast as data frames
+
+	* summary.aldmck(), and the two weight plotting functions no longer assume self-placements
+
+	* Allows no missing values for all functions
+
+0.05	* Changed to comply with new Command Check. 2.14.1
+	* .onLoad() changed to conform using packageStartupMessage()
+	* _R_BUILD_COMPACT_VIGNETTES_ environment set to compress using QPDF
+	* WRITE statements in code all taken out to remove warnings
+	* plot/summary function documentation coded using \method markup
+	* Some are not true S3 methods, but coded that way to allow for backwards compatibility
+	* Added LC1980_bbt to speed up command checks
+	
+0.06	* In the index, the description: "Conducts Aldrich-McKelvey and Blackbox Scaling (SVD generalization with missing values)" has been changed to "Conducts Aldrich-McKelvey and Blackbox Scaling to Recover Latent Dimensions of Judgment" to avoid prior confusion.
+	* Added lines in blackbox(): 	dumpthese <- (rowSums(individuals[[i]]==0)==i)
+					individuals[[i]][dumpthese,] <- NA
+	* Changed:    result <- list(stimuli = stimuli, respondents = as.data.frame(respondents),
+	
+              eigenvalues = as.numeric(res$eigenvalues),
+	
+              AMfit = as.numeric(res$fits[1]), R2 = as.numeric(res$fits[2]),
+	
+              N = nrow(data)-deleted, N.neg = as.integer(res$fits[5]),
+	
+              N.pos = as.integer(res$fits[4]))
+	
+	to: result <- list(stimuli = stimuli, respondents = as.data.frame(respondents),
+	
+              eigenvalues = as.numeric(res$eigenvalues),
+	
+              AMfit = as.numeric(res$fits[1]), R2 = as.numeric(res$fits[2]),
+	
+              N =as.integer(res$fits[4])+as.integer(res$fits[5]), N.neg = as.integer(res$fits[5]),
+	
+              N.pos = as.integer(res$fits[4]))
+
+	* Vignetted updated to drop all references to missing values
+
+0.13	* Commented out the use of .First.lib and .Last.lib to conform to R 3.0.0 per Brian Ripley's suggestion
+	* Header.R renamed as zzz.R following CRAN standard
+
+0.11
+	* Version to adopt suggestions following JSS R&R
+	* Update to require R 3.0
+	* Vignetted directory changed
+	* nrow(), ncol(), dim() generic functions added
+	* stimuli(), individuals(), fit() extractor functions added
+	* boot_aldmck(), boot_blackbt, plot.boot_aldmck(), plot.blackbox(), plot.boot_blackbt() added
+	* predict.blackbox(), predict.aldmck(), predict.blackbt() added
+	* Documentation on NAs for all estimators corrected
+	* All estimators now accept data frames
+	* plot.aldmck() now restores previous graphical parameters
+	* James' contact and package maintainer contact updated
+
+	* Vignette reflects changes from R&R
+
+
+
+	* Valgrind errors from CORR2 eliminated by introduction of replacement function    
+	* Title of package changed per Uwe Ligges suggestion
+	* Imports tools in NAMESPACE
+
+
+

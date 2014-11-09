@@ -1,11 +1,36 @@
 useDynLib(basicspace)
+import(tools)
 
 export(aldmck,plot.cdf,plot.aldmck,plot.AM,
 plot.aldmck_positive,plot.aldmck_negative,blackbox_transpose,
-plotcdf.blackbt, blackbox, plot.blackbt,summary.aldmck,plot.aldmck,summary.blackbt, summary.blackbox)
+plotcdf.blackbt, blackbox, plot.blackbt,summary.aldmck,plot.aldmck,summary.blackbt, summary.blackbox,
+stimuli, individuals, fit,
+predict.blackbox, predict.blackbt, predict.aldmck,
+boot_blackbt, boot_aldmck, plot.boot_blackbt, plot.boot_aldmck)
+
+S3method(plot,blackbox)
+S3method(plot,boot_blackbt)
+S3method(plot,boot_aldmck)
+
+S3method(ncol,blackbox)
+S3method(nrow,blackbox)
+S3method(dim,blackbox)
+
+S3method(ncol,blackbt)
+S3method(nrow,blackbt)
+S3method(dim,blackbt)
+
+S3method(ncol,aldmck)
+S3method(nrow,aldmck)
+S3method(dim,aldmck)
+
+S3method(predict,aldmck)
+S3method(predict,blackbox)
+S3method(predict,blackbt)
 
 S3method(plot,aldmck)
-S3method(summary,aldmck)
 S3method(plot,blackbt)
-S3method(summary,blackbt)
+
+S3method(summary,aldmck)
 S3method(summary,blackbox)
+S3method(summary,blackbt)
