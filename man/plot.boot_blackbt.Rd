@@ -5,20 +5,35 @@
   \code{plot.boot_blackbt} reads an \code{boot_blackbt} object and plots a dotchart of the stimuli with estimated confidence intervals.
 }
 
+
+
 \usage{
+
 \method{plot}{boot_blackbt}(x, \ldots)
+
 }
+
+
 
 \arguments{
+
   \item{x}{ an \code{boot_blackbt} output object. }
+
   \item{...}{ other arguments to \code{plot}.}
+
 }
 
+
+
 \value{
+
     A dotchart of estimated stimulus locations, with 95 percent confidence intervals. Point estimates are estimates from the original data set.
 }
 
+
+
 \author{ 
+
 Keith Poole \email{ktpoole@uga.edu}
 
 Howard Rosenthal \email{hr31@nyu.edu}
@@ -31,11 +46,17 @@ Royce Carroll \email{rcarroll@rice.edu}
 
 }
 
+
+
 \seealso{
+
    '\link{blackbox_transpose}', '\link{boot_blackbt}'.
 }
 
+
+
 \examples{
+
 
 data(LC1980)
 data=LC1980[,-1]
@@ -47,4 +68,6 @@ data("bootbbt")
 plot.boot_blackbt(bootbbt)
 
 }
+
 \keyword{ multivariate }
+

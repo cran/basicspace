@@ -38,12 +38,14 @@ Royce Carroll \email{rcarroll@rice.edu}
 
 \examples{
 ## Estimate blackbox object from example and call predict function
-## Need to make missing data recodes as well
 data(Issues1980)
-Issues1980[Issues1980[,"abortion1"]==7,"abortion1"] <- 8
-Issues1980[Issues1980[,"abortion2"]==7,"abortion2"] <- 8
-result <- blackbox(Issues1980, missing=c(0,8,9), verbose=FALSE, dims=3, minscale=8)
-prediction <- predict.blackbox(result,dims=3)
+Issues1980[Issues1980[,"abortion1"]==7,"abortion1"] <- 8	#missing recode
+Issues1980[Issues1980[,"abortion2"]==7,"abortion2"] <- 8	#missing recode
+
+### This command conducts estimates, which we instead load using data()
+# Issues1980_bb <- blackbox(Issues1980,missing=c(0,8,9),verbose=FALSE,dims=3,minscale=8)
+data(Issues1980_bb)
+prediction <- predict.blackbox(Issues1980_bb,dims=3)
 
 ## Examine predicted vs. observed values for first 10 respondents
 ## Note that 4th and 6th respondents are NA because of missing data

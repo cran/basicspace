@@ -74,5 +74,7 @@
 	* Title of package changed per Uwe Ligges suggestion
 	* Imports tools in NAMESPACE
 
+0.15	* Fixed valgrind issue identified by Brian Ripley, including vignette issue
+
 
 

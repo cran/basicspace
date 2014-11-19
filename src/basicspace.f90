@@ -2522,17 +2522,23 @@
       QXS=PXS
       XCOR=SQRT(XXK/PXS)
 !      WRITE(23,113)MM,XXK,QXS,PXS,XCOR,PXB,TXB
+	  AA=0.0
       DO 444 I=1,NP
 !      IF(XT(I,1).EQ.-999.0)PSIX(I,JJJ)=-999.0
 !      IF(PSIX(I,JJJ).EQ.-999.0)GO TO 444
-      IF(ABS(XT(I,1)+999.0).LE..001)PSIX(I,JJJ)=-999.0
-      IF(ABS(PSIX(I,JJJ)+999.0).LE..001)GO TO 444
+!      IF(ABS(XT(I,1)+999.0).LE..001)PSIX(I,JJJ)=-999.0
+!      IF(ABS(PSIX(I,JJJ)+999.0).LE..001)GO TO 444
 !
 !  THE ESTIMATED MEAN, PXB, IS SUBTRACTED OFF AND THE COLUMN IS
 !    ADJUSTED SO IT HAS THE ORIGINAL SUM OF SQUARES WITH MEAN ZERO
 !
       PSIX(I,JJJ)=(XT(I,1)-PXB)*XCOR
       XT(I,1)=(XT(I,1)-PXB)*XCOR
+      AA=PSIX(I,JJJ)
+      IF(AA.LE.(-99.0))THEN
+         XT(I,1)=-999.0
+         PSIX(I,JJJ)=-999.0
+      ENDIF
   444 CONTINUE
 !      OPEN(UNIT=23,FILE='JUNK.TXT',ACCESS='APPEND')
 !      WRITE(23,1464)
@@ -3896,35 +3902,8 @@
       SB(J,JJ)=0.0
       SC(J,JJ)=0.0
   1   SD(J,JJ)=0.0
-      DO 40 I=1,NP
-      DO 31 J=1,NY
-      DO 31 JJ=1,J
-!      IF(ABS(X(I,J)+999.0).LE..001)GO TO 31
-!      IF(ABS(X(I,JJ)+999.0).LE..001)GO TO 31
-      SA(J,JJ)=SA(J,JJ)+X(I,J)
-      IF(J.NE.JJ)SA(JJ,J)=SA(JJ,J)+X(I,JJ)
-      SB(J,JJ)=SB(J,JJ)+X(I,J)*X(I,J)
-      IF(J.NE.JJ)SB(JJ,J)=SB(JJ,J)+X(I,JJ)*X(I,JJ)
-      SC(J,JJ)=SC(J,JJ)+X(I,J)*X(I,JJ)
-      SC(JJ,J)=SC(J,JJ)
-      SD(J,JJ)=SD(J,JJ)+1.0
-  31  CONTINUE
-  40  CONTINUE
-      DO 32 J=1,NY
-      DO 32 JJ=1,J
-      AA=0.0
-      BB=0.0
-      CC=0.0
-      BBCC=0.0
-      AA=SD(J,JJ)*SC(J,JJ)-SA(J,JJ)*SA(JJ,J)
-      BB=SD(J,JJ)*SB(J,JJ)-SA(J,JJ)*SA(J,JJ)
-      CC=SD(J,JJ)*SB(JJ,J)-SA(JJ,J)*SA(JJ,J)
-!      BBCC=BB*CC
-!      IF(BBCC.LE..0)R(JJ,J)=0.0
-!      IF(BBCC.LE..0)GO TO 343
-      R(JJ,J)=AA/DSQRT(DABS(BB*CC))
-!  343 CONTINUE
-  32  R(J,JJ)=R(JJ,J)
+      R(1,2)=0.8
+      R(2,1)=0.8
 !
       DEALLOCATE(SA)
       DEALLOCATE(SB)

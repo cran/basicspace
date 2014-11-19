@@ -78,8 +78,10 @@ Keith Poole. \url{ http://voteview.ucsd.edu/aldmck.htm }
 \examples{
 
 data(LC1980)
+
 result <- boot_aldmck(data=LC1980, polarity=2, respondent=1, missing=c(0,8,9), iter=100)
 plot(result)
+
 
 
 }

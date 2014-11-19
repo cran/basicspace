@@ -536,8 +536,11 @@ Estimation of the scores is now trivial using the \code{blackbox} function, whic
 arguments already described in the Monte Carlo example:
 
 <<twelve>>=
-result <- blackbox(Issues1980, missing = c(0,8,9), verbose = FALSE, dims = 2,
-   minscale = 8)
+
+## Commented to shorten runtimes
+# Issues1980_bb <- blackbox(Issues1980, missing=c(0,8,9), verbose=FALSE,
+#     dims=3, minscale=8)
+data(Issues1980_bb)
 @
 
 Objects of class \code{blackbox} can also be summarized using the \code{summary} function, although
@@ -546,7 +549,7 @@ provides the intercept ($c$) and stretch ($w_1 \ldots w_3$) parameters for each 
 as the number of respondents and various fit statistics.
 
 <<thirteen>>=
-summary(result)
+summary(Issues1980_bb)
 @
 
 When using \code{blackbox} for applied research, the researcher's principal goal is the recovery of
@@ -562,7 +565,7 @@ conservatism increases, the researcher may wish to rotate the scores (i.e., by m
 using them for auxiliary analyses. 
 
 <<fourteen>>=
-cor(result$individuals[[1]]$c1, Issues1980[, "libcon1"], use="pairwise")
+cor(Issues1980_bb$individuals[[1]]$c1, Issues1980[, "libcon1"], use="pairwise")
 @
 
 \section{Example 2: 1980 NES Liberal-Conservative Scale}
@@ -585,8 +588,12 @@ using \code{blackbox\_transpose}, we simply load the data and call the function 
 data("LC1980")
 LCdat=LC1980[, -1]
 LCdat[1:10,]
-result <- blackbox_transpose(LCdat, missing = c(0,8,9), dims = 2,
-   minscale = 5, verbose = TRUE)
+
+## Commented to shorten runtimes
+# LC1980_bbt <- blackbox_transpose(LCdat, missing=c(0,8,9), dims=3,
+#  minscale=5,verbose=TRUE)
+data(LC1980_bbt)
+   
 @
 
 In an effort to simplify interpretation of results from \code{blackbox\_tranpose}, we include two plot functions.
@@ -599,8 +606,8 @@ locations of the population weights (see Figure 5).
 
 par(mfrow = c(1, 2))
 
-plot(result)
-plotcdf.blackbt(result)
+plot(LC1980_bbt)
+plotcdf.blackbt(LC1980_bbt)
 @
 \end{center}
 \caption{Blackbox Transpose PDF and CDF plots.}
@@ -610,7 +617,7 @@ plotcdf.blackbt(result)
 We can also produce summary reports of the stimuli as follows:
 
 <<blackfinal>>=
-summary(result)
+summary(LC1980_bbt)
 @
 
 The second dimension is picking up John Anderson, a Representative from Illinois who ran as a third party candidate in 1980.  Respondents clearly had trouble placing Anderson on the liberal-conservative scale. The second dimension is picking up this ambiguity of position.

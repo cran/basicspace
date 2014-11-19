@@ -6,7 +6,7 @@
 }
 
 \description{
-  Blackbox-Transpose estimats from Liberal-Conservative 7-point scales from the 1980
+  Blackbox-Transpose estimates from Liberal-Conservative 7-point scales from the 1980
   National Election Study. Estimates in 3 dimensions.
 }
 
@@ -65,7 +65,6 @@ data(LC1980_bbt)
 
   American national Election Study. \url{http://www.electionstudies.org/}
 
-  Also availble from Keith Poole. \url{ http://voteview.edu/aldmck.htm }
 }
 
 \author{ 
@@ -85,11 +84,14 @@ Royce Carroll \email{rcarroll@rice.edu}
 }
 
 \examples{
+
 ### Loads and scales the Liberal-Conservative scales from the 1980 NES.
 data(LC1980)
 LCdat=LC1980[,-1]	#Dump the column of self-placements
 
+
 ### This command conducts estimates, which we instead load using data()
+
 #LC1980_bbt <- blackbox_transpose(LCdat,missing=c(0,8,9),dims=3,minscale=5,verbose=TRUE)
 data(LC1980_bbt)
 
@@ -97,6 +99,7 @@ plot(LC1980_bbt)
 par(ask=TRUE)
 plotcdf.blackbt(LC1980_bbt)
 summary(LC1980_bbt)
+
 }
 
 \keyword{datasets}

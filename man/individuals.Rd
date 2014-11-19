@@ -42,7 +42,11 @@ Royce Carroll \email{rcarroll@rice.edu}
 data(Issues1980)
 Issues1980[Issues1980[,"abortion1"]==7,"abortion1"] <- 8	#missing recode
 Issues1980[Issues1980[,"abortion2"]==7,"abortion2"] <- 8	#missing recode
-result <- blackbox(Issues1980,missing=c(0,8,9),verbose=FALSE,dims=3,minscale=8)
-individuals(result)
+
+### This command conducts estimates, which we instead load using data()
+# Issues1980_bb <- blackbox(Issues1980,missing=c(0,8,9),verbose=FALSE,dims=3,minscale=8)
+data(Issues1980_bb)
+
+individuals(Issues1980_bb)
 }
 \keyword{ multivariate }

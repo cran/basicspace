@@ -47,6 +47,7 @@ data(LC1980)
 LCdat=LC1980[,-1]	#Dump the column of self-placements
 
 ### This command conducts estimates, which we instead load using data()
+
 #LC1980_bbt <- blackbox_transpose(LCdat,missing=c(0,8,9),dims=3,minscale=5,verbose=TRUE)
 data(LC1980_bbt)
 

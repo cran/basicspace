@@ -1,38 +1,16 @@
-\name{blackbox}
-\alias{blackbox}
-\title{ Blackbox Scaling }
-\description{ 
-  \code{blackbox} is a function that takes a matrix of survey data in which individuals
-	place themselves on continuous scales across multiple issues, and locates those
-	citizens in a spatial model of voting. Mathematically, this function generalizes
-	the singular value of a matrix to cases in which there is missing data in the
-	matrix. Scales generated using perceptual data (i.e. scales of legislator locations
-	using liberal-conservative rankings by survey respondents) should instead use
-	the \code{blackbox_transpose} function in this package instead.
+\name{Issues1980_bb}
+\alias{Issues1980_bb}
+
+\title{
+  Blackbox Estimate, 1980 NES Issue Scales.
+}
+
+\description{
+  Blackbox estimates from issues scales from the 1980 National Election Study.
 }
 
 \usage{
-  blackbox(data,missing=NULL,verbose=FALSE,dims=1,minscale)
-}
-
-\arguments{
-  \item{data}{ matrix of numeric values containing the issue scale data.  Respondents should
-	be organized on rows, and stimuli on columns. It is helpful, though
-	not necessary, to include row names and column names. }
-  \item{missing}{ vector or matrix of numeric values, sets the missing values for the data.
-        NA values are always treated as missing regardless of what is set here.
-	Observations with missing data are discarded before analysis.  If input is a
-	vector, then the vector is assumed to contain the missing value codes for all
-	the data.  If the input is a matrix, it must be of dimension p x q, where p
-	is the maximum number of missing values and q is the number of columns in the
-	data.  Each column of the inputted matrix then specifies the missing data values
-	for the respective variables in data.  If null (default), no missing values are in
-	the data other than the standard NA value.}
-  \item{verbose}{ logical, indicates whether \code{aldmck} should print out detailed
-	output when scaling the data.}
-  \item{dims}{integer, specifies the number of dimensions to be estimated. }
-  \item{minscale}{ integer, specifies the minimum number of responses a respondent needs
-	needs to provide to be used in the scaling.} 
+data(Issues1980_bb)
 }
 
 \value{
@@ -79,6 +57,11 @@
   \item{dims}{ Number of dimensions estimated.}
 }
 
+\source{
+
+  American National Election Study. \url{http://www.electionstudies.org/}
+
+}
 
 \author{ 
 Keith Poole \email{ktpoole@uga.edu}
@@ -90,13 +73,6 @@ Jeffrey Lewis \email{jblewis@ucla.edu}
 James Lo \email{jameslo@princeton.edu}
 
 Royce Carroll \email{rcarroll@rice.edu}
-}
-
-\references{
-
-Keith T. Poole (1998) ``Recovering a Basic Space From a Set of Issue Scales.'' American
-Journal of Political Science. 42(3), 954-993.
-
 }
 
 \seealso{
@@ -111,10 +87,11 @@ Issues1980[Issues1980[,"abortion1"]==7,"abortion1"] <- 8	#missing recode
 Issues1980[Issues1980[,"abortion2"]==7,"abortion2"] <- 8	#missing recode
 
 ### This command conducts estimates, which we instead load using data()
-# Issues1980_bb <- blackbox(Issues1980,missing=c(0,8,9),verbose=FALSE,dims=3,minscale=8)
+#Issues1980_bb <- blackbox(Issues1980,missing=c(0,8,9),verbose=FALSE,dims=3,minscale=8)
 data(Issues1980_bb)
 
 summary(Issues1980_bb)
 
 }
-\keyword{ multivariate }
+
+\keyword{datasets}
