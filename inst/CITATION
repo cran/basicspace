@@ -1,0 +1,30 @@
+bibentry(bibtype = "Article",
+  title        = "Recovering a Basic Space from Issue Scales in {R}",
+  author       = c(person(given = "Keith",
+                          family = "Poole"),
+                   person(given = "Jeffrey",
+                          family = "Lewis"),
+                   person(given = "Howard",
+                          family = "Rosenthal",
+                          email = "howardrosenthal@nyu.edu"),
+                   person(given = "James",
+                          family = "Lo",
+                          email = "jameslo@princeton.edu"),
+                   person(given = "Royce",
+                          family = "Carroll",
+                          email = "rcarroll@rice.edu")),
+  journal      = "Journal of Statistical Software",
+  year         = "2016",
+  volume       = "69",
+  number       = "7",
+  pages        = "1--21",
+  doi          = "10.18637/jss.v069.i07",
+
+  header       = "To cite basicspace in publications use:",
+  textVersion  =
+  paste("Keith Poole, Jeffrey Lewis, Howard Rosenthal, James Lo, Royce Carroll (2016).",
+        "Recovering a Basic Space from Issue Scales in R.",
+        "Journal of Statistical Software, 69(7), 1-21.",
+        "doi:10.18637/jss.v069.i07")
+)
+

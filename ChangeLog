@@ -4,17 +4,11 @@
 	* Includes full vignette
 
 0.03	* Includes updated vignette with AM Monte Carlo, many fixes, in preparation for JSS submission
-
 	* Now notes that aldmck() in one dimension yields no weights, R^2
-
 	* Includes Sebastian Saiegh's PELA 2004 data
-
 	* Some extra error messages now in place
-
 	* aldmck() output cast as data frames
-
 	* summary.aldmck(), and the two weight plotting functions no longer assume self-placements
-
 	* Allows no missing values for all functions
 
 0.05	* Changed to comply with new Command Check. 2.14.1
@@ -65,16 +59,15 @@
 	* All estimators now accept data frames
 	* plot.aldmck() now restores previous graphical parameters
 	* James' contact and package maintainer contact updated
-
 	* Vignette reflects changes from R&R
-
-
-
-	* Valgrind errors from CORR2 eliminated by introduction of replacement function    
+	* Valgrind errors from CORR2 eliminated by introduction of replacement function
 	* Title of package changed per Uwe Ligges suggestion
 	* Imports tools in NAMESPACE
 
 0.15	* Fixed valgrind issue identified by Brian Ripley, including vignette issue
+
+0.16 * CITATION file included to accepted JSS article
+	 * All Rd files link to accepted JSS vignette
 
 
 

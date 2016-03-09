@@ -47,7 +47,7 @@ data(LC1980)
 
   American national Election Study. \url{http://www.electionstudies.org/}
 
-  Also availble from Keith Poole. \url{ http://voteview.edu/}
+  Also availble from Keith Poole. \url{ http://voteview.com/}
 }
 
 \author{ 

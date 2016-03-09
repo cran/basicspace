@@ -97,6 +97,10 @@ Royce Carroll \email{rcarroll@rice.edu}
 
 \references{
 
+Keith Poole, Jeffrey Lewis, Howard Rosenthal, James Lo, Royce Carroll (2016) ``Recovering
+a Basic Space from Issue Scales in R.'' Journal of Statistical Software. 69(7), 1--21.
+doi:10.18637/jss.v069.i07
+
 Keith T. Poole (1998) ``Recovering a Basic Space From a Set of Issue Scales.'' American
 Journal of Political Science. 42(3), 954-993.
 

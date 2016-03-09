@@ -97,13 +97,17 @@ Royce Carroll \email{rcarroll@rice.edu}
 
 \references{
 
+Keith Poole, Jeffrey Lewis, Howard Rosenthal, James Lo, Royce Carroll (2016) ``Recovering
+a Basic Space from Issue Scales in R.'' Journal of Statistical Software. 69(7), 1--21.
+doi:10.18637/jss.v069.i07
+
 John H. Aldrich and Richard D. McKelvey (1977) ``A Method of Scaling with Applications to
 the 1968 and 1972 Presidential Elections.'' American Political Science Review. 71(1), 111-130.
 
 Thomas R. Palfrey and Keith T. Poole (1987) ``The Relationship between Information, Ideology,
 and Voting Behavior.'' American Journal of Political Science. 31(3), 511-530.
 
-Keith Poole. \url{ http://voteview.ucsd.edu/aldmck.htm }
+Keith Poole. \url{ http://voteview.com}
 
 }
 
