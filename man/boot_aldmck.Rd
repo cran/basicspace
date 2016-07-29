@@ -54,7 +54,7 @@ Howard Rosenthal \email{rosentha@princeton.edu}
 
 Jeffrey Lewis \email{jblewis@ucla.edu}
 
-James Lo \email{jameslo@princeton.edu}
+James Lo \email{lojames@usc.edu}
 
 Royce Carroll \email{rcarroll@rice.edu}
 }
