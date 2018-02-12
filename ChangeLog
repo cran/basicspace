@@ -71,5 +71,7 @@
 
 0.18 * Package maintainer changed from jameslo@princeton.edu to lojames@usc.edu
 
-
-
+0.20	* Modified Fortran code to address warnings thrown by -Wall
+	* Removed SAFE_FLAGS
+	* Added doi to description for method
+	* boot_aldmck() example shortened to 50 trials for compliance with RCMD Check

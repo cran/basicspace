@@ -146,20 +146,23 @@ Issues1980[Issues1980[, "abortion2" ]== 7, "abortion2"] <- 8
 ###################################################
 ### code chunk number 13: twelve
 ###################################################
-result <- blackbox(Issues1980, missing = c(0,8,9), verbose = FALSE, dims = 2,
-   minscale = 8)
+
+## Commented to shorten runtimes
+# Issues1980_bb <- blackbox(Issues1980, missing=c(0,8,9), verbose=FALSE,
+#     dims=3, minscale=8)
+data(Issues1980_bb)
 
 
 ###################################################
 ### code chunk number 14: thirteen
 ###################################################
-summary(result)
+summary(Issues1980_bb)
 
 
 ###################################################
 ### code chunk number 15: fourteen
 ###################################################
-cor(result$individuals[[1]]$c1, Issues1980[, "libcon1"], use="pairwise")
+cor(Issues1980_bb$individuals[[1]]$c1, Issues1980[, "libcon1"], use="pairwise")
 
 
 ###################################################
@@ -168,8 +171,12 @@ cor(result$individuals[[1]]$c1, Issues1980[, "libcon1"], use="pairwise")
 data("LC1980")
 LCdat=LC1980[, -1]
 LCdat[1:10,]
-result <- blackbox_transpose(LCdat, missing = c(0,8,9), dims = 2,
-   minscale = 5, verbose = TRUE)
+
+## Commented to shorten runtimes
+# LC1980_bbt <- blackbox_transpose(LCdat, missing=c(0,8,9), dims=3,
+#  minscale=5,verbose=TRUE)
+data(LC1980_bbt)
+   
 
 
 ###################################################
@@ -178,14 +185,14 @@ result <- blackbox_transpose(LCdat, missing = c(0,8,9), dims = 2,
 
 par(mfrow = c(1, 2))
 
-plot(result)
-plotcdf.blackbt(result)
+plot(LC1980_bbt)
+plotcdf.blackbt(LC1980_bbt)
 
 
 ###################################################
 ### code chunk number 18: blackfinal
 ###################################################
-summary(result)
+summary(LC1980_bbt)
 
 
 ###################################################

@@ -1,9 +1,9 @@
-c5a1cc13e9daf4de66b0a50efa9a0205 *ChangeLog
-d1b5b9512f2b815810a79356e3ca2fc6 *DESCRIPTION
+001b42ba570de336e0b8c71710e25021 *ChangeLog
+dce3742d9b4267ffa5d58602f479eba4 *DESCRIPTION
 6d066f72f7bf36b0f7f36459bc1fc4c8 *NAMESPACE
-7d84f9bdf94e9db450cb9baa521e40f4 *R/basicspace.R
+63349b1ac6d235994822d655540b0854 *R/basicspace.R
 7d53167f18cd147588b409a8685adcfe *R/zzz.R
-8bdc48fb3b13b7412ae18fddaeb54740 *build/vignette.rds
+64856015c84668e9b239b52591ea3814 *build/vignette.rds
 44c49a8790ab6742d6d53b9d02165f58 *data/Issues1980.rda
 cd7e6ed9a9da26d71e86fd105dfca12e *data/Issues1980_bb.rda
 fa0e33267b38872fc6e26bc073b511fd *data/LC1980.rda
@@ -11,9 +11,9 @@ fa0e33267b38872fc6e26bc073b511fd *data/LC1980.rda
 1ad87d42232b950bad2f2501cec29bbd *data/bootbbt.rda
 a68eb44678b95658781bd0c3353d26cd *data/colombia.rda
 68c1c6373f873a95a10075f4378d0b4f *inst/CITATION
-21749accf346d1bab2f448068ff6a441 *inst/doc/basicspace.R
-d26b3afa607610e2282dda5f2a543775 *inst/doc/basicspace.Rnw
-7f6071b5fc398267c464706cbf126429 *inst/doc/basicspace.pdf
+235bce0ed29a5a958fedf951384a56b4 *inst/doc/basicspace.R
+737158603bf422e19e86868fa4498179 *inst/doc/basicspace.Rnw
+a51d2efb9f2973a4ffdcd0908c8a94fc *inst/doc/basicspace.pdf
 ad044af3f7172a2b6a9a58670b508bed *man/Issues1980.Rd
 f8c12bf00fbdf788db5df7c44a1532ef *man/Issues1980_bb.Rd
 34ed6349a27f85c4b343dc8088627e77 *man/LC1980.Rd
@@ -21,7 +21,7 @@ f8c12bf00fbdf788db5df7c44a1532ef *man/Issues1980_bb.Rd
 3b26733d00063eaa8dd4a7b7eb4334c1 *man/aldmck.Rd
 b6112972e76219b079d67d7c3bfcf5c0 *man/blackbox.Rd
 669be06a33f48872b77f2284adb856c2 *man/blackbox_transpose.Rd
-595e8c28612b435b8a8a5707eef4fae8 *man/boot_aldmck.Rd
+e30141e450ba0169187e755301865a03 *man/boot_aldmck.Rd
 5d78a9578ebb4a9069f01902efadc6ec *man/boot_blackbt.Rd
 044f3cef3e0497adf55b3586a318dcaa *man/bootbbt.Rd
 3f6cacb9b8951c5dd35bf015ebb9dc12 *man/colombia.Rd
@@ -33,7 +33,7 @@ f15820a4bac91c3d1629bbbdb65984d2 *man/plot.AM.Rd
 7d95366f643b618766523d2cf689c8c1 *man/plot.aldmck_positive.Rd
 08a078b1be34368a6ed7fa046882b9ff *man/plot.blackbox.Rd
 9ea6aab999cc967f761640ef8da984cc *man/plot.blackbt.Rd
-7dada5dc932b31143d8c8fd38d94b5d0 *man/plot.boot_aldmck.Rd
+680cadf2e5d3482febcd2e7fac1385de *man/plot.boot_aldmck.Rd
 8382111e2e2f4d0533dbdc08fbac9ea8 *man/plot.boot_blackbt.Rd
 d7939ac6eb85f9e8979cbd2aee05186a *man/plot.cdf.Rd
 6cf5b44db3e04ac85f23a5d7411a08ee *man/plotcdf.blackbt.Rd
@@ -44,8 +44,9 @@ b9792502d9cd68f4e3cd9a2f4d37f6cf *man/predict.aldmck.Rd
 c20839bb888b8450c3ddd61686cbae36 *man/summary.aldmck.Rd
 583ef93ffb51d1aa3cf3595d32be0287 *man/summary.blackbox.Rd
 afc29bfe706a267db2f9d73929c1adcb *man/summary.blackbt.Rd
-71db8ccc2e7c6c119e2b29a2cc15771c *src/Makevars
-b3910deaeadd69dd191b61922bbfa52e *src/Makevars.win
-4bf093239dbce6ce8f7367df48443da4 *src/basicspace.f90
+2a6f9e9e044a78154d3cfda5936d6f48 *src/Makevars
+2a6f9e9e044a78154d3cfda5936d6f48 *src/Makevars.win
+4d626afb4bc411160dce9c404f4a68b6 *src/basicspace.f90
+549e2533f90f082d0ce7300b70ddb69d *src/basicspace_init.c
 737158603bf422e19e86868fa4498179 *vignettes/basicspace.Rnw
 48d9f9d59b65da13149acdfb806013a5 *vignettes/basicspace.bib
