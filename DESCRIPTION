@@ -1,6 +1,6 @@
 Package: basicspace
-Version: 0.20
-Date: 2018-02-12
+Version: 0.24
+Date: 2020-01-09
 Title: Recovering a Basic Space from Issue Scales
 Author: Keith Poole <ktpoole@uga.edu>, Howard Rosenthal
         <hr31@nyu.edu>, Jeffrey Lewis <jblewis@ucla.edu>,
@@ -13,5 +13,5 @@ Description: Conducts Aldrich-McKelvey and Blackbox Scaling (Poole et al 2016)
 License: GPL-2
 Repository: CRAN
 NeedsCompilation: yes
-Packaged: 2018-02-12 22:32:58 UTC; jameslo
-Date/Publication: 2018-02-12 23:30:33 UTC
+Packaged: 2020-01-09 22:36:55 UTC; jameslo
+Date/Publication: 2020-01-10 16:50:15 UTC

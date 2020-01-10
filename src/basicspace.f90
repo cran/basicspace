@@ -1,7 +1,7 @@
 !************************************************************************
 !
       SUBROUTINE BLACKBOX(NRESPONDENTS,NISSUES,NDIMENSIONS,NMISSING, &
-                          KMISS,MINSCALE,MID,KISSUE,CAND,FITS,       &
+                          KMISS,MINSCALE,MID,KISSUE,FITS,       &
                           PSIMATRIX,WMATRIX,LRESPONDENTS,LMARK,      &
                           FITS2,EXITSTATUS)
       IMPLICIT DOUBLE PRECISION (A-H,O-Z)
@@ -20,7 +20,6 @@
 !               RSAVE(25,25),YHAT(3539),UUU(3539,25),VVV(3539,25),    &
 !               LID(3539),WORK(3539)
 ! 
-      CHARACTER*21 CAND(NISSUES),KTP1947
 !
       INTEGER, ALLOCATABLE :: KID(:)
       INTEGER, ALLOCATABLE :: LID(:)
@@ -74,7 +73,6 @@
 !                    IPRNT=0 WRITE TO DISK
       IPRNT=1
 !
-      KTP1947=CAND(1)
       KPX1947=KKK
 !
       LWORK=3*NRESPONDENTS+3*NISSUES
@@ -139,24 +137,29 @@
   233 CONTINUE
 !      IF(IPRNT.EQ.0)WRITE(23,199)(VVV(1,K),K=1,KKK)
       DO 227 J=1,KKK
-      DO 227 K=1,KKK
+      DO 9227 K=1,KKK
       SUM=0.0
       DO 228 I=1,NOBS
       SUM=SUM+XDATA(I,J)*XDATA(I,K)
   228 CONTINUE
-  227 VVV(J,K)=SUM
+      VVV(J,K)=SUM
+ 9227 CONTINUE
+  227 CONTINUE
+
 !      IF(IPRNT.EQ.0)WRITE(23,197)
       DO 229 I=1,KKK
 !      IF(IPRNT.EQ.0)WRITE(23,200)I,(VVV(I,J),J=1,KKK)
   229 CONTINUE
 !      IF(IPRNT.EQ.0)WRITE(23,202)
       DO 230 J=1,KKK
-      DO 230 K=1,KKK
+      DO 9230 K=1,KKK
       SUM=0.0
       DO 231 I=1,NY
       SUM=SUM+W(I,J+1)*W(I,K+1)
   231 CONTINUE
-  230 VVV(J,K)=SUM
+      VVV(J,K)=SUM
+ 9230 CONTINUE
+  230 CONTINUE
       DO 232 I=1,KKK
 !      IF(IPRNT.EQ.0)WRITE(23,200)I,(VVV(I,J),J=1,KKK)
   232 CONTINUE
@@ -438,7 +441,8 @@
       DO 349 J=1,NY
       DC(J)=0.0
       CC(J)=0.0
-  349 LL(J)=0
+      LL(J)=0
+  349 CONTINUE
       KTOT=0
       SVSUM=0.0
       SWSUM=0.0
@@ -578,13 +582,14 @@
       XCOR=SQRT(XXK/PXS)
 !      WRITE(23,113)KKK,MM,XXK,QXS,PXS,XCOR,PXB,TXB
 !      WRITE(*,113)KKK,MM,XXK,QXS,PXS,XCOR,PXB,TXB
-      DO 444 I=1,NP
+      DO 9444 I=1,NP
 !
 !  THE ESTIMATED MEAN, PXB, IS SUBTRACTED OFF AND THE COLUMN IS
 !    ADJUSTED SO IT HAS THE ORIGINAL SUM OF SQUARES WITH MEAN ZERO
 !
       PSIX(I,JJJ)=(XT(I,1)-PXB)*XCOR
       XT(I,1)=(XT(I,1)-PXB)*XCOR
+ 9444 CONTINUE
   444 CONTINUE
 !
 !  END OF A.L.S. LOOP
@@ -601,9 +606,11 @@
 !
       DO 461 I=1,NP
       IF(KKK.EQ.NF)PSIX(I,NF+1)=1.0
-      DO 461 J=1,NY
+      DO 9461 J=1,NY
       IF(KKK.EQ.NF)X(I,J)=XSS(I,J)
-  461 XS(I,J)=X(I,J)
+      XS(I,J)=X(I,J)
+ 9461 CONTINUE
+  461 CONTINUE
       IF(KKK.EQ.NF)GO TO 9999
       call CORR2(NRESPONDENTS,NISSUES,NP,NY,X,R,LL,MPOS,KS,KPOS,1)
  9999 CONTINUE
@@ -647,12 +654,15 @@
 !
       DO 60 I=1,NP
       DO 601 K=1,NY
-  601 XT(I,K)=0.0
+      XT(I,K)=0.0
+  601 CONTINUE
       DO 61 K=1,NY
       SUM=0.0
       DO 62 J=1,NFPS
-  62  SUM=SUM+PSIX(I,J)*W(K,J)
-  61  X(I,K)=SUM
+      SUM=SUM+PSIX(I,J)*W(K,J)
+  62  CONTINUE
+      X(I,K)=SUM
+  61  CONTINUE
       DO 59 JJ=1,NY
 !      IF(XS(I,JJ).NE.-999.0)XT(I,JJ)=XS(I,JJ)
 !      IF(XS(I,JJ).EQ.-999.0)XT(I,JJ)=X(I,JJ)
@@ -665,16 +675,20 @@
 !   INSERTED FOR MISSING DATA
 !
       DO 71 I=1,NY
-      DO 71 J=1,NY
+      DO 971 J=1,NY
       SUM=0.0
       DO 73 K=1,NP
-  73  SUM=SUM+XT(K,I)*XT(K,J)
-  71  ROOTC(I,J)=SUM
+      SUM=SUM+XT(K,I)*XT(K,J)
+  73  CONTINUE
+      ROOTC(I,J)=SUM
+  971 CONTINUE
+   71 CONTINUE
 !      CALL RS(3539,NY,ROOTC,D,1,CROOT,FAL1,FAL2,IERR)
       DO 729 I=1,NP
-      DO 729 J=1,NY
+      DO 9729 J=1,NY
       ROOTC(I,J)=XT(I,J)
       CROOT(I,J)=XT(I,J)-DC(J)
+ 9729 CONTINUE
   729 CONTINUE
       XTOL=.001
 !      CALL LSVRR(NP,NY,ROOTC,3539,21,XTOL,IRANK,YHAT,UUU,            &
@@ -713,7 +727,7 @@
       SUMM1=0.0
       SUMM2=0.0
       DO 83 I=1,NP
-      DO 83 J=1,NY
+      DO 983 J=1,NY
       SUMM=SUMM+X(I,J)**2
 !      IF(XS(I,J).NE.-999.0)ESUM=ESUM+(X(I,J)-XS(I,J))**2
 !      IF(XS(I,J).NE.-999.0)SUMM1=SUMM1+X(I,J)**2
@@ -725,21 +739,26 @@
 !  STORE PW' + Jc' IN XSS(NOBS,NY) AND COMPUTE PW' AND STORE IN XT(NOBS,NY)
 !
       XSS(I,J)=X(I,J)
-  83  XT(I,J)=X(I,J)-W(J,NF+1)
+      XT(I,J)=X(I,J)-W(J,NF+1)
+ 983  CONTINUE
+  83  CONTINUE
 !
 !  PERFORM SINGULAR VALUE DECOMPOSITION OF PW' + Jc'
 !
       DO 75 I=1,NY
-      DO 75 J=1,NY
+      DO 975 J=1,NY
       SUM=0.0
       DO 76 K=1,NP
       SUM=SUM+XSS(K,I)*XSS(K,J)
   76  CONTINUE
-  75  ROOTC(I,J)=SUM
+      ROOTC(I,J)=SUM
+ 975  CONTINUE
+  75  CONTINUE
 !      CALL RS(3539,NY,ROOTC,DDD,1,CROOT,FAL1,FAL2,IERR)
       DO 728 I=1,NP
-      DO 728 J=1,NY
+      DO 9728 J=1,NY
       ROOTC(I,J)=XSS(I,J)
+ 9728 CONTINUE
   728 CONTINUE
       XTOL=.001
 !      CALL LSVRR(NP,NY,ROOTC,3539,21,XTOL,IRANK,YHAT,UUU,            &
@@ -762,17 +781,21 @@
 !  PERFORM SINGULAR VALUE DECOMPOSITION OF PW'
 !
       DO 77 I=1,NY
-      DO 77 J=1,NY
+      DO 977 J=1,NY
       SUM=0.0
       DO 78 K=1,NP
       SUM=SUM+XT(K,I)*XT(K,J)
   78  CONTINUE
-  77  ROOTC(I,J)=SUM
+      ROOTC(I,J)=SUM
+ 977  CONTINUE
+  77  CONTINUE
 !      CALL RS(3539,NY,ROOTC,DD,1,CROOT,FAL1,FAL2,IERR)
       DO 727 I=1,NP
-      DO 727 J=1,NY
+      DO 9727 J=1,NY
       ROOTC(I,J)=XT(I,J)
+ 9727 CONTINUE
   727 CONTINUE
+
       XTOL=.001
 !      CALL LSVRR(NP,NY,ROOTC,3539,21,XTOL,IRANK,YHAT,UUU,            &
 !                 3539,VVV,3539)
@@ -789,13 +812,15 @@
          DD(I)=YHAT(I)
 !         WRITE(23,338)I,YHAT(I)
       ENDIF
-      DO 462 JJ=1,NF
+      DO 9462 JJ=1,NF
       PSIX(I,JJ)=UUU(I,JJ)*SQRT(YHAT(JJ))
+ 9462 CONTINUE
   462 CONTINUE
       DO 460 I=1,NY
-      DO 460 JJ=1,NF
+      DO 9460 JJ=1,NF
 !      W(I,JJ)=VVV(I,JJ)*SQRT(YHAT(JJ))
       W(I,JJ)=VVV(JJ,I)*SQRT(YHAT(JJ))
+ 9460 CONTINUE
   460 CONTINUE
 !      WRITE(23,7200)IERR
 !      WRITE(*,7200)IERR
@@ -811,22 +836,26 @@
   233 CONTINUE
 !      WRITE(23,199)(VVV(1,K),K=1,NF)
       DO 227 J=1,NF
-      DO 227 K=1,NF
+      DO 9227 K=1,NF
       SUM=0.0
       DO 228 I=1,NP
       SUM=SUM+PSIX(I,J)*PSIX(I,K)
   228 CONTINUE
-  227 VVV(J,K)=SUM
+      VVV(J,K)=SUM
+ 9227 CONTINUE
+  227 CONTINUE
       DO 229 I=1,NF
 !      WRITE(23,200)I,(VVV(I,J),J=1,NF)
   229 CONTINUE
       DO 230 J=1,NF
-      DO 230 K=1,NF
+      DO 9230 K=1,NF
       SUM=0.0
       DO 231 I=1,NY
       SUM=SUM+W(I,J)*W(I,K)
   231 CONTINUE
-  230 VVV(J,K)=SUM
+      VVV(J,K)=SUM
+ 9230 CONTINUE
+  230 CONTINUE
       DO 232 I=1,NF
 !      WRITE(23,200)I,(VVV(I,J),J=1,NF)
   232 CONTINUE
@@ -834,13 +863,15 @@
 !  SAVE PSI AND W HERE
 !
       DO 266 J=1,NF
-      DO 266 I=1,NP
+      DO 9266 I=1,NP
       XSAVE(I,J)=PSIX(I,J)
+ 9266 CONTINUE
   266 CONTINUE
       DO 265 J=1,NF
-      DO 265 I=1,NY
+      DO 9265 I=1,NY
       WSAVE(I,J+1)=W(I,J)
       WSAVE(I,1)=W(I,NF+1)
+ 9265 CONTINUE        
   265 CONTINUE        
 !
 !
@@ -860,12 +891,14 @@
 !  RESTORE PSI AND W HERE
 !
       DO 264 J=1,NF
-      DO 264 I=1,NP
+      DO 9264 I=1,NP
       XDATA(I,J)=XSAVE(I,J)
+ 9264 CONTINUE
   264 CONTINUE
       DO 263 J=1,NF+1
-      DO 263 I=1,NY
+      DO 9263 I=1,NY
       W(I,J)=WSAVE(I,J)
+ 9263 CONTINUE        
   263 CONTINUE        
 !
       DEALLOCATE(LL)
@@ -923,14 +956,16 @@
 
 !  200 FORMAT(1X,50F7.3)
       DO 1 J=1,NY
-      DO 1 JJ=1,NY
+      DO 91 JJ=1,NY
       SA(J,JJ)=0.0
       SB(J,JJ)=0.0
       SC(J,JJ)=0.0
-  1   SD(J,JJ)=0.0
+      SD(J,JJ)=0.0
+   91 CONTINUE
+    1 CONTINUE
       DO 40 I=1,NP
       DO 31 J=1,NY
-      DO 31 JJ=1,J
+      DO 931 JJ=1,J
       IF(ABS(X(I,J)+999.0).LE..001)GO TO 31
       IF(ABS(X(I,JJ)+999.0).LE..001)GO TO 31
       SA(J,JJ)=SA(J,JJ)+X(I,J)
@@ -940,10 +975,11 @@
       SC(J,JJ)=SC(J,JJ)+X(I,J)*X(I,JJ)
       SC(JJ,J)=SC(J,JJ)
       SD(J,JJ)=SD(J,JJ)+1.0
+ 931  CONTINUE
   31  CONTINUE
   40  CONTINUE
       DO 32 J=1,NY
-      DO 32 JJ=1,J
+      DO 932 JJ=1,J
       AA=SD(J,JJ)*SC(J,JJ)-SA(J,JJ)*SA(JJ,J)
       BB=SD(J,JJ)*SB(J,JJ)-SA(J,JJ)*SA(J,JJ)
       CC=SD(J,JJ)*SB(JJ,J)-SA(JJ,J)*SA(JJ,J)
@@ -952,7 +988,9 @@
       IF(BBCC.LE..0)GO TO 343
       R(JJ,J)=AA/SQRT(BB*CC)
   343 CONTINUE
-  32  R(J,JJ)=R(JJ,J)
+      R(J,JJ)=R(JJ,J)
+  932 CONTINUE
+   32 CONTINUE
 !      IF(IPRNT.EQ.1)GO TO 62
 !      DO 34 J=1,NY
 !  34  WRITE(23,200)(R(J,JJ),JJ=1,NY)
@@ -965,7 +1003,8 @@
       DO 50 J=1,NY
       SUM=0.0
       DO 51 JJ=1,NY
-  51  SUM=SUM+ABS(R(J,JJ))
+      SUM=SUM+ABS(R(J,JJ))
+  51  CONTINUE
       IF(SUM.GT.BB)THEN
          BB=SUM
          KS=J
@@ -976,7 +1015,8 @@
       KSOLD=KS
       DO 52 J=1,NY
       IF(R(KS,J).LE.0.0)LL(J)=-1
-  52  IF(R(KS,J).GT.0.0)LL(J)=1
+      IF(R(KS,J).GT.0.0)LL(J)=1
+  52  CONTINUE
 !
 !  ITERATIVELY CHANGE SIGNS OF COLUMNS TO MAXIMIZE NUMBER OF ENTRIES
 !   IN THE CORRELATION MATRIX WHICH ARE POSITIVE.  THIS VECTOR IS THEN
@@ -985,17 +1025,20 @@
       NYD2=(NY-1)/2
       KPOS=0
       DO 60 JK=1,NY
-      DO 60 J=1,NY
+      DO 960 J=1,NY
       KK=0
       KSUM=0
       DO 61 JJ=1,NY
       AA=R(J,JJ)*FLOAT(LL(JJ))*FLOAT(LL(J))
       IF(JK.EQ.NY.AND.AA.GE.0.0)KPOS=KPOS+1
       IF(JK.EQ.NY.AND.AA.GE.0.0)KSUM=KSUM+1
-  61  IF(AA.LT.0.0)KK=KK+1
+      IF(AA.LT.0.0)KK=KK+1
+  61  CONTINUE
       IF(KK.GT.NYD2)LL(J)=LL(J)*(-1)
       IF(JK.EQ.NY)MPOS(J)=KSUM
-  60  IF(KK.GT.NYD2)KS=999
+      IF(KK.GT.NYD2)KS=999
+ 960  CONTINUE
+  60  CONTINUE
 !      IF(IPRNT.EQ.0)WRITE(23,1009)NY,NYD2,KPOS,KSUM,KS,KSOLD,        &
 !                                         (LL(JCJ),JCJ=1,NY)
 ! 1009 FORMAT(' SIGN VECTOR',40I4)
@@ -1067,8 +1110,10 @@
       LLL(K)=0
       TSUM(K)=0.0
       C(K)=0.0
-      DO 15 J=1,NF1
-  15  W(K,J)=0.0
+      DO 915 J=1,NF1
+      W(K,J)=0.0
+ 915  CONTINUE
+  15  CONTINUE
 !
 !  IF ILAST = 1 THEN ONLY PERFORM THE ESTIMATE OF W AND c FOR THE 
 !   CURRENT COLUMN OF P.
@@ -1081,8 +1126,10 @@
       IF(ILAST.EQ.0)KKA=1
       DO 11 KK=KKA,NF
       DO 16 K=1,NY
-      DO 16 J=1,NF+1
-  16  W(K,J)=0.0
+      DO 916 J=1,NF+1
+      W(K,J)=0.0
+ 916  CONTINUE
+  16  CONTINUE
 !
 !  RUN REGRESSION TO ESTIMATE W AND c ONE COLUMN AT A TIME
 !   BECAUSE OF MISSING DATA
@@ -1095,7 +1142,7 @@
 !  COMPUTE [P'P]-1
 !
       DO 2 J=1,NF1
-      DO 2 JJ=1,NF1
+      DO 92 JJ=1,NF1
       SUM=0.0
       DO 1 I=1,NP
 !      IF(XS(I,K).EQ.-999.0)GO TO 1
@@ -1103,18 +1150,22 @@
       SUM=SUM+PSI(I,J)*PSI(I,JJ)
   1   CONTINUE
       A(J,JJ)=SUM
-  2   ZMAT(J,JJ)=SUM
+      ZMAT(J,JJ)=SUM
+ 92   CONTINUE
+  2   CONTINUE
       CALL DSYEV('V','L',NF1,ZMAT,3*NDIMENSIONS,WVEC,WK,LWORK,INFO)
 !      call rs(127,nf1,a,wvec,1,ZMAT,fv1,fv2,ier)
       DO 60 I=1,NF1
-      DO 60 KX=1,NF1
+      DO 960 KX=1,NF1
       SUM=0.0
       DO 61 J=1,NF1
       IF(ABS(WVEC(J)).GT..0001)THEN
           SUM=SUM+ZMAT(KX,J)*(1.0/WVEC(J))*ZMAT(I,J)
       ENDIF
   61  CONTINUE
-  60  B(I,KX)=SUM
+      B(I,KX)=SUM
+ 960  CONTINUE
+  60  CONTINUE
 !
 !  COMPUTE [P'P]-1*P'X = W'/c'
 !
@@ -1124,10 +1175,13 @@
       DO 5 J=1,NF1
       SUM=0.0
       DO 4 JJ=1,NF1
-  4   SUM=SUM+B(J,JJ)*PSI(I,JJ)
-  5   C(J)=SUM
+      SUM=SUM+B(J,JJ)*PSI(I,JJ)
+  4   CONTINUE
+      C(J)=SUM
+  5   CONTINUE
       DO 6 J=1,NF1
-  6   W(K,J)=W(K,J)+C(J)*XS(I,K)
+      W(K,J)=W(K,J)+C(J)*XS(I,K)
+  6   CONTINUE
   3   CONTINUE
 !
 !  CALCULATE R-SQUARE AND SSE FOR REGRESSION
@@ -1139,7 +1193,8 @@
       LLL(K)=LLL(K)+1
       SUM=0.0
       DO 9 J=1,NF1
-  9   SUM=SUM+PSI(I,J)*W(K,J)
+      SUM=SUM+PSI(I,J)*W(K,J)
+  9   CONTINUE
       ESUM=ESUM+(SUM-XS(I,K))**2
       X(I,K)=SUM-XS(I,K)
       XT(I,1)=SUM
@@ -1163,8 +1218,10 @@
       DO 88 K=1,NY
       SUM=0.0
       DO 89 J=1,NF1
-  89  SUM=SUM+PSI(I,J)*W(K,J)
-  88  XT(I,K)=SUM
+      SUM=SUM+PSI(I,J)*W(K,J)
+  89  CONTINUE
+      XT(I,K)=SUM
+  88  CONTINUE
   888 CONTINUE
       call RSQUR(NRESPONDENTS,NISSUES,NP,NY,RR,XT,XS,1)
       TSUM(KK+NY)=RR
@@ -1249,7 +1306,8 @@
       KK=KK+1
       Y(KK)=XS(I,J)-W(J,NF1)
       DO 3 JJ=1,NF
-  3   A(KK,JJ)=W(J,JJ)
+      A(KK,JJ)=W(J,JJ)
+  3   CONTINUE
   2   CONTINUE
 !
 !  CALL SUBROUTINE REGA TO PERFORM LEAST SQUARES
@@ -1334,35 +1392,45 @@
 !
       LWORK=40*NDIMENSIONS
       DO 1 J=1,NF
-      DO 1 JJ=1,NF
+      DO 91 JJ=1,NF
       SUM=0.0
       DO 2 I=1,NS
-  2   SUM=SUM+A(I,J)*A(I,JJ)
+      SUM=SUM+A(I,J)*A(I,JJ)
+  2   CONTINUE
       B(J,JJ)=SUM
-  1   ZMAT(J,JJ)=SUM
+      ZMAT(J,JJ)=SUM
+ 91   CONTINUE
+  1   CONTINUE
 !
       CALL DSYEV('V','L', NF, ZMAT,3*NDIMENSIONS,WVEC,WK,LWORK,INFO)
 !      call rs(127,nf,B,wvec,1,ZMAT,fv1,fv2,ier)
       DO 60 I=1,NF
-      DO 60 K=1,NF
+      DO 960 K=1,NF
       SUM=0.0
       DO 61 J=1,NF
       IF(ABS(WVEC(J)).GT..0001)THEN
           SUM=SUM+ZMAT(K,J)*(1.0/WVEC(J))*ZMAT(I,J)
       ENDIF
   61  CONTINUE
-  60  C(I,K)=SUM
+      C(I,K)=SUM
+ 960  CONTINUE
+  60  CONTINUE
       DO 3 I=1,NS
-      DO 3 J=1,NF
+      DO 93 J=1,NF
       SUM=0.0
       DO 4 JJ=1,NF
-  4   SUM=SUM+C(J,JJ)*A(I,JJ)
-  3   BB(J,I)=SUM
+      SUM=SUM+C(J,JJ)*A(I,JJ)
+  4   CONTINUE
+      BB(J,I)=SUM
+ 93   CONTINUE
+  3   CONTINUE
       DO 5 JJ=1,NF
       SUM=0.0
       DO 6 J=1,NS
-  6   SUM=SUM+BB(JJ,J)*Y(J)
-  5   V(JJ)=SUM
+      SUM=SUM+BB(JJ,J)*Y(J)
+  6   CONTINUE
+      V(JJ)=SUM
+  5   CONTINUE
 !
       DEALLOCATE(WVEC)
       DEALLOCATE(WK)
@@ -1392,7 +1460,7 @@
       ESUM=0.0
       XNT=0.0
       DO 1 I=1,NP
-      DO 1 J=1,NY
+      DO 91 J=1,NY
 !      IF(A(I,J).EQ.-999.0)GO TO 1
 !      IF(B(I,J).EQ.-999.0)GO TO 1
       IF(ABS(A(I,J)+999.0).LE..001)GO TO 1
@@ -1403,6 +1471,7 @@
       DSUM=DSUM+B(I,J)*B(I,J)
       ESUM=ESUM+A(I,J)*B(I,J)
       XNT=XNT+1.0
+ 91   CONTINUE
   1   CONTINUE
       AA=XNT*ESUM-ASUM*BSUM
       BB=XNT*CSUM-ASUM*ASUM
@@ -1421,12 +1490,14 @@
 !  200 FORMAT(1X,50F10.4)
       IPRNT = IPRNT
       DO 1 J=1,NF
-      DO 1 K=1,NF
+      DO 91 K=1,NF
       SUM=0.0
       DO 2 I=1,NP
       SUM=SUM+PSI(I,J)*PSI(I,K)
   2   CONTINUE
-  1   R(J,K)=SUM
+      R(J,K)=SUM
+ 91   CONTINUE
+  1   CONTINUE
 !      IF(IPRNT.EQ.0)THEN
 !         DO 3 I=1,NF
 !  3      WRITE(23,200)(R(I,J),J=1,NF)
@@ -1588,7 +1659,7 @@
 !************************************************************************
 !
       SUBROUTINE BLACKBOXT(NRESPONDENTS,NISSUES,NDIMENSIONS,NMISSING,&
-                          KMISS,MINSCALE,MID,KISSUE,CAND,FITS,       &
+                          KMISS,MINSCALE,MID,KISSUE,FITS,       &
                           PSIMATRIX,WMATRIX,LRESPONDENTS,LMARK,      &
                           FITS2,EXITSTATUS)
       IMPLICIT DOUBLE PRECISION (A-H,O-Z)
@@ -1604,7 +1675,6 @@
         WMATRIX(NISSUES*((NDIMENSIONS*(NDIMENSIONS+1))/2)+2*NISSUES*&
       NDIMENSIONS)  
 !
-      CHARACTER*21 CAND(NISSUES),CSTUPID
 !
       INTEGER, ALLOCATABLE :: KID(:)
       INTEGER, ALLOCATABLE :: LID(:)
@@ -1687,7 +1757,6 @@
 !      OPEN(UNIT=23,FILE='JUNK.TXT')
 !
       KP1947=MINSCALE
-      CSTUPID=CAND(1)
 !
       EXITSTATUS=0
       LWORK=3*NRESPONDENTS+3*NISSUES
@@ -1771,24 +1840,28 @@
   233 CONTINUE
 !      WRITE(23,199)(VVV(1,K),K=1,KKK)
       DO 227 J=1,KKK
-      DO 227 K=1,KKK
+      DO 9227 K=1,KKK
       SUM=0.0
       DO 228 I=1,NOBS
       SUM=SUM+XDATA(I,J)*XDATA(I,K)
   228 CONTINUE
-  227 VVV(J,K)=SUM
+      VVV(J,K)=SUM
+ 9227 CONTINUE
+  227 CONTINUE
 !      WRITE(23,197)
       DO 229 I=1,KKK
 !      WRITE(23,200)I,(VVV(I,J),J=1,KKK)
   229 CONTINUE
 !      WRITE(23,202)
       DO 230 J=1,KKK
-      DO 230 K=1,KKK
+      DO 9230 K=1,KKK
       SUM=0.0
       DO 231 I=1,NY
       SUM=SUM+W(I,J+1)*W(I,K+1)
   231 CONTINUE
-  230 VVV(J,K)=SUM
+      VVV(J,K)=SUM
+ 9230 CONTINUE
+  230 CONTINUE
       DO 232 I=1,KKK
 !      WRITE(23,200)I,(VVV(I,J),J=1,KKK)
   232 CONTINUE
@@ -1893,9 +1966,10 @@
 !
       DO 765 JJ=1,KKK
       WORK4(JJ)=0.0
-      DO 765 JP=1,KKK
+      DO 9765 JP=1,KKK
       WORK2(JJ,JP)=0.0
       WORK3(JJ,JP)=0.0
+ 9765 CONTINUE
   765 CONTINUE
       DO 464 I=1,NOBS
       IF(KKK.EQ.2)THEN
@@ -2373,7 +2447,8 @@
       DO 349 J=1,NY
       DC(J)=0.0
       CC(J)=0.0
-  349 LL(J)=0
+      LL(J)=0
+  349 CONTINUE
       KTOT=0
       SVSUM=0.0
       SWSUM=0.0
@@ -2529,7 +2604,7 @@
       XCOR=SQRT(XXK/PXS)
 !      WRITE(23,113)MM,XXK,QXS,PXS,XCOR,PXB,TXB
       AA=0.0
-      DO 444 I=1,NP
+      DO 9444 I=1,NP
 !      IF(XT(I,1).EQ.-999.0)PSIX(I,JJJ)=-999.0
 !      IF(PSIX(I,JJJ).EQ.-999.0)GO TO 444
 !      IF(ABS(XT(I,1)+999.0).LE..001)PSIX(I,JJJ)=-999.0
@@ -2545,6 +2620,7 @@
          XT(I,1)=-999.0
          PSIX(I,JJJ)=-999.0
       ENDIF
+ 9444 CONTINUE
   444 CONTINUE
 !      OPEN(UNIT=23,FILE='JUNK.TXT',ACCESS='APPEND')
 !      WRITE(23,1464)
@@ -2565,9 +2641,11 @@
 !
       DO 461 I=1,NP
       IF(KKK.EQ.NF)PSIX(I,NF+1)=1.0
-      DO 461 J=1,NY
+      DO 9461 J=1,NY
       IF(KKK.EQ.NF)X(I,J)=XSS(I,J)
-  461 XS(I,J)=X(I,J)
+      XS(I,J)=X(I,J)
+ 9461 CONTINUE
+  461 CONTINUE
       IF(KKK.EQ.NF)GO TO 9999
       call CORR3(NRESPONDENTS,NISSUES,NP,NY,X,LL,MPOS,KS,KPOS)
  9999 CONTINUE
@@ -2611,7 +2689,8 @@
 !
       DO 60 I=1,NP
       DO 601 K=1,NY
-  601 XT(I,K)=0.0
+      XT(I,K)=0.0
+  601 CONTINUE
 !      IF(PSIX(I,1).EQ.-999.0)GO TO 60
       IF(ABS(PSIX(I,1)+999.0).LE..001)GO TO 60
       DO 61 K=1,NY
@@ -2619,8 +2698,10 @@
       WK(K+NY)=0.0
       SUM=0.0
       DO 62 J=1,NFPS
-  62  SUM=SUM+PSIX(I,J)*W(K,J)
-  61  X(I,K)=SUM
+      SUM=SUM+PSIX(I,J)*W(K,J)
+  62  CONTINUE
+      X(I,K)=SUM
+  61  CONTINUE
       DO 59 JJ=1,NY
 !      IF(XS(I,JJ).NE.-999.0)XT(I,JJ)=XS(I,JJ)
 !      IF(XS(I,JJ).EQ.-999.0)XT(I,JJ)=X(I,JJ)
@@ -2645,8 +2726,9 @@
 !  710    ROOTC(I,J)=SUM
 !         CALL RS(NRESPONDENTS,NP,ROOTC,D,1,CROOT,FAL1,FAL2,IERR)
          DO 729 I=1,NP
-         DO 729 J=1,NY
+         DO 9729 J=1,NY
          ROOTC(J,I)=XT(I,J)
+ 9729    CONTINUE
   729    CONTINUE
          XTOL=.001
 !         CALL LSVRR(NY,NP,ROOTC,NRESPONDENTS,21,XTOL,IRANK,YHAT,UUU,
@@ -2670,7 +2752,7 @@
       SUMM1=0.0
       SUMM2=0.0
       DO 83 I=1,NP
-      DO 83 J=1,NY
+      DO 983 J=1,NY
       SUMM=SUMM+X(I,J)**2
 !      IF(XS(I,J).NE.-999.0)ESUM=ESUM+(X(I,J)-XS(I,J))**2
 !      IF(XS(I,J).NE.-999.0)SUMM1=SUMM1+X(I,J)**2
@@ -2682,22 +2764,27 @@
 !  STORE PW' + Jc' IN XSS(NOBS,NY) AND COMPUTE PW' AND STORE IN XT(NOBS,NY)
 !
       XSS(I,J)=X(I,J)
-  83  XT(I,J)=X(I,J)-W(J,NF+1)
+      XT(I,J)=X(I,J)-W(J,NF+1)
+ 983  CONTINUE
+  83  CONTINUE
 !
 !  PERFORM SINGULAR VALUE DECOMPOSITION OF PW' + Jc'
 !
       IF(NY.GT.NP)THEN
          DO 750 I=1,NP
-         DO 750 J=1,NP
+         DO 9750 J=1,NP
          SUM=0.0
          DO 760 K=1,NY
          SUM=SUM+XSS(I,K)*XSS(J,K)
   760    CONTINUE
-  750    ROOTC(I,J)=SUM
+         ROOTC(I,J)=SUM
+ 9750    CONTINUE
+  750    CONTINUE
 !         CALL RS(NRESPONDENTS,NP,ROOTC,DDD,1,CROOT,FAL1,FAL2,IERR)
          DO 728 I=1,NP
-         DO 728 J=1,NY
+         DO 9728 J=1,NY
          ROOTC(J,I)=XSS(I,J)
+ 9728    CONTINUE
   728    CONTINUE
          XTOL=.001
 !         CALL LSVRR(NY,NP,ROOTC,NRESPONDENTS,21,XTOL,IRANK,YHAT,UUU,
@@ -2722,16 +2809,19 @@
 !
       IF(NY.GT.NP)THEN
          DO 770 I=1,NP
-         DO 770 J=1,NP
+         DO 9770 J=1,NP
          SUM=0.0
          DO 780 K=1,NY
          SUM=SUM+XT(I,K)*XT(J,K)
   780    CONTINUE
-  770    ROOTC(I,J)=SUM
+         ROOTC(I,J)=SUM
+ 9770    CONTINUE
+  770    CONTINUE
 !         CALL RS(NRESPONDENTS,NP,ROOTC,DD,1,CROOT,FAL1,FAL2,IERR)
          DO 727 I=1,NP
-         DO 727 J=1,NY
+         DO 9727 J=1,NY
          ROOTC(J,I)=XT(I,J)
+ 9727    CONTINUE
   727    CONTINUE
          XTOL=.001
 !         CALL LSVRR(NY,NP,ROOTC,NRESPONDENTS,21,XTOL,IRANK,YHAT,UUU,
@@ -2746,13 +2836,15 @@
 !         WRITE(23,337)IRANK
          DO 462 I=1,NP
          DD(I)=YHAT(I)
-         DO 462 JJ=1,NF
+         DO 9462 JJ=1,NF
 !         PSIX(I,JJ)=VVV(I,JJ)*SQRT(YHAT(JJ))
          PSIX(I,JJ)=VVV(JJ,I)*SQRT(YHAT(JJ))
+ 9462    CONTINUE
   462    CONTINUE
          DO 460 I=1,NY
-         DO 460 JJ=1,NF
+         DO 9460 JJ=1,NF
          W(I,JJ)=UUU(I,JJ)*SQRT(YHAT(JJ))
+ 9460    CONTINUE
   460    CONTINUE
 !  
 !  CONSTRAINT CHECKS
@@ -2766,22 +2858,26 @@
   233    CONTINUE
 !         WRITE(23,199)(VVV(1,K),K=1,NFPS)
          DO 227 J=1,NFPS
-         DO 227 K=1,NFPS
+         DO 9227 K=1,NFPS
          SUM=0.0
          DO 228 I=1,NP
          SUM=SUM+PSIX(I,J)*PSIX(I,K)
   228    CONTINUE
-  227    VVV(J,K)=SUM
+         VVV(J,K)=SUM
+ 9227    CONTINUE
+  227    CONTINUE
          DO 229 I=1,NFPS
 !         WRITE(23,200)I,(VVV(I,J),J=1,NFPS)
   229    CONTINUE
          DO 230 J=1,NFPS
-         DO 230 K=1,NFPS
+         DO 9230 K=1,NFPS
          SUM=0.0
          DO 231 I=1,NY
          SUM=SUM+W(I,J)*W(I,K)
   231    CONTINUE
-  230    VVV(J,K)=SUM
+         VVV(J,K)=SUM
+ 9230    CONTINUE
+  230    CONTINUE
          DO 232 I=1,NFPS
 !         WRITE(23,200)I,(VVV(I,J),J=1,NFPS)
   232    CONTINUE
@@ -2789,13 +2885,15 @@
 !  SAVE PSI AND W HERE
 !
          DO 266 J=1,NF
-         DO 266 I=1,NP
+         DO 9266 I=1,NP
          XSAVE(I,J)=PSIX(I,J)
+ 9266    CONTINUE
   266    CONTINUE
          DO 265 J=1,NF
-         DO 265 I=1,NY
+         DO 9265 I=1,NY
          WSAVE(I,J+1)=W(I,J)
          WSAVE(I,1)=W(I,NF+1)
+ 9265    CONTINUE        
   265    CONTINUE        
 !
       ENDIF
@@ -2831,12 +2929,14 @@
 !  RESTORE PSI AND W HERE
 !
       DO 264 J=1,NF
-      DO 264 I=1,NP
+      DO 9264 I=1,NP
       XDATA(I,J)=XSAVE(I,J)
+ 9264 CONTINUE
   264 CONTINUE
       DO 263 J=1,NF+1
-      DO 263 I=1,NY
+      DO 9263 I=1,NY
       W(I,J)=WSAVE(I,J)
+ 9263 CONTINUE        
   263 CONTINUE        
 !
       DEALLOCATE(LL)
@@ -2892,14 +2992,16 @@
 !
 !  200 FORMAT(1X,50F7.3)
       DO 1 J=1,NY
-      DO 1 JJ=1,NY
+      DO 91 JJ=1,NY
       SA(J,JJ)=0.0
       SB(J,JJ)=0.0
       SC(J,JJ)=0.0
-  1   SD(J,JJ)=0.0
+      SD(J,JJ)=0.0
+ 91   CONTINUE
+  1   CONTINUE
       DO 40 I=1,NP
       DO 31 J=1,NY
-      DO 31 JJ=1,J
+      DO 931 JJ=1,J
 !      IF(X(I,J).EQ.-999.0)GO TO 31
 !      IF(X(I,JJ).EQ.-999.0)GO TO 31
       IF(ABS(X(I,J)+999.0).LE..001)GO TO 31
@@ -2911,10 +3013,11 @@
       SC(J,JJ)=SC(J,JJ)+X(I,J)*X(I,JJ)
       SC(JJ,J)=SC(J,JJ)
       SD(J,JJ)=SD(J,JJ)+1.0
+ 931  CONTINUE
   31  CONTINUE
   40  CONTINUE
       DO 32 J=1,NY
-      DO 32 JJ=1,J
+      DO 932 JJ=1,J
       AA=SD(J,JJ)*SC(J,JJ)-SA(J,JJ)*SA(JJ,J)
       BB=SD(J,JJ)*SB(J,JJ)-SA(J,JJ)*SA(J,JJ)
       CC=SD(J,JJ)*SB(JJ,J)-SA(JJ,J)*SA(JJ,J)
@@ -2923,7 +3026,9 @@
       IF(BBCC.LE..0)GO TO 343
       R(JJ,J)=AA/SQRT(BB*CC)
   343 CONTINUE
-  32  R(J,JJ)=R(JJ,J)
+      R(J,JJ)=R(JJ,J)
+ 932  CONTINUE
+  32  CONTINUE
 !  62  BB=-99.0
       BB=-99.0
 !
@@ -2933,7 +3038,8 @@
       DO 50 J=1,NY
       SUM=0.0
       DO 51 JJ=1,NY
-  51  SUM=SUM+ABS(R(J,JJ))
+      SUM=SUM+ABS(R(J,JJ))
+  51  CONTINUE
       IF(SUM.GT.BB)THEN
          BB=SUM
          KS=J
@@ -2943,7 +3049,8 @@
   50  CONTINUE
       DO 52 J=1,NY
       IF(R(KS,J).LE.0.0)LL(J)=-1
-  52  IF(R(KS,J).GT.0.0)LL(J)=1
+      IF(R(KS,J).GT.0.0)LL(J)=1
+  52  CONTINUE
 !
 !  ITERATIVELY CHANGE SIGNS OF COLUMNS TO MAXIMIZE NUMBER OF ENTRIES
 !   IN THE CORRELATION MATRIX WHICH ARE POSITIVE.  THIS VECTOR IS THEN
@@ -2952,17 +3059,20 @@
       NYD2=(NY-1)/2
       KPOS=0
       DO 60 JK=1,NY
-      DO 60 J=1,NY
+      DO 960 J=1,NY
       KK=0
       KSUM=0
       DO 61 JJ=1,NY
       AA=R(J,JJ)*FLOAT(LL(JJ))*FLOAT(LL(J))
       IF(JK.EQ.NY.AND.AA.GE.0.0)KPOS=KPOS+1
       IF(JK.EQ.NY.AND.AA.GE.0.0)KSUM=KSUM+1
-  61  IF(AA.LT.0.0)KK=KK+1
+      IF(AA.LT.0.0)KK=KK+1
+  61  CONTINUE
       IF(KK.GT.NYD2)LL(J)=LL(J)*(-1)
       IF(JK.EQ.NY)MPOS(J)=KSUM
-  60  IF(KK.GT.NYD2)KS=999
+      IF(KK.GT.NYD2)KS=999
+ 960  CONTINUE
+  60  CONTINUE
 !
       DEALLOCATE(R)
       DEALLOCATE(SA)
@@ -3029,8 +3139,10 @@
       LLL(K)=0
       TSUM(K)=0.0
       C(K)=0.0
-      DO 15 J=1,NF1
-  15  W(K,J)=0.0
+      DO 915 J=1,NF1
+      W(K,J)=0.0
+ 915  CONTINUE
+  15  CONTINUE
 !
 !  IF ILAST = 1 THEN ONLY PERFORM THE ESTIMATE OF W AND c FOR THE 
 !   CURRENT COLUMN OF P.
@@ -3043,8 +3155,10 @@
       IF(ILAST.EQ.0)KKA=1
       DO 11 KK=KKA,NF
       DO 16 K=1,NY
-      DO 16 J=1,NF+1
-  16  W(K,J)=0.0
+      DO 916 J=1,NF+1
+      W(K,J)=0.0
+ 916  CONTINUE
+  16  CONTINUE
 !
 !  RUN REGRESSION TO ESTIMATE W AND c ONE COLUMN AT A TIME
 !   BECAUSE OF MISSING DATA
@@ -3057,7 +3171,7 @@
 !  COMPUTE [P'P]-1
 !
       DO 2 J=1,NF1
-      DO 2 JJ=1,NF1
+      DO 92 JJ=1,NF1
       SUM=0.0
       DO 1 I=1,NP
 !      IF(J.EQ.1.AND.JJ.EQ.1)WRITE(23,665)I,PSI(I,1),PSI(I,2)
@@ -3069,7 +3183,9 @@
       SUM=SUM+PSI(I,J)*PSI(I,JJ)
   1   CONTINUE
       A(J,JJ)=SUM
-  2   ZMAT(J,JJ)=SUM
+      ZMAT(J,JJ)=SUM
+ 92   CONTINUE
+  2   CONTINUE
       CALL DSYEV('V','L',NF1,ZMAT,NDIMENSIONS+2,WVEC,WK,LWORK,INFO)
 !      call rs(127,nf1,a,wvec,1,ZMAT,fv1,fv2,ier)
 !      WRITE(*,667)NF1,INFO,(WVEC(JC),JC=1,NF1),ZMAT(1,1),ZMAT(1,2),&
@@ -3078,14 +3194,16 @@
 !      KEITH=999
 !      IF(KEITH.EQ.999)STOP
       DO 60 I=1,NF1
-      DO 60 KX=1,NF1
+      DO 960 KX=1,NF1
       SUM=0.0
       DO 61 J=1,NF1
       IF(ABS(WVEC(J)).GT..001)THEN
           SUM=SUM+ZMAT(KX,J)*(1.0/WVEC(J))*ZMAT(I,J)
       ENDIF
   61  CONTINUE
-  60  B(I,KX)=SUM
+      B(I,KX)=SUM
+ 960  CONTINUE
+  60  CONTINUE
 !
 !  COMPUTE [P'P]-1*P'X = W'/c'
 !
@@ -3097,10 +3215,13 @@
       DO 5 J=1,NF1
       SUM=0.0
       DO 4 JJ=1,NF1
-  4   SUM=SUM+B(J,JJ)*PSI(I,JJ)
-  5   C(J)=SUM
+      SUM=SUM+B(J,JJ)*PSI(I,JJ)
+  4   CONTINUE
+      C(J)=SUM
+  5   CONTINUE
       DO 6 J=1,NF1
-  6   W(K,J)=W(K,J)+C(J)*XS(I,K)
+      W(K,J)=W(K,J)+C(J)*XS(I,K)
+  6   CONTINUE
   3   CONTINUE
 !
 !  CALCULATE R-SQUARE AND SSE FOR REGRESSION
@@ -3116,7 +3237,8 @@
       LLL(K)=LLL(K)+1
       SUM=0.0
       DO 9 J=1,NF1
-  9   SUM=SUM+PSI(I,J)*W(K,J)
+      SUM=SUM+PSI(I,J)*W(K,J)
+  9   CONTINUE
       ESUM=ESUM+(SUM-XS(I,K))**2
       X(I,K)=SUM-XS(I,K)
       XT(I,1)=SUM
@@ -3137,14 +3259,17 @@
 !
       DO 888 I=1,NP
       DO 887 K=1,NY
-  887 XT(I,K)=-999.0
+      XT(I,K)=-999.0
+  887 CONTINUE
 !      IF(PSI(I,1).EQ.-999.0)GO TO 888
       IF(ABS(PSI(I,1)+999.0).LE..001)GO TO 888
       DO 88 K=1,NY
       SUM=0.0
       DO 89 J=1,NF1
-  89  SUM=SUM+PSI(I,J)*W(K,J)
-  88  XT(I,K)=SUM
+      SUM=SUM+PSI(I,J)*W(K,J)
+  89  CONTINUE
+      XT(I,K)=SUM
+  88  CONTINUE
   888 CONTINUE
 !
 !  TRANSPOSE CALL
@@ -3217,7 +3342,8 @@
       KK=KK+1
       Y(KK)=XS(I,J)-W(J,NF1)
       DO 3 JJ=1,NF
-  3   A(KK,JJ)=W(J,JJ)
+      A(KK,JJ)=W(J,JJ)
+  3   CONTINUE
   2   CONTINUE
 !
 !  CALL SUBROUTINE REGA TO PERFORM LEAST SQUARES
@@ -3297,37 +3423,47 @@
 !  102 FORMAT(2I5,30F10.4)
       LWORK=40*(NDIMENSIONS+2)
       DO 1 J=1,NF
-      DO 1 JJ=1,NF
+      DO 91 JJ=1,NF
       SUM=0.0
       DO 2 I=1,NS
-  2   SUM=SUM+A(I,J)*A(I,JJ)
+      SUM=SUM+A(I,J)*A(I,JJ)
+  2   CONTINUE
       B(J,JJ)=SUM
-  1   ZMAT(J,JJ)=SUM
+      ZMAT(J,JJ)=SUM
+ 91   CONTINUE
+  1   CONTINUE
 !
       CALL DSYEV('V','L', NF, ZMAT,NDIMENSIONS+2,WVEC,WK,LWORK,INFO)
 !      call rs(127,nf,B,wvec,1,ZMAT,fv1,fv2,ier)
 !      WRITE(23,101)NS,NF,IER
 !      WRITE(23,102)NS,NF,(WVEC(J),J=1,NF)
       DO 60 I=1,NF
-      DO 60 K=1,NF
+      DO 960 K=1,NF
       SUM=0.0
       DO 61 J=1,NF
       IF(ABS(WVEC(J)).GT..00001)THEN
           SUM=SUM+ZMAT(K,J)*(1.0/WVEC(J))*ZMAT(I,J)
       ENDIF
   61  CONTINUE
-  60  C(I,K)=SUM
+      C(I,K)=SUM
+ 960  CONTINUE
+  60  CONTINUE
       DO 3 I=1,NS
-      DO 3 J=1,NF
+      DO 93 J=1,NF
       SUM=0.0
       DO 4 JJ=1,NF
-  4   SUM=SUM+C(J,JJ)*A(I,JJ)
-  3   BB(J,I)=SUM
+      SUM=SUM+C(J,JJ)*A(I,JJ)
+  4   CONTINUE
+      BB(J,I)=SUM
+  93  CONTINUE
+  3   CONTINUE
       DO 5 JJ=1,NF
       SUM=0.0
       DO 6 J=1,NS
-  6   SUM=SUM+BB(JJ,J)*Y(J)
-  5   V(JJ)=SUM
+      SUM=SUM+BB(JJ,J)*Y(J)
+  6   CONTINUE
+      V(JJ)=SUM
+  5   CONTINUE
 !
       DEALLOCATE(WVEC)
       DEALLOCATE(WK)
@@ -3420,10 +3556,11 @@
       KDEGM=0
       DO 27 K=1,NQ
       ZSUM(K)=0.0
-      DO 27 L=1,NQ
+      DO 927 L=1,NQ
       AWV(K,L)=0.0
       A(KK)=0.0
       KK=KK+1
+ 927  CONTINUE
   27  CONTINUE
       I=0
       ZZSUM=0.0
@@ -3460,12 +3597,13 @@
       KERR=0
       DO 100 II=1,NMISS
       KK=0
-      DO 100 K=1,NNQ
+      DO 9100 K=1,NNQ
       IF(K.EQ.NRESP)GO TO 100
       KK=KK+1
       AA=ABS(A(K)-XMISS(II))
       IF(AA.LE.XKNTL)KDEGO(KK)=KDEGO(KK)+1
       IF(AA.LE.XKNTL)KERR=1
+ 9100 CONTINUE
   100 CONTINUE
   997 CONTINUE
       IF(KERR.EQ.1)GO TO 9
@@ -3581,7 +3719,8 @@
       FITS(1)=XSIGM
       XWV=AWV(NLEFT,NQ-1)
       DO 42 J=1,NQ
-  42  IF(XWV.GT.0.0)AWV(J,NQ-1)=-AWV(J,NQ-1)
+      IF(XWV.GT.0.0)AWV(J,NQ-1)=-AWV(J,NQ-1)
+  42  CONTINUE
 !      write(24,3)
 !      write(*,19)
 !      write(24,19)
@@ -3683,7 +3822,8 @@
       QQQ(I)=ZZ(I)
       XSUM(I)=0.0
       ZSUM(I)=0.0
-  111 XSUM(I+NQ)=0.0
+      XSUM(I+NQ)=0.0
+  111 CONTINUE
 !  3   FORMAT(1X,78('*'))
       IK=0
       IPOS=0
@@ -3702,7 +3842,8 @@
       IF(NMISS.EQ.0)GO TO 1011
       DO 100 I=1,NMISS
       AA=ABS(A(NRESP)-XMISS(I))
-  100 IF(AA.LE.XKNTL)GO TO 2
+      IF(AA.LE.XKNTL)GO TO 2
+  100 CONTINUE
  1011 XRES1=A(NRESP)
   101 CONTINUE
       IF(NRESP.EQ.0)XRES1=0.0
@@ -3757,7 +3898,8 @@
       SUMB=SUMB+AA
       SUMC=SUMC+ZZ(J)
       SUMD=SUMD+AA*AA
-  22  SUME=SUME+ZZ(J)*ZZ(J)
+      SUME=SUME+ZZ(J)*ZZ(J)
+  22  CONTINUE
       AA=XNQ*SUMA-SUMB*SUMC
       BB=XNQ*SUMD-SUMB*SUMB
       CC=XNQ*SUME-SUMC*SUMC
@@ -3811,7 +3953,8 @@
       YSUM(NQ+1)=SQRT((TTSUM-(TSUM*TSUM)/XNP)/(XNP))
       DO 200 I=1,NQ
       ZSUM(I)=XSUM(I)/XNP
-  200 YSUM(I)=SQRT((XSUM(I+NQ)-(XSUM(I)*XSUM(I))/XNP)/(XNP))
+      YSUM(I)=SQRT((XSUM(I+NQ)-(XSUM(I)*XSUM(I))/XNP)/(XNP))
+  200 CONTINUE
       ZSUM(NQ+1)=TSUM/XNP
 !      write(*,50)
 !      write(24,50)
@@ -3911,12 +4054,14 @@
 
 !  200 FORMAT(1X,50F7.3)
       DO 1 J=1,NY
-      DO 1 JJ=1,NY
+      DO 91 JJ=1,NY
       R(J,JJ)=0.0
       SA(J,JJ)=0.0
       SB(J,JJ)=0.0
       SC(J,JJ)=0.0
-  1   SD(J,JJ)=0.0
+      SD(J,JJ)=0.0
+ 91   CONTINUE
+  1   CONTINUE
       R(1,2)=0.8
       R(2,1)=0.8
 !

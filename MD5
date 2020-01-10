@@ -1,9 +1,9 @@
-001b42ba570de336e0b8c71710e25021 *ChangeLog
-dce3742d9b4267ffa5d58602f479eba4 *DESCRIPTION
+66554575c52b88fd2de1cbbee14e5536 *ChangeLog
+95c89ded53efb12a4a5566e230b69480 *DESCRIPTION
 6d066f72f7bf36b0f7f36459bc1fc4c8 *NAMESPACE
-63349b1ac6d235994822d655540b0854 *R/basicspace.R
+a592afa682b999f57448671168b0b834 *R/basicspace.R
 7d53167f18cd147588b409a8685adcfe *R/zzz.R
-64856015c84668e9b239b52591ea3814 *build/vignette.rds
+2132b19c250d517241955865395eb599 *build/vignette.rds
 44c49a8790ab6742d6d53b9d02165f58 *data/Issues1980.rda
 cd7e6ed9a9da26d71e86fd105dfca12e *data/Issues1980_bb.rda
 fa0e33267b38872fc6e26bc073b511fd *data/LC1980.rda
@@ -13,7 +13,7 @@ a68eb44678b95658781bd0c3353d26cd *data/colombia.rda
 68c1c6373f873a95a10075f4378d0b4f *inst/CITATION
 235bce0ed29a5a958fedf951384a56b4 *inst/doc/basicspace.R
 737158603bf422e19e86868fa4498179 *inst/doc/basicspace.Rnw
-a51d2efb9f2973a4ffdcd0908c8a94fc *inst/doc/basicspace.pdf
+b0341ddacbdaf19e41c89601fe63faa3 *inst/doc/basicspace.pdf
 ad044af3f7172a2b6a9a58670b508bed *man/Issues1980.Rd
 f8c12bf00fbdf788db5df7c44a1532ef *man/Issues1980_bb.Rd
 34ed6349a27f85c4b343dc8088627e77 *man/LC1980.Rd
@@ -46,7 +46,7 @@ c20839bb888b8450c3ddd61686cbae36 *man/summary.aldmck.Rd
 afc29bfe706a267db2f9d73929c1adcb *man/summary.blackbt.Rd
 2a6f9e9e044a78154d3cfda5936d6f48 *src/Makevars
 2a6f9e9e044a78154d3cfda5936d6f48 *src/Makevars.win
-4d626afb4bc411160dce9c404f4a68b6 *src/basicspace.f90
-549e2533f90f082d0ce7300b70ddb69d *src/basicspace_init.c
+c5f66b01ce4d9ce1c8d58b3e9063998f *src/basicspace.f90
+19422208b8744fdff649ccb66c9ab46c *src/basicspace_init.c
 737158603bf422e19e86868fa4498179 *vignettes/basicspace.Rnw
 48d9f9d59b65da13149acdfb806013a5 *vignettes/basicspace.bib

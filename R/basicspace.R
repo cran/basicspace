@@ -21,7 +21,7 @@ boot_aldmck <- function(data, respondent=0, missing=NULL, polarity, iter=100){
 
 plot.boot_aldmck <- function(x, ...){
 
-	if (class(x) != "boot_aldmck") stop("Data is not of class boot_aldmck.")
+	if(!inherits(x, "boot_aldmck"))  stop("Input is not of class boot_aldmck.")
 
 	x <- x[,order(colMeans(x))]
 	positions <- colMeans(x)
@@ -37,7 +37,7 @@ plot.boot_aldmck <- function(x, ...){
 
 plot.blackbox <- function(x, ...){
 
-	if (class(x) != "blackbox") stop("Data is not of class blackbox.")
+	if(!inherits(x, "blackbox"))  stop("Input is not of class blackbox.")
 
 	hist(x$individuals[[x$dims]]$c1, breaks = seq(-1, 1, 0.1),
 		main="Distribution of Blackbox Intercepts",
@@ -47,7 +47,7 @@ plot.blackbox <- function(x, ...){
 
 plot.boot_blackbt <- function(x, ...){
 
-	if (class(x) != "boot_blackbt") stop("Data is not of class boot_blackbt.")
+	if(!inherits(x, "boot_blackbt"))  stop("Input is not of class boot_blackbt.")
 
 	x <- x[,order(colMeans(x))]
 	positions <- colMeans(x)
@@ -93,8 +93,8 @@ boot_blackbt <- function(data, missing=NULL, dims=1, dim.extract=dims, minscale,
 predict.blackbox <- function(object, dims=1, ...){
 
 	## Error catch for dims
-    	if(!class(object)=="blackbox") stop("Input is not of class 'blackbox'.")
-        if(dims < 1)  stop("dims must be great than 1")
+	if(!inherits(object, "blackbox"))  stop("Input is not of class blackbox.")
+	if(dims < 1)  stop("dims must be great than 1")
 	if(dims > object$dims)  stop(paste("dims must be equal or less than the number of estimate dimensions, which is", object$dims))
 
 	## Extract object output
@@ -114,8 +114,9 @@ predict.blackbox <- function(object, dims=1, ...){
 
 predict.aldmck <- function(object, caliper=0.2, ...){
 
-      	if(!class(object)=="aldmck") stop("Input is not of class 'aldmck'.")
-      	if(caliper < 0) stop("Caliper must be positive.")
+	if(!inherits(object, "aldmck"))  stop("Input is not of class aldmck.")
+    if(caliper < 0) stop("Caliper must be positive.")
+
 	N <-nrow(object$respondents)	#number of respondents
 	j <- length(object$stimuli)	#number of stimuli
 	Y <- matrix(rep(object$stimuli,N), nrow=N, ncol=j, byrow=TRUE)
@@ -134,7 +135,7 @@ predict.aldmck <- function(object, caliper=0.2, ...){
 predict.blackbt <- function(object, dims=1, ...){
 
 	## Error catch for dims
-    	if(!class(object)=="blackbt") stop("Input is not of class 'blackbt'.")
+	if(!inherits(object, "blackbt"))  stop("Input is not of class blackbt.")
 	if(dims < 1)  stop("dims must be great than 1")
 	if(dims > object$dims)  stop(paste("dims must be equal or less than the number of estimate dimensions, which is", object$dims))
 
@@ -158,7 +159,8 @@ predict.blackbt <- function(object, dims=1, ...){
 summary.blackbox <- function(object, ...){
 
 	x <- object
-	if(!class(x)=="blackbox") stop("Input is not of class 'blackbox'.")
+	if(!inherits(x, "blackbox"))  stop("Input is not of class blackbox.")
+
 	cat("\n\nSUMMARY OF BLACKBOX OBJECT")
 	cat("\n----------------------------------")
 	for(i in 1:x$dims){
@@ -179,8 +181,8 @@ summary.blackbox <- function(object, ...){
 blackbox <- function(data,missing=NULL,verbose=FALSE,dims=1,minscale){
 
 	### Error check each argument ###
-	if(class(data) == "data.frame") data <- as.matrix(data)
-	if(class(data) != "matrix") stop("Data is not a matrix, or data frame.")
+	if(inherits(data, "data.frame"))  data <- as.matrix(data)
+	if(!inherits(data, "matrix"))  stop("Data is not a matrix, or data frame.")
 
 	if(typeof(data) != "double") stop("Data are not numeric values, please convert it using as.numeric() or mode().")
 	if(!is.null(missing) & !(is.matrix(missing) | is.vector(missing))) stop("Argument 'missing' must be a vector or matrix.")
@@ -221,7 +223,6 @@ blackbox <- function(data,missing=NULL,verbose=FALSE,dims=1,minscale){
 		as.integer(minscale),		# MINSCALE
 		as.integer(rep(1,N)),		# MID
                 as.numeric(rawdata),		# KISSUE
-		as.character("a"),		# CAND, not used
                 fits = double(7*dims), 		# FITS
                 psimatrix = double(N*((dims*(dims+1))/2)+2*N*dims),		# PSIMATRIX
                 wmatrix = double((NQ)*((dims*(dims+1))/2)+2*(NQ)*dims),		# WMATRIX
@@ -279,8 +280,8 @@ blackbox <- function(data,missing=NULL,verbose=FALSE,dims=1,minscale){
 blackbox_transpose <- function(data,missing=NULL,verbose=FALSE,dims=1,minscale){
 
 	### Error check each argument ###
-	if(class(data) == "data.frame") data <- as.matrix(data)
-	if(class(data) != "matrix") stop("Data is not a matrix, or data frame.")
+	if(inherits(data, "data.frame"))  data <- as.matrix(data)
+	if(!inherits(data, "matrix"))  stop("Data is not a matrix, or data frame.")
 
 	if(typeof(data) != "double") stop("Data are not numeric values, please convert it using as.numeric().")
 	if(!is.null(missing) & !(is.matrix(missing) | is.vector(missing))) stop("Argument 'missing' must be a vector or matrix.")
@@ -322,7 +323,6 @@ blackbox_transpose <- function(data,missing=NULL,verbose=FALSE,dims=1,minscale){
 		as.integer(minscale),		# MINSCALE
 		as.integer(rep(1,N)),		# MID
                 as.double(rawdata),		# KISSUE
-		as.character("a"),		# CAND, not used
                 fits = double(7*dims), 		# FITS
                 psimatrix = double(N*((dims*(dims+1))/2)+2*N*dims),		# PSIMATRIX
                 wmatrix = double((NQ)*((dims*(dims+1))/2)+2*(NQ)*dims),		# WMATRIX
@@ -377,7 +377,7 @@ blackbox_transpose <- function(data,missing=NULL,verbose=FALSE,dims=1,minscale){
 
 plot.blackbt <- function(x, xlim=c(-1,1), ...){
 
-	if(!class(x)=="blackbt") stop("Input is not of class 'blackbt'.")
+	if(!inherits(x, "blackbt"))  stop("Input is not of class blackbt.")
 
 	colchoice <- rep(palette(),3)
 	dens <- density(x$individuals[[1]]$w1,na.rm=TRUE)
@@ -398,7 +398,7 @@ plot.blackbt <- function(x, xlim=c(-1,1), ...){
 
 plotcdf.blackbt <- function(x, align=NULL, xlim=c(-1.2,1), ...){
 
-	if(!class(x)=="blackbt") stop("Input is not of class 'blackbt'.")
+	if(!inherits(x, "blackbt"))  stop("Input is not of class blackbt.")
 
 	colchoice <- rep(palette(),3)
 	cdf <- ecdf(x$individuals[[1]]$w1)
@@ -419,7 +419,7 @@ plotcdf.blackbt <- function(x, align=NULL, xlim=c(-1.2,1), ...){
 summary.blackbt <- function(object, ...){
 
 	x <- object
-	if(!class(x)=="blackbt") stop("Input is not of class 'blackbt'.")
+	if(!inherits(x, "blackbt"))  stop("Input is not of class blackbt.")
 	cat("\n\nSUMMARY OF BLACKBOX TRANSPOSE OBJECT")
 	cat("\n----------------------------------")
 	for(i in 1:x$dims){
@@ -439,9 +439,9 @@ summary.blackbt <- function(object, ...){
 
 plot.aldmck <- function(x, ...){
 
-	if(!class(x)=="aldmck") stop("Input is not of class 'aldmck'.")
+	if(!inherits(x, "aldmck"))  stop("Input is not of class aldmck.")
 
-        op <- par(no.readonly=TRUE)     
+    op <- par(no.readonly=TRUE)     
 	par(mfrow=c(2,2))
 	plot.AM(x,...)
 	plot.cdf(x,...)
@@ -453,7 +453,7 @@ plot.aldmck <- function(x, ...){
 
 plot.AM <- function(x, xlim=c(-2,2), ...){
 
-	if(!class(x)=="aldmck") stop("Input is not of class 'aldmck'.")
+	if(!inherits(x, "aldmck"))  stop("Input is not of class aldmck.")
 
 	if(sum(x$respondents[,"weight"]>0,na.rm=TRUE)==0){
 		plot(0,1,xlim=c(0,1),ylim=c(0,1),type="n",xaxt="n",yaxt="n",xlab="", ylab="",bty="n")
@@ -480,7 +480,7 @@ plot.AM <- function(x, xlim=c(-2,2), ...){
 
 plot.aldmck_positive <- function(x, xlim=c(-2,2), ...){
 
-	if(!class(x)=="aldmck") stop("Input is not of class 'aldmck'.")
+	if(!inherits(x, "aldmck"))  stop("Input is not of class aldmck.")
 
 	if(sum(x$respondents[,"weight"]>0,na.rm=TRUE)==0){
 		plot(0,1,xlim=c(0,1),ylim=c(0,1),type="n",xaxt="n",yaxt="n",xlab="", ylab="",bty="n")
@@ -508,7 +508,7 @@ plot.aldmck_positive <- function(x, xlim=c(-2,2), ...){
 
 plot.aldmck_negative <- function(x, xlim=c(-2,2), ...){
 
-	if(!class(x)=="aldmck") stop("Input is not of class 'aldmck'.")
+	if(!inherits(x, "aldmck"))  stop("Input is not of class aldmck.")
 
 	if(sum(x$respondents[,"weight"]<0,na.rm=TRUE)==0){
 		plot(0,1,xlim=c(0,1),ylim=c(0,1),type="n",xaxt="n",yaxt="n",xlab="", ylab="",bty="n")
@@ -546,7 +546,7 @@ plot.aldmck_negative <- function(x, xlim=c(-2,2), ...){
 
 plot.cdf <- function(x, align=NULL, xlim=c(-2,2), ...){
 
-	if(!class(x)=="aldmck") stop("Input is not of class 'aldmck'.")
+	if(!inherits(x, "aldmck"))  stop("Input is not of class aldmck.")
 
 	if(sum(x$respondents[,"weight"]>0,na.rm=TRUE)==0){
 		plot(0,1,xlim=c(0,1),ylim=c(0,1),type="n",xaxt="n",yaxt="n",xlab="", ylab="",bty="n")
@@ -574,8 +574,8 @@ plot.cdf <- function(x, align=NULL, xlim=c(-2,2), ...){
 aldmck <- function(data, respondent = 0, missing=NULL, polarity, verbose=FALSE) {
 
 	### Error check each argument ###
-	if(class(data) == "data.frame") data <- as.matrix(data)
-	if(class(data) != "matrix") stop("Data is not a matrix or data frame.")
+	if(inherits(data, "data.frame"))  data <- as.matrix(data)
+	if(!inherits(data, "matrix"))  stop("Data is not a matrix, or data frame.")
 	if(typeof(data) != "double") stop("Data are not numeric values, please convert it using as.numeric() or mode().")
 
 	if(mode(respondent) != "numeric")  stop("Respondent is not specified as an integer.")
@@ -690,7 +690,8 @@ aldmck <- function(data, respondent = 0, missing=NULL, polarity, verbose=FALSE) 
 summary.aldmck <- function(object, ...){
 
     x<-object
-    if(!class(x)=="aldmck") stop("Input is not of class 'aldmck'.")
+	if(!inherits(x, "aldmck"))  stop("Input is not of class aldmck.")
+
 
     cat("\n\nSUMMARY OF ALDRICH-MCKELVEY OBJECT")
     cat("\n----------------------------------")
@@ -703,7 +704,6 @@ summary.aldmck <- function(object, ...){
      }
     cat("\nReduction of normalized variance of perceptions:", round(x$AMfit, digits=2), "\n\n")
 
-
     final <- matrix(round(sort(x$stimuli),3),ncol=1)
     rownames(final) <- names(sort(x$stimuli))
     colnames(final) <- c("Location")
@@ -712,21 +712,26 @@ summary.aldmck <- function(object, ...){
 }
 
 stimuli <- function(object){
-        if(class(object)=="blackbox" | class(object)=="blackbt") return(object$stimuli)
-        if(class(object)=="aldmck") return(object$stimuli)
-        stop("Input is not of class 'blackbox' or 'blackbt' or 'aldmck'.")
+
+	if(inherits(object, "blackbox") | inherits(object, "blackbt")) return(object$stimuli)
+	if(inherits(object, "aldmck") )  return(object$stimuli)
+    stop("Input is not of class 'blackbox' or 'blackbt' or 'aldmck'.")
+
 }
 
 individuals <- function(object){
-        if(class(object)=="blackbox" | class(object)=="blackbt") return(object$individuals)
-        if(class(object)=="aldmck") return(object$respondents)
-        stop("Input is not of class 'blackbox' or 'blackbt' or 'aldmck'.")
+
+	if(inherits(object, "blackbox") | inherits(object, "blackbt")) return(object$individuals)
+	if(inherits(object, "aldmck") )  return(object$respondents)
+    stop("Input is not of class 'blackbox' or 'blackbt' or 'aldmck'.")
+
 }
 
 fit <- function(object){
-        if(class(object)=="blackbox" | class(object)=="blackbt") return(object$fits)
-        if(class(object)=="aldmck") return(object$AMfit)
-        stop("Input is not of class 'blackbox' or 'blackbt' or 'aldmck'.")
+
+	if(inherits(object, "blackbox") | inherits(object, "blackbt")) return(object$fits)
+	if(inherits(object, "aldmck") )  return(object$AMfit)
+    stop("Input is not of class 'blackbox' or 'blackbt' or 'aldmck'.")
 }
 
 dim.blackbox <- function(x){
