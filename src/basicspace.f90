@@ -1486,22 +1486,35 @@
 !
       SUBROUTINE PSIPRM(NP,NF,PSI,IPRNT)
       IMPLICIT DOUBLE PRECISION (A-H,O-Z)
-      DIMENSION PSI(3539,152),R(127,127)
-!  200 FORMAT(1X,50F10.4)
+      DIMENSION PSI(3539,152)
+      DOUBLE PRECISION, ALLOCATABLE :: R(:,:)
+
+      ! Allocate memory for R based on NF
+      ALLOCATE(R(NF,NF))
+
+      ! Initialize IPRNT
       IPRNT = IPRNT
+
       DO 1 J=1,NF
       DO 91 K=1,NF
-      SUM=0.0
-      DO 2 I=1,NP
-      SUM=SUM+PSI(I,J)*PSI(I,K)
-  2   CONTINUE
-      R(J,K)=SUM
- 91   CONTINUE
-  1   CONTINUE
-!      IF(IPRNT.EQ.0)THEN
-!         DO 3 I=1,NF
-!  3      WRITE(23,200)(R(I,J),J=1,NF)
-!      ENDIF
+            SUM = 0.0
+            DO 2 I=1,NP
+                  SUM = SUM + PSI(I,J) * PSI(I,K)
+      2     CONTINUE
+            R(J,K) = SUM
+      91   CONTINUE
+      1   CONTINUE
+
+      ! Uncomment below to print R if needed
+      ! IF(IPRNT.EQ.0) THEN
+      !     DO 3 I=1,NF
+      !         WRITE(23,200) (R(I,J), J=1,NF)
+      !  3   CONTINUE
+      ! ENDIF
+
+      ! Deallocate R at the end of the subroutine
+      DEALLOCATE(R)
+
       RETURN
       END
 

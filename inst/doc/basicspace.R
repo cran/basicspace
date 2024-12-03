@@ -72,6 +72,8 @@ V.rotate <- svddecomp$v
 T <- V.rotate %*% t(U.rotate)
 Psi.hatrotate <- Psi.hat %*% T
 
+oldpar <- par(no.readonly = TRUE)
+on.exit(par(oldpar))
 par(mfrow=c(1,2))
 plot(Psi.true[,1],Psi.hatrotate[,1], xlim= c(-0.7,0.7), ylim= c(-0.5, 0.5),
 pch=20, cex=0.4, cex.lab=1.6, bty="n",
@@ -87,6 +89,8 @@ xlab="True Psi, second dimension", ylab="Recovered Psi, second dimension")
 ###################################################
 W.hat <- cbind(result$stimuli[[2]]$w1, result$stimuli[[2]]$w2)
 W.hatrotate <- W.hat%*%T
+oldpar <- par(no.readonly = TRUE)
+on.exit(par(oldpar))
 par(mfrow=c(1,2))
 
 plot(W.true[,1],W.hatrotate[,1], xlim= c( 0.00, 1.50), ylim= c(-0.75, 2.75),
@@ -103,6 +107,8 @@ xlab="True W, second dimension", ylab="Recovered W, second dimension")
 ### code chunk number 9: eight
 ###################################################
 
+oldpar <- par(no.readonly = TRUE)
+on.exit(par(oldpar))
 par(mfrow=c(1,1))
 
 plot(c, c.hat, 
@@ -118,6 +124,8 @@ W.hat <- cbind(result$stimuli[[2]]$w1, result$stimuli[[2]]$w2)
 Psi.hat <- cbind(result$individuals[[2]]$c1, result$individuals[[2]]$c2)
 X.hat <- Psi.hat %*% t(W.hat) + Jn %o% result$stimuli[[2]]$c
 
+oldpar <- par(no.readonly = TRUE)
+on.exit(par(oldpar))
 par(mfrow=c(1,2))
 
 plot(X.true[missing], X.hat[missing],
@@ -182,7 +190,8 @@ data(LC1980_bbt)
 ###################################################
 ### code chunk number 17: bbt
 ###################################################
-
+oldpar <- par(no.readonly = TRUE)
+on.exit(par(oldpar))
 par(mfrow = c(1, 2))
 
 plot(LC1980_bbt)

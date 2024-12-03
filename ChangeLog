@@ -66,10 +66,10 @@
 
 0.15	* Fixed valgrind issue identified by Brian Ripley, including vignette issue
 
-0.16 * CITATION file included to accepted JSS article
-	 * All Rd files link to accepted JSS vignette
+0.16 	* CITATION file included to accepted JSS article
+	* All Rd files link to accepted JSS vignette
 
-0.18 * Package maintainer changed from jameslo@princeton.edu to lojames@usc.edu
+0.18 	* Package maintainer changed from jameslo@princeton.edu to lojames@usc.edu
 
 0.20	* Modified Fortran code to address warnings thrown by -Wall
 	* Removed SAFE_FLAGS
@@ -80,6 +80,12 @@
 	* All double DO loops now terminate on separate lines
 	* With changes above, code is now Fortran 2018 compliant
 	* All "class != X" statements replaced with is() statements to comply with CRAN
-	* Replaced old-style character delcaractions CHARACTER*21 with CHARACTER(LEN=21)
+	* Replaced old-style character declaractions CHARACTER*21 with CHARACTER(LEN=21)
 	* Character argument CAND removed from BLACKBOX and BLACKBOXT functions, and not passed from R
+	
+0.25  	* Update the PSIPRM subroutine in src/basicspace.f90 to: (1): Replace the static declaration of R with an allocatable array; (2) Dynamically allocate the memory for R based on NF; and (3) Deallocate the memory at the end of the subroutine. 
+	* Added data/datalist 
+	* Updated inst/CITATION
+	* Package maintainer changes from lojames@usc.edu to cdhare@ucdavis.edu
+
 

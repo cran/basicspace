@@ -23,7 +23,7 @@ data(LC1980)
   \item{Issues}{ matrix, containing reported self-placements along various stimuli on a
 	7 point Liberal-Conservative scales (with the exception of abortion scales, which
 	are 4 point):
-    \itemize{
+    \describe{
     \item{\code{libcon1}}{ Liberal-conservative self-placement on 7 point scale.}
     \item{\code{defense}}{ Defense spending self-placement on 7 point scale.}
     \item{\code{govserv}}{ Government service on 7 point scale.}
@@ -44,10 +44,7 @@ data(LC1980)
 }
 
 \source{
-
-  American national Election Study. \url{http://www.electionstudies.org/}
-
-  Also availble from Keith Poole. \url{ http://voteview.com/}
+  American National Election Studies (\url{https://electionstudies.org/})
 }
 
 \author{ 
@@ -60,24 +57,36 @@ Jeffrey Lewis \email{jblewis@ucla.edu}
 James Lo \email{lojames@usc.edu}
 
 Royce Carroll \email{rcarroll@rice.edu}
+
+Christopher Hare \email{cdhare@ucdavis.edu}
+}
+
+\references{
+David A. Armstrong II, Ryan Bakker, Royce Carroll, Christopher Hare, Keith T. Poole, and Howard Rosenthal. 2021. \emph{Analyzing Spatial Models of Choice and Judgment}. 2nd ed. Statistics in the Social and Behavioral Sciences Series. Boca Raton, FL: Chapman & Hall/CRC. doi: 10.1201/9781315197609
+
+Keith T. Poole, Jeffrey B. Lewis, Howard Rosenthal, James Lo, and Royce Carroll. 2016. ``Recovering a Basic Space from Issue Scales in R.'' \emph{Journal of Statistical Software} 69(7): 1-21. doi:10.18637/jss.v069.i07
+
+Keith T. Poole. 1998. ``Recovering a Basic Space From a Set of Issue Scales.'' \emph{American Journal of Political Science} 42(3): 954-993. doi: 10.2307/2991737
 }
 
 \seealso{
-  '  '\link{blackbox}', '\link{summary.blackbox}'.
+'\link{blackbox}', '\link{summary.blackbox}'.
 }
 
 \examples{
-### Loads issue scales from the 1980 NES.
-data(Issues1980)
-Issues1980[Issues1980[,"abortion1"]==7,"abortion1"] <- 8	#missing recode
-Issues1980[Issues1980[,"abortion2"]==7,"abortion2"] <- 8	#missing recode
+  ### Loads issue scales from the 1980 ANES.
+  data(Issues1980)
+  Issues1980[Issues1980[,"abortion1"]==7,"abortion1"] <- 8	#missing recode
+  Issues1980[Issues1980[,"abortion2"]==7,"abortion2"] <- 8	#missing recode
 
-### This command conducts estimates, which we instead load using data()
-# Issues1980_bb <- blackbox(Issues1980,missing=c(0,8,9),verbose=FALSE,dims=3,minscale=8)
-data(Issues1980_bb)
+  \donttest{ 
+  Issues1980_bb <- blackbox(Issues1980, missing=c(0,8,9), verbose=FALSE, 
+    dims=3, minscale=8)
+  }
+  ### 'Issues1980_bb' can be retrieved quickly with: 
+  data(Issues1980_bb)
 
-summary(Issues1980_bb)
-
+  summary(Issues1980_bb)
 }
 
 \keyword{datasets}

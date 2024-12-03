@@ -1,18 +1,18 @@
 useDynLib(basicspace)
-import(tools)
 
+import(tools)
 importFrom("grDevices", "palette")
 importFrom("graphics", "abline", "arrows", "hist", "mtext", "par",
              "plot", "points", "segments", "text")
 importFrom("stats", "cor", "density", "ecdf", "quantile")
 importFrom("utils", "flush.console")
   
-export(aldmck,plot.cdf,plot.aldmck,plot.AM,
-plot.aldmck_positive,plot.aldmck_negative,blackbox_transpose,
-plotcdf.blackbt, blackbox, plot.blackbt,summary.aldmck,plot.aldmck,summary.blackbt, summary.blackbox,
-stimuli, individuals, fit,
-predict.blackbox, predict.blackbt, predict.aldmck,
-boot_blackbt, boot_aldmck, plot.boot_blackbt, plot.boot_aldmck)
+export(aldmck,plot.cdf,plot.aldmck,plot.AM,plot.aldmck_positive,
+    plot.aldmck_negative,blackbox_transpose,plotcdf.blackbt, blackbox, 
+    plot.blackbt,summary.aldmck,plot.aldmck,summary.blackbt, 
+    summary.blackbox,stimuli, individuals, fit,predict.blackbox, 
+    predict.blackbt, predict.aldmck,boot_blackbt, boot_aldmck, 
+    plot.boot_blackbt, plot.boot_aldmck)
 
 S3method(plot,AM)
 S3method(plot,cdf)

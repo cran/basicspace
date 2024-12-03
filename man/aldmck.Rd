@@ -1,6 +1,6 @@
 \name{aldmck}
 \alias{aldmck}
-\title{ Aldrich-McKelvey Scaling }
+\title{Aldrich-McKelvey Scaling}
 \description{ 
   \code{aldmck} is a function that takes a matrix of perceptual data, such as
 	liberal-conservative rankings of various stimuli, and recovers the true
@@ -14,7 +14,7 @@
 }
 
 \usage{
-  aldmck(data, respondent = 0, missing=NULL, polarity, verbose=FALSE)
+  aldmck(data, respondent=0, missing=NULL, polarity, verbose=FALSE)
 }
 
 \arguments{
@@ -53,7 +53,7 @@
   \item{respondents}{ matrix, containing the information estimated for each respondent.
 	Observations which were discarded in the estimation for missing data purposes
 	have been NA'd out:
-    \itemize{
+    \describe{
     \item{\code{intercept}}{Intercept of perceptual distortion for respondent.}
     \item{\code{weight}}{Weight of perceptual distortion for respondent.}
     \item{\code{idealpt}}{Estimated location of the respondent. Note that these positions
@@ -93,35 +93,35 @@ Jeffrey Lewis \email{jblewis@ucla.edu}
 James Lo \email{lojames@usc.edu}
 
 Royce Carroll \email{rcarroll@rice.edu}
+
+Christopher Hare \email{cdhare@ucdavis.edu}
 }
 
 \references{
+John H. Aldrich and Richard D. McKelvey. 1977. ``A Method of Scaling with Applications to the 1968 and 1972 Presidential Elections.'' \emph{American Political Science Review} 71(1): 111-130. doi: 10.2307/1956957
 
-Keith Poole, Jeffrey Lewis, Howard Rosenthal, James Lo, Royce Carroll (2016) ``Recovering
-a Basic Space from Issue Scales in R.'' Journal of Statistical Software. 69(7), 1--21.
-doi:10.18637/jss.v069.i07
+David A. Armstrong II, Ryan Bakker, Royce Carroll, Christopher Hare, Keith T. Poole, and Howard Rosenthal. 2021. \emph{Analyzing Spatial Models of Choice and Judgment}. 2nd ed. Statistics in the Social and Behavioral Sciences Series. Boca Raton, FL: Chapman & Hall/CRC. doi: 10.1201/9781315197609
 
-John H. Aldrich and Richard D. McKelvey (1977) ``A Method of Scaling with Applications to
-the 1968 and 1972 Presidential Elections.'' American Political Science Review. 71(1), 111-130.
+Thomas R. Palfrey and Keith T. Poole. 1987. ``The Relationship between Information, Ideology, and Voting Behavior.'' \emph{American Journal of Political Science} 31(3): 511-530. doi: 10.2307/2111281
 
-Thomas R. Palfrey and Keith T. Poole (1987) ``The Relationship between Information, Ideology,
-and Voting Behavior.'' American Journal of Political Science. 31(3), 511-530.
+Keith T. Poole, Jeffrey B. Lewis, Howard Rosenthal, James Lo, and Royce Carroll. 2016. ``Recovering a Basic Space from Issue Scales in R.'' \emph{Journal of Statistical Software} 69(7): 1-21. doi:10.18637/jss.v069.i07
 
-Keith Poole. \url{ http://voteview.com}
-
+Keith T. Poole. 1998. ``Recovering a Basic Space From a Set of Issue Scales.'' \emph{American Journal of Political Science} 42(3): 954-993. doi: 10.2307/2991737
 }
 
 \seealso{
-  '\link{LC1980}', '\link{summary.aldmck}',  '\link{plot.aldmck}', '\link{plot.cdf}'.
+'\link{LC1980}', '\link{summary.aldmck}',  '\link{plot.aldmck}', '\link{plot.cdf}'.
 }
 
 \examples{
-
-### Loads and scales the Liberal-Conservative scales from the 1980 NES.
-data(LC1980)
-result <- aldmck(data=LC1980, polarity=2, respondent=1, missing=c(0,8,9),verbose=TRUE)
-summary(result)
-plot.aldmck(result)
-
+	### Loads the Liberal-Conservative scales from the 1980 ANES.
+	data(LC1980)
+	
+	result <- aldmck(data=LC1980, polarity=2, respondent=1, 
+		missing=c(0,8,9), verbose=FALSE)
+	
+	summary(result)
+	plot.aldmck(result)
 }
+
 \keyword{ multivariate }

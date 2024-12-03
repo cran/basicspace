@@ -61,7 +61,7 @@ plot.boot_blackbt <- function(x, ...){
 
 }
 
-boot_blackbt <- function(data, missing=NULL, dims=1, dim.extract=dims, minscale, iter=100){
+boot_blackbt <- function(data, missing=NULL, dims=1, dim.extract=dims, minscale, iter=100, verbose=FALSE){
 
 	if(dim.extract > dims) stop("dim.extract must be less than dims")
 
@@ -79,9 +79,11 @@ boot_blackbt <- function(data, missing=NULL, dims=1, dim.extract=dims, minscale,
 			minscale=minscale, verbose=FALSE)
 		samples[i,] <- unlist(tmpres$stimuli[[dims]][getdim])
 
-	        if(i %% 10 ==0){
+	    if(verbose==TRUE){
+			if(i %% 10 ==0){
 			cat("\n\t\tIteration", i, "complete...")
 			flush.console()
+			}
 		}
 	}
 
@@ -205,13 +207,11 @@ blackbox <- function(data,missing=NULL,verbose=FALSE,dims=1,minscale){
 	stimnames <- colnames(data)
 	if(is.null(stimnames)) stimnames <- paste("stim", 1:N, sep="")
 	if(verbose){
+		deleted <- sum(is.na(apply(data,1,sum)))
+		cat("\n\n\tBeginning Blackbox Scaling...")
 
-	deleted <- sum(is.na(apply(data,1,sum)))
-	cat("\n\n\tBeginning Blackbox Scaling...")
-
-	#cat(nrow(data)-deleted, "of", nrow(data), "observations are complete.\n\t\t")
-	cat(NQ, "stimuli have been provided.")
-
+		#cat(nrow(data)-deleted, "of", nrow(data), "observations are complete.\n\t\t")
+		cat(NQ, "stimuli have been provided.")
 	}
 
 	res <- .Fortran("blackbox",
@@ -305,30 +305,27 @@ blackbox_transpose <- function(data,missing=NULL,verbose=FALSE,dims=1,minscale){
 	stimnames <- colnames(data)
 	if(is.null(stimnames)) stimnames <- paste("stim", 1:N, sep="")
 	if(verbose){
-
-	deleted <- sum(is.na(apply(data,1,sum)))
-	cat("\n\n\tBeginning Blackbox Transpose Scaling...")
-
-	#cat(nrow(data)-deleted, "of", nrow(data), "observations are complete.\n\t\t")
-	cat(NQ, "stimuli have been provided.")
-
+		deleted <- sum(is.na(apply(data,1,sum)))
+		cat("\n\n\tBeginning Blackbox Transpose Scaling...")
+		#message(nrow(data)-deleted, "of", nrow(data), "observations are complete.\n\t\t")
+		cat(NQ, "stimuli have been provided.")
 	}
 
 	res <- .Fortran("blackboxt",
                 as.integer(N),			# NRESPONDENTS
                 as.integer(NQ),			# NISSUES
-		as.integer(dims),		# NDIMENSIONS, check later about mods
+				as.integer(dims),		# NDIMENSIONS, check later about mods
                 as.integer(1),  		# NMISSING
-	        as.double(rep(missval,NQ)),	# KMISS
-		as.integer(minscale),		# MINSCALE
-		as.integer(rep(1,N)),		# MID
+	        	as.double(rep(missval,NQ)),	# KMISS
+				as.integer(minscale),		# MINSCALE
+				as.integer(rep(1,N)),		# MID
                 as.double(rawdata),		# KISSUE
                 fits = double(7*dims), 		# FITS
                 psimatrix = double(N*((dims*(dims+1))/2)+2*N*dims),		# PSIMATRIX
                 wmatrix = double((NQ)*((dims*(dims+1))/2)+2*(NQ)*dims),		# WMATRIX
-		lresp = integer(N+NQ),						# LRESPONDENTS
-		lmark = integer(N),		# LMARK
-		fits2 = double(6),		# FITS2
+				lresp = integer(N+NQ),						# LRESPONDENTS
+				lmark = integer(N),		# LMARK
+				fits2 = double(6),		# FITS2
                 exitstatus = integer(1))	# EXITSTATUS
 
  	if (res$exitstatus != 1) stop("\n\n\t====== Blackbox-Transpose did not execute properly ======\n\n")
@@ -441,13 +438,15 @@ plot.aldmck <- function(x, ...){
 
 	if(!inherits(x, "aldmck"))  stop("Input is not of class aldmck.")
 
-    op <- par(no.readonly=TRUE)     
+	# dev.new(height=7, width=7)
+    oldpar <- par(no.readonly = TRUE)
+	on.exit(par(oldpar))
 	par(mfrow=c(2,2))
 	plot.AM(x,...)
 	plot.cdf(x,...)
 	plot.aldmck_positive(x,...)
 	plot.aldmck_negative(x,...)
-        suppressWarnings(par(op))
+    # suppressWarnings(par(oldpar))
 
 }
 
@@ -613,14 +612,12 @@ aldmck <- function(data, respondent = 0, missing=NULL, polarity, verbose=FALSE) 
 	stimnames <- colnames(data)
 	if(is.null(stimnames)) stimnames <- paste("stim", 1:N, sep="")
 	if(verbose){
-
-	cat("\n\n\tBeginning Aldrich-McKelvey Scaling...")
-	if(respondent!=0) cat("\n\n\t\tColumn '",stimnames[respondent],"' is set as the self placement.", sep="")
-	if(respondent==0) cat("\n\n\t\tSelf-placements have not been provided by the user.")
-
-	cat("\n\t\tColumn '",stimnames[polarity],"' is set as the left-leaning stimulus.\n\t\t", sep="")
-	cat(nrow(data)-deleted, "of", nrow(data), "observations are complete.\n\t\t")
-	cat(NQ, "stimuli have been provided.")
+		cat("\n\n\tBeginning Aldrich-McKelvey Scaling...")
+		if(respondent!=0) cat("\n\n\t\tColumn '",stimnames[respondent],"' is set as the self placement.", sep="")
+		if(respondent==0) cat("\n\n\t\tSelf-placements have not been provided by the user.")
+		cat("\n\t\tColumn '",stimnames[polarity],"' is set as the left-leaning stimulus.\n\t\t", sep="")
+		cat(nrow(data)-deleted, "of", nrow(data), "observations are complete.\n\t\t")
+		cat(NQ, "stimuli have been provided.")
 	}
     if ((respondent != 0) & (respondent < polarity))   polarity = polarity - 1
 
@@ -631,7 +628,7 @@ aldmck <- function(data, respondent = 0, missing=NULL, polarity, verbose=FALSE) 
               as.integer(NQ+1),	 		# NISSUES 
               as.integer(NRESP),  		# NSELFPOS
               as.integer(1),			# NMISSING (maximum number of missing valaues)
-	      as.numeric(rep(missval,NQ+1)),	# KMISS, input number of missing values in each stimuli, length(NMISS*(NQ+1))), need to be double later
+	      		as.numeric(rep(missval,NQ+1)),	# KMISS, input number of missing values in each stimuli, length(NMISS*(NQ+1))), need to be double later
               as.integer(polarity),       	# POLARITY (input, which is on left)
               as.integer(rep(1,N)),		# MID, input, ID number of individual,length(nrow(data))   
               as.numeric(rawdata),		# KISSUE, data matrix, needs to be double later, length(nrow(data)*(NQ+1)))

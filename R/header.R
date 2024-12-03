@@ -6,13 +6,12 @@
 
    packageStartupMessage("\n## BASIC SPACE SCALING PACKAGE")
    packageStartupMessage("## 2009 - ", this.year)
-   packageStartupMessage("## Keith Poole, Howard Rosenthal, Jeffrey Lewis, James Lo, and Royce Carroll")
+   packageStartupMessage("## Keith Poole, Howard Rosenthal, Jeffrey Lewis, James Lo, Royce Carroll, and Christopher Hare")
    packageStartupMessage("## Support provided by the U.S. National Science Foundation")
    packageStartupMessage("## NSF Grant SES-0611974\n")
 
    Sys.setenv("_R_BUILD_COMPACT_VIGNETTES_"="qpdf")
 
-   #library.dynam("basicspace", libpath)
 }
 
 .onUnload <- function(libpath) {

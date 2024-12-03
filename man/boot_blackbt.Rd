@@ -12,7 +12,8 @@
 }
 
 \usage{
-  boot_blackbt(data, missing=NULL, dims=1, dim.extract=dims, minscale, iter=100)
+  boot_blackbt(data, missing=NULL, dims=1, dim.extract=dims, minscale, 
+    iter=100, verbose=FALSE)
 }
 
 \arguments{
@@ -30,9 +31,11 @@
 	the data other than the standard NA value.}
   \item{dims}{integer, specifies the number of dimensions to be estimated. }
   \item{dim.extract}{integer, specifies which dimension to extract results for the bootstrap from. }
-  \item{minscale}{ integer, specifies the minimum number of responses a respondent needs
+  \item{minscale}{integer, specifies the minimum number of responses a respondent needs
 	needs to provide to be used in the scaling.} 
   \item{iter}{integer, number of iterations the bootstrap should run for.}
+  \item{verbose}{logical, indicates whether the progress of \code{blackbox_transpose} (at each 10th iteration) should be printed to the screen.}
+
 }
 
 \value{
@@ -52,28 +55,37 @@ Jeffrey Lewis \email{jblewis@ucla.edu}
 James Lo \email{lojames@usc.edu}
 
 Royce Carroll \email{rcarroll@rice.edu}
+
+Christopher Hare \email{cdhare@ucdavis.edu}
+}
+
+\references{
+David A. Armstrong II, Ryan Bakker, Royce Carroll, Christopher Hare, Keith T. Poole, and Howard Rosenthal. 2021. \emph{Analyzing Spatial Models of Choice and Judgment}. 2nd ed. Statistics in the Social and Behavioral Sciences Series. Boca Raton, FL: Chapman & Hall/CRC. doi: 10.1201/9781315197609
+
+Keith T. Poole, Jeffrey B. Lewis, Howard Rosenthal, James Lo, and Royce Carroll. 2016. ``Recovering a Basic Space from Issue Scales in R.'' \emph{Journal of Statistical Software} 69(7): 1-21. doi:10.18637/jss.v069.i07
+
+Keith T. Poole. 1998. ``Recovering a Basic Space From a Set of Issue Scales.'' \emph{American Journal of Political Science} 42(3): 954-993. doi: 10.2307/2991737
 }
 
 
 \seealso{
-  '\link{blackbox_transpose}', '\link{plot.boot_blackbt}'.
+'\link{blackbox_transpose}', '\link{plot.boot_blackbt}'.
 }
+
 
 \examples{
+  ### Loads the Liberal-Conservative scales from the 1980 ANES.
+  data(LC1980)
+  LCdat <- LC1980[,-1]	#Dump the column of self-placements
 
-data(LC1980)
+  \donttest{ 
+    bootbbt <- boot_blackbt(LCdat, missing=c(0,8,9), dims=1, 
+      minscale=8, iter=10, verbose=FALSE)
+  }
+  ### 'LC1980_bbt' can be retrieved quickly with: 
+  data(bootbbt)
 
-data=LC1980[,-1]
-
- # Not run to save time, but loaded object is the output
-
-# bootbbt <- boot_blackbt(data, missing=c(0,8,9), dims=1, minscale=8, iter=10)
-
-data("bootbbt")
-
-
-plot.boot_blackbt(bootbbt)
-
-
+  plot.boot_blackbt(bootbbt)
 }
+
 \keyword{ multivariate }
